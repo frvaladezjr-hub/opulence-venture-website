@@ -212,28 +212,28 @@ home_body = """
       <div class="reveal">
         <div class="eyebrow">Why Opulence Venture Group</div>
         <h2 class="section-title" style="margin-top:var(--space-3);">An integrated perspective, not a single product</h2>
-        <p class="body-lg" style="margin-top:var(--space-5);color:#a89f8a;">Many firms specialize in a single product or transaction. We approach planning as a coordinated set of decisions &mdash; business, tax, retirement, risk, and legacy &mdash; considered together over time.</p>
+        <p class="body-lg" style="margin-top:var(--space-5);color:#9fb0c2;">Many firms specialize in a single product or transaction. We approach planning as a coordinated set of decisions &mdash; business, tax, retirement, risk, and legacy &mdash; considered together over time.</p>
         <div class="quote-block" style="margin-top:var(--space-10);">
           <p>&ldquo;The right strategy isn't found in any single product. It's found in how the pieces fit together.&rdquo;</p>
           <cite>Opulence Venture Group</cite>
         </div>
       </div>
       <div class="reveal">
-        <div class="stat-card" style="border-top:1px solid oklch(from #eee9dd l c h / 0.16);">
-          <div class="stat-value" style="font-size:var(--text-lg);color:#f6f3ea;">Cross-Disciplinary Coordination</div>
-          <p class="text-muted" style="font-size:var(--text-sm);color:#a89f8a;">Business, tax, retirement, and estate strategy considered as one plan.</p>
+        <div class="stat-card" style="border-top:1px solid oklch(from #e8eef5 l c h / 0.16);">
+          <div class="stat-value" style="font-size:var(--text-lg);color:#eef4fa;">Cross-Disciplinary Coordination</div>
+          <p class="text-muted" style="font-size:var(--text-sm);color:#9fb0c2;">Business, tax, retirement, and estate strategy considered as one plan.</p>
         </div>
         <div class="stat-card">
-          <div class="stat-value" style="font-size:var(--text-lg);color:#f6f3ea;">Independent, Strategy-First Approach</div>
-          <p class="text-muted" style="font-size:var(--text-sm);color:#a89f8a;">Planning built around your goals, not a single product.</p>
+          <div class="stat-value" style="font-size:var(--text-lg);color:#eef4fa;">Independent, Strategy-First Approach</div>
+          <p class="text-muted" style="font-size:var(--text-sm);color:#9fb0c2;">Planning built around your goals, not a single product.</p>
         </div>
         <div class="stat-card">
-          <div class="stat-value" style="font-size:var(--text-lg);color:#f6f3ea;">Long-Term Advisory Relationship</div>
-          <p class="text-muted" style="font-size:var(--text-sm);color:#a89f8a;">Plans are designed to be revisited as your life and business evolve.</p>
+          <div class="stat-value" style="font-size:var(--text-lg);color:#eef4fa;">Long-Term Advisory Relationship</div>
+          <p class="text-muted" style="font-size:var(--text-sm);color:#9fb0c2;">Plans are designed to be revisited as your life and business evolve.</p>
         </div>
         <div class="stat-card">
-          <div class="stat-value" style="font-size:var(--text-lg);color:#f6f3ea;">Coordinated Advisor Network</div>
-          <p class="text-muted" style="font-size:var(--text-sm);color:#a89f8a;">We work alongside your CPA, attorney, and other trusted advisors.</p>
+          <div class="stat-value" style="font-size:var(--text-lg);color:#eef4fa;">Coordinated Advisor Network</div>
+          <p class="text-muted" style="font-size:var(--text-sm);color:#9fb0c2;">We work alongside your CPA, attorney, and other trusted advisors.</p>
         </div>
       </div>
     </div>
@@ -696,7 +696,7 @@ contact_body = """
 
       <div class="reveal section--dark" style="padding:var(--space-10);border-radius:var(--radius-lg);">
         <div class="eyebrow">Direct Contact</div>
-        <h3 style="font-family:var(--font-display);font-weight:400;font-size:var(--text-lg);margin-top:var(--space-3);margin-bottom:var(--space-6);color:#f6f3ea;">Prefer to reach out directly?</h3>
+        <h3 style="font-family:var(--font-display);font-weight:400;font-size:var(--text-lg);margin-top:var(--space-3);margin-bottom:var(--space-6);color:#eef4fa;">Prefer to reach out directly?</h3>
 
         <div class="contact-info-item">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.67 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.31 1.85.54 2.81.67A2 2 0 0 1 22 16.92z"/></svg>
