@@ -238,6 +238,8 @@ p, li, figcaption {
 .section--dark h1, .section--dark h2, .section--dark h3 { color: #f5f2ea; }
 .section--dark .text-muted { color: #a89f8a; }
 .section--dark .divider { background: #2b271e; }
+.section--dark .quote-block p { color: #f6f3ea; }
+.section--dark .quote-block cite { color: #a89f8a; }
 
 .grid {
   display: grid;
@@ -306,6 +308,7 @@ p, li, figcaption {
   border: 1px solid transparent;
   min-height: 44px;
   white-space: nowrap;
+  text-decoration: none;
   transition:
     background var(--transition-interactive),
     color var(--transition-interactive),
@@ -855,7 +858,7 @@ p, li, figcaption {
 .resource-card p { font-size: var(--text-sm); color: var(--color-text-muted); }
 
 /* Badge / pill list (used for audiences, services chips) */
-.chip-list { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.chip-list { display: flex; flex-wrap: wrap; gap: var(--space-2); list-style: none; }
 .chip {
   font-size: var(--text-xs);
   font-weight: 600;
@@ -888,6 +891,14 @@ p, li, figcaption {
 .cta-band h2 { font-size: var(--text-2xl); color: #fbf9f2; font-weight: 400; }
 .cta-band p { color: #d8d2c2; font-size: var(--text-lg); margin-block: var(--space-4) var(--space-8); }
 .cta-band-actions { display: flex; flex-wrap: wrap; gap: var(--space-4); }
+.cta-band .btn-outline {
+  border-color: oklch(0.95 0 0 / 0.35);
+  color: #fbf9f2;
+}
+.cta-band .btn-outline:hover {
+  border-color: #fbf9f2;
+  background: oklch(0.95 0 0 / 0.08);
+}
 
 /* ==========================================================================
    Forms
@@ -1018,7 +1029,7 @@ p, li, figcaption {
   margin-bottom: var(--space-4);
   font-weight: 600;
 }
-.footer-col ul { display: flex; flex-direction: column; gap: var(--space-3); }
+.footer-col ul { display: flex; flex-direction: column; gap: var(--space-3); list-style: none; }
 .footer-col a {
   font-size: var(--text-sm);
   color: #b8b0a0;
