@@ -50,6 +50,7 @@
   /* Fonts */
   --font-display: 'Fraunces', 'Iowan Old Style', Georgia, serif;
   --font-body: 'General Sans', 'Inter', -apple-system, sans-serif;
+  --font-brand: 'Jost', var(--font-body);
 }
 
 /* ---- Color: Light (default) ---------------------------------------------- */
@@ -398,22 +399,35 @@ p, li, figcaption {
 .brand-word {
   display: flex;
   flex-direction: column;
-  line-height: 1.05;
+  line-height: 1.15;
+  gap: 0.2em;
 }
 .brand-word strong {
-  font-family: var(--font-body);
-  font-weight: 700;
-  font-size: 1rem;
-  letter-spacing: 0.08em;
+  font-family: var(--font-brand);
+  font-weight: 500;
+  font-size: 1.05rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 .brand-word span {
-  font-family: var(--font-body);
-  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  font-family: var(--font-brand);
+  font-weight: 400;
   font-size: 0.6rem;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--color-primary);
+}
+.brand-word span::before,
+.brand-word span::after {
+  content: '';
+  flex: 1 1 auto;
+  height: 1px;
+  min-width: 6px;
+  background: currentColor;
+  opacity: 0.55;
 }
 
 .nav-primary {
@@ -1160,7 +1174,7 @@ p, li, figcaption {
 }
 .footer-brand { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-4); text-decoration: none; }
 .footer-brand img { height: 32px; width: auto; }
-.footer-brand strong { font-family: var(--font-body); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #eef4fa; font-size: 0.95rem; }
+.footer-brand strong { font-family: var(--font-brand); font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: #eef4fa; font-size: 1rem; }
 .footer-tagline { font-size: var(--text-sm); color: #9fb0c2; max-width: 34ch; }
 .footer-col h4 {
   font-family: var(--font-body);
