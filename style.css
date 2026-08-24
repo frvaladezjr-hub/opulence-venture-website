@@ -871,6 +871,147 @@ p, li, figcaption {
 }
 
 /* ==========================================================================
+   Path cards (three primary client paths, dropdown-style)
+   ========================================================================== */
+
+.path-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5);
+}
+@media (min-width: 900px) {
+  .path-grid { grid-template-columns: repeat(3, 1fr); }
+}
+.path-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: box-shadow var(--transition-interactive), transform var(--transition-interactive);
+}
+.path-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.path-card-trigger {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-8);
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+}
+.path-card-heading { display: flex; flex-direction: column; gap: var(--space-2); }
+.path-card-index {
+  font-family: var(--font-display);
+  font-size: var(--text-sm);
+  font-style: italic;
+  color: var(--color-primary);
+}
+.path-card-heading h3 {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 400;
+  color: var(--color-text);
+}
+.path-card-heading p {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  max-width: 32ch;
+}
+.path-card-trigger svg {
+  width: 20px; height: 20px;
+  flex-shrink: 0;
+  margin-top: var(--space-1);
+  color: var(--color-primary);
+  transition: transform var(--transition-interactive);
+}
+.path-card[data-open='true'] .path-card-trigger svg { transform: rotate(45deg); }
+.path-card-panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s var(--ease-in-out);
+}
+.path-card-panel-inner {
+  padding: 0 var(--space-8) var(--space-8);
+  border-top: 1px solid var(--color-divider);
+  padding-top: var(--space-6);
+}
+.path-card-topics {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+.path-card-topics li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--color-text);
+}
+.path-card-topics li::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  flex-shrink: 0;
+}
+.path-card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-primary);
+  text-decoration: none;
+}
+.path-card-link svg { width: 16px; height: 16px; transition: transform var(--transition-interactive); }
+.path-card-link:hover svg { transform: translateX(3px); }
+
+/* ==========================================================================
+   Consultant cards
+   ========================================================================== */
+
+.consultant-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-8);
+  max-width: 340px;
+}
+@media (min-width: 640px) {
+  .consultant-grid { grid-template-columns: repeat(auto-fit, minmax(260px, 320px)); max-width: none; justify-content: start; }
+}
+.consultant-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.consultant-photo { aspect-ratio: 4/5; overflow: hidden; }
+.consultant-photo img { width: 100%; height: 100%; object-fit: cover; }
+.consultant-body { padding: var(--space-6); }
+.consultant-body h3 {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 400;
+  color: var(--color-text);
+}
+.consultant-role {
+  display: block;
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin-top: var(--space-1);
+  margin-bottom: var(--space-3);
+}
+.consultant-body p.text-muted { font-size: var(--text-sm); }
+
+/* ==========================================================================
    CTA band
    ========================================================================== */
 

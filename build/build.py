@@ -15,6 +15,37 @@ ORG_JSONLD = f"""<script type="application/ld+json">
 }}
 </script>"""
 
+def path_card(index, title, description, topics, href, cta_label):
+    topics_html = "".join(f"<li>{t}</li>" for t in topics)
+    return f"""<div class="path-card" data-open="false">
+      <button class="path-card-trigger" aria-expanded="false">
+        <div class="path-card-heading">
+          <span class="path-card-index">{index}</span>
+          <h3>{title}</h3>
+          <p>{description}</p>
+        </div>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+      </button>
+      <div class="path-card-panel">
+        <div class="path-card-panel-inner">
+          <ul class="path-card-topics">{topics_html}</ul>
+          <a class="path-card-link" href="{href}">{cta_label} <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+        </div>
+      </div>
+    </div>"""
+
+
+def consultant_card(photo, alt, name, role):
+    return f"""<div class="consultant-card">
+      <div class="consultant-photo"><img src="{photo}" alt="{alt}" loading="lazy" decoding="async" width="600" height="750" /></div>
+      <div class="consultant-body">
+        <h3>{name}</h3>
+        <span class="consultant-role">{role}</span>
+        <p class="text-muted">Works directly with clients to coordinate business, tax, retirement, and legacy strategy into a single, integrated plan.</p>
+      </div>
+    </div>"""
+
+
 def page(filename, title, description, og_image, body, jsonld="", active=None):
     html = head(title, description, filename, og_image=og_image, jsonld=jsonld)
     html += "<body>\n"
@@ -37,12 +68,23 @@ home_body = """
     <img src="assets/images/hero-skyline.webp" alt="" loading="eager" decoding="async" width="1920" height="1280" />
   </div>
   <div class="container--wide hero-content">
-    <div class="eyebrow">Business &amp; Wealth Strategy</div>
-    <h1>Strategic Planning for Your Business, Wealth &amp; Legacy</h1>
-    <p class="hero-support">Helping business owners and families coordinate the moving pieces of business, tax, retirement, risk management and wealth transfer.</p>
+    <div class="eyebrow">Business. Wealth. Legacy.</div>
+    <h1>Strategic Planning for the Decisions That Matter Most</h1>
+    <p class="hero-support">Opulence Venture Group helps business owners, professionals, and families coordinate the business, tax, retirement, risk, and legacy decisions that shape everything else.</p>
     <div class="hero-actions">
       <a class="btn btn-primary btn-lg" href="contact.html#consultation-form">Schedule a Consultation</a>
       <a class="btn btn-outline btn-lg" href="#what-we-do">Explore Our Services</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="paths">
+  <div class="container--wide">
+    <div class="eyebrow reveal">Where to Start</div>
+    <h2 class="section-title reveal" style="margin-top:var(--space-3);max-width:34ch;">Three paths, one coordinated strategy</h2>
+    <p class="section-lede reveal" style="margin-top:var(--space-5);margin-bottom:var(--space-12);">However your situation is shaped, it likely falls into one of these areas &mdash; each designed to connect back to the same integrated plan.</p>
+    <div class="path-grid reveal">
+      __PATH_CARDS__
     </div>
   </div>
 </section>
@@ -240,9 +282,52 @@ home_body = """
   </div>
 </section>
 
+<section class="section" id="consultants">
+  <div class="container--wide">
+    <div class="eyebrow reveal">Our Team</div>
+    <h2 class="section-title reveal" style="margin-top:var(--space-3);max-width:34ch;">Meet the consultant behind your plan</h2>
+    <p class="section-lede reveal" style="margin-top:var(--space-5);margin-bottom:var(--space-12);">A direct point of contact for every client, working alongside your existing CPA, attorney, and advisors.</p>
+    <div class="consultant-grid reveal">
+      __CONSULTANTS__
+    </div>
+  </div>
+</section>
+
 __CTA__
 """
 
+home_body = home_body.replace("__PATH_CARDS__", (
+    path_card(
+        "01",
+        "Business Owners",
+        "Structuring, protecting, and eventually transitioning what you've built.",
+        ["Business structure", "Tax efficiency", "Employee retention", "Succession"],
+        "business-consulting.html",
+        "Explore Business Consulting",
+    )
+    + path_card(
+        "02",
+        "Individuals &amp; Families",
+        "Coordinated planning around retirement, wealth, and what comes next.",
+        ["Retirement", "Wealth optimization", "Risk management", "Legacy"],
+        "wealth-legacy.html",
+        "Explore Wealth &amp; Legacy",
+    )
+    + path_card(
+        "03",
+        "Advanced Planning",
+        "A fully coordinated view across every area of your financial life.",
+        ["Business", "Tax", "Insurance", "Retirement", "Estate coordination"],
+        "advanced-financial-planning.html",
+        "Explore Advanced Financial Planning",
+    )
+))
+home_body = home_body.replace("__CONSULTANTS__", consultant_card(
+    "assets/images/consultant-1.webp",
+    "Portrait of an Opulence Venture Group consultant",
+    "Founder",
+    "Senior Financial Consultant",
+))
 home_body = home_body.replace("__CTA__", cta_band(
     "Let's build a plan around your goals",
     "Schedule a complimentary consultation to discuss your business, wealth, and legacy planning priorities.",

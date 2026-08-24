@@ -133,6 +133,19 @@
     });
   });
 
+  /* ---------- Path cards (three primary client paths) ---------- */
+  document.querySelectorAll('.path-card').forEach(function (card) {
+    var trigger = card.querySelector('.path-card-trigger');
+    var panel = card.querySelector('.path-card-panel');
+    if (!trigger || !panel) return;
+    trigger.addEventListener('click', function () {
+      var isOpen = card.getAttribute('data-open') === 'true';
+      card.setAttribute('data-open', String(!isOpen));
+      panel.style.maxHeight = isOpen ? '0px' : panel.scrollHeight + 'px';
+      trigger.setAttribute('aria-expanded', String(!isOpen));
+    });
+  });
+
   /* ---------- Contact form ---------- */
   var form = document.querySelector('#consultation-form');
   if (form) {
