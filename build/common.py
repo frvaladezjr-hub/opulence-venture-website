@@ -13,9 +13,11 @@ SERVICE_ITEMS = [
     ("advanced-financial-planning.html", "Advanced Financial Planning", "Retirement, tax-efficient strategies & estate coordination."),
     ("business-owner-strategies.html", "Business Owner Strategies", "Cash flow, entity structure, compensation & risk."),
     ("wealth-legacy.html", "Wealth & Legacy", "Wealth transfer, retirement income & legacy planning."),
+    ("capital-gains-tax-strategies.html", "Capital Gains Tax Strategies", "Timing, structuring & basis strategies for asset sales & gains."),
 ]
 
 NAV_ITEMS_TAIL = [
+    ("consultants.html", "Our Team"),
     ("resources.html", "Resources"),
     ("contact.html", "Contact"),
 ]
@@ -150,6 +152,7 @@ def footer():
         <ul>
           <li><a href="index.html">Home</a></li>
           <li><a href="about.html">About</a></li>
+          <li><a href="consultants.html">Our Team</a></li>
           <li><a href="resources.html">Resources</a></li>
           <li><a href="contact.html">Contact</a></li>
         </ul>

@@ -35,13 +35,25 @@ def path_card(index, title, description, topics, href, cta_label):
     </div>"""
 
 
-def consultant_card(photo, alt, name, role):
+def _initials(name):
+    parts = [p for p in name.replace(".", "").split(" ") if p]
+    return "".join(p[0].upper() for p in parts[:2])
+
+
+def consultant_card(photo, alt, name, role, bio=None):
+    bio = bio or "Works directly with clients to coordinate business, tax, retirement, and legacy strategy into a single, integrated plan."
+    if photo:
+        photo_html = f'<img src="{photo}" alt="{alt}" loading="lazy" decoding="async" width="600" height="750" />'
+        photo_class = "consultant-photo"
+    else:
+        photo_html = f'<span class="consultant-initials">{_initials(name)}</span><span class="consultant-photo-note">Headshot coming soon</span>'
+        photo_class = "consultant-photo is-placeholder"
     return f"""<div class="consultant-card">
-      <div class="consultant-photo"><img src="{photo}" alt="{alt}" loading="lazy" decoding="async" width="600" height="750" /></div>
+      <div class="{photo_class}">{photo_html}</div>
       <div class="consultant-body">
         <h3>{name}</h3>
         <span class="consultant-role">{role}</span>
-        <p class="text-muted">Works directly with clients to coordinate business, tax, retirement, and legacy strategy into a single, integrated plan.</p>
+        <p class="text-muted">{bio}</p>
       </div>
     </div>"""
 
@@ -290,6 +302,7 @@ home_body = """
     <div class="consultant-grid reveal">
       __CONSULTANTS__
     </div>
+    <a class="link-arrow reveal" href="consultants.html" style="margin-top:var(--space-8);">Meet the full team <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
   </div>
 </section>
 
@@ -324,9 +337,9 @@ home_body = home_body.replace("__PATH_CARDS__", (
 ))
 home_body = home_body.replace("__CONSULTANTS__", consultant_card(
     "assets/images/consultant-1.webp",
-    "Portrait of an Opulence Venture Group consultant",
+    "Portrait of Frank Valadez, Founder of Opulence Venture Group",
+    "Frank Valadez",
     "Founder",
-    "Senior Financial Consultant",
 ))
 home_body = home_body.replace("__CTA__", cta_band(
     "Let's build a plan around your goals",
@@ -634,6 +647,105 @@ build_service_page(
     meta_description="Estate planning coordination, wealth transfer, retirement income planning, and legacy strategies for families from Opulence Venture Group.",
 )
 
+# ---- Capital Gains Tax Strategies ------------------------------------------
+build_service_page(
+    filename="capital-gains-tax-strategies.html",
+    eyebrow="Capital Gains Tax Strategies",
+    h1="Capital Gains Tax Strategies",
+    intro_paragraphs=[
+        "Selling a business, an investment property, or a concentrated stock position can create a significant tax event. The timing, structure, and sequencing of that sale can meaningfully affect what you ultimately keep.",
+        "We help clients evaluate the planning options available around asset sales and investment gains well before a transaction happens, so decisions are made deliberately rather than at the last minute. Every strategy below is subject to applicable rules and individual circumstances vary &mdash; we coordinate closely with your CPA and attorney throughout.",
+    ],
+    audience_chips=["Business Sellers", "Real Estate Investors", "Concentrated Stock Holders", "Pre-Liquidity Founders"],
+    focus_items=[
+        ("Sale Timing &amp; Structuring", "Evaluating when and how an asset sale is structured, including installment sale options, which may help distribute the tax impact of a transaction over time."),
+        ("1031 Exchange Planning", "For qualifying real estate, reviewing whether a like-kind exchange may help defer gain recognition as part of a broader portfolio strategy, subject to applicable rules and deadlines."),
+        ("Qualified Opportunity Zone Review", "Evaluating whether reinvesting eligible gains into a Qualified Opportunity Fund may align with your investment goals and timeline, subject to applicable rules."),
+        ("Tax-Loss Harvesting", "Reviewing a portfolio for opportunities to realize losses that may help offset realized gains elsewhere, as part of an ongoing, coordinated tax strategy."),
+        ("Step-Up in Basis Planning", "Coordinating with your estate planning attorney on how asset titling and timing may affect basis treatment for beneficiaries."),
+        ("Charitable &amp; Trust Strategies", "Reviewing whether donor-advised funds, charitable trusts, or other structures may fit within your broader gain and legacy planning goals."),
+    ],
+    feature_image="assets/images/capital-gains-abstract.webp",
+    feature_alt="Abstract ascending staircase graphic representing structured capital gains planning",
+    quote="The tax outcome of a sale is often decided long before the closing date &mdash; in how it was planned.",
+    meta_title="Capital Gains Tax Strategies | Opulence Venture Group",
+    meta_description="Sale timing, 1031 exchange, opportunity zone, tax-loss harvesting, and basis planning strategies for business sales, real estate, and concentrated stock positions.",
+)
+
+# ==========================================================================
+# CONSULTANTS / OUR TEAM
+# ==========================================================================
+consultants_body = f"""
+<section class="page-header">
+  <div class="page-header-media"><img src="assets/images/team-consultation.webp" alt="" loading="eager" decoding="async" width="1920" height="1200" /></div>
+  <div class="container--wide">
+    {breadcrumb("Our Team", "consultants.html")}
+    <div class="page-header-content">
+      <div class="eyebrow">Our Team</div>
+      <h1>Meet Our Consultants</h1>
+      <p>A team of advisors covering business strategy, payroll, and retirement income &mdash; coordinated around a single plan for you.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <p class="body-lg reveal">Every client works with a dedicated point of contact, supported by a broader team with specialized experience across business advisory, payroll, and retirement income planning. Headshots and direct contact information for each team member are being added as they join &mdash; in the meantime, reach out through our <a href="contact.html">contact page</a> and we'll connect you with the right person.</p>
+
+    <div class="consultant-role-group" style="margin-top:var(--space-16);">
+      <div class="consultant-role-group-title reveal">Founder</div>
+      <div class="consultant-grid reveal">
+        {consultant_card("assets/images/consultant-1.webp", "Portrait of Frank Valadez, Founder of Opulence Venture Group", "Frank Valadez", "Founder", "Oversees each client's overall plan, coordinating business, tax, retirement, and legacy strategy into one integrated approach.")}
+      </div>
+    </div>
+
+    <div class="consultant-role-group">
+      <div class="consultant-role-group-title reveal">Business Advisors</div>
+      <div class="consultant-grid reveal">
+        {consultant_card(None, "", "Anthony Cordova", "Business Advisor", "Works with business owners on structure, cash flow, and growth-stage planning decisions.")}
+        {consultant_card(None, "", "Seth Hallows", "Business Advisor", "Supports business owners in evaluating structure, succession, and operational planning strategies.")}
+      </div>
+    </div>
+
+    <div class="consultant-role-group">
+      <div class="consultant-role-group-title reveal">Payroll Services</div>
+      <div class="consultant-grid reveal">
+        {consultant_card(None, "", "Ajay Fay", "Payroll Services Specialist", "Helps business clients coordinate payroll setup and administration alongside their broader financial plan.")}
+      </div>
+    </div>
+
+    <div class="consultant-role-group">
+      <div class="consultant-role-group-title reveal">Retirement Income Specialists</div>
+      <div class="consultant-grid reveal">
+        {consultant_card(None, "", "Nick Hernandez", "Retirement Income Specialist", "Focuses on sequencing retirement income sources to help support clients' lifestyle goals.")}
+        {consultant_card(None, "", "Josh Stachurski", "Retirement Income Specialist", "Helps clients evaluate retirement income and distribution strategies as part of their overall plan.")}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="disclaimer">
+  <div class="container">
+    <p>Team roles and responsibilities are provided for general informational purposes and may be updated as our team grows. Working with any member of our team does not create a guarantee of any specific outcome. Please consult a qualified, licensed tax, legal, or financial professional regarding your specific situation.</p>
+  </div>
+</section>
+
+__CTA__
+"""
+
+consultants_body = consultants_body.replace("__CTA__", cta_band(
+    "Want to talk with the right person on our team?",
+    "Schedule a complimentary consultation and we'll connect you with the advisor best suited to your goals.",
+))
+
+page(
+    "consultants.html",
+    "Our Team | Opulence Venture Group",
+    "Meet the Opulence Venture Group team \u2014 business advisors, payroll services, and retirement income specialists working alongside our founder to coordinate your plan.",
+    "assets/images/team-consultation.webp",
+    consultants_body,
+)
+
 # ==========================================================================
 # RESOURCES
 # ==========================================================================
@@ -655,6 +767,26 @@ resources_body = """
     <div class="eyebrow reveal">Planning Topics</div>
     <h2 class="section-title reveal" style="margin-top:var(--space-3);margin-bottom:var(--space-10);max-width:32ch;">Topics worth a closer look</h2>
     <div class="reveal">__TOPICS__</div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="eyebrow reveal">Trusted Partners</div>
+    <h2 class="section-title reveal" style="margin-top:var(--space-3);margin-bottom:var(--space-5);max-width:32ch;">Specialists we work alongside</h2>
+    <p class="body-lg reveal" style="margin-bottom:var(--space-10);max-width:64ch;">For specific business-formation and specialty tax needs outside our core planning work, we coordinate with a small network of outside specialist firms. These are independent companies &mdash; not Opulence Venture Group affiliates or subsidiaries &mdash; and any engagement with them is separate from your relationship with us.</p>
+    <div class="partner-grid reveal">
+      <div class="partner-card">
+        <div class="partner-card-logo"><img src="assets/images/partner-prime.png" alt="Prime Corporate Services logo" loading="lazy" decoding="async" width="600" height="199" /></div>
+        <h3>Prime Corporate Services</h3>
+        <p>Entity formation, business credit development, and specialty tax preparation for entrepreneurs and small business owners.</p>
+      </div>
+      <div class="partner-card">
+        <div class="partner-card-logo"><img src="assets/images/partner-irongate.png" alt="Irongate Business Advisors logo" loading="lazy" decoding="async" width="600" height="239" /></div>
+        <h3>Irongate Business Advisors</h3>
+        <p>Specialty tax credit and cost-segregation studies, including R&amp;D tax credits and fixed-asset reviews, for qualifying businesses.</p>
+      </div>
+    </div>
   </div>
 </section>
 
