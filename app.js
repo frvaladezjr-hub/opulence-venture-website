@@ -53,13 +53,20 @@
   document.querySelectorAll('.nav-dropdown').forEach(function (dropdown) {
     var trigger = dropdown.querySelector('.nav-dropdown-trigger');
     if (!trigger) return;
+    var closeTimer = null;
     function close() {
+      clearTimeout(closeTimer);
       dropdown.setAttribute('data-open', 'false');
       trigger.setAttribute('aria-expanded', 'false');
     }
     function open() {
+      clearTimeout(closeTimer);
       dropdown.setAttribute('data-open', 'true');
       trigger.setAttribute('aria-expanded', 'true');
+    }
+    function scheduleClose() {
+      clearTimeout(closeTimer);
+      closeTimer = setTimeout(close, 250);
     }
     trigger.addEventListener('click', function (e) {
       e.stopPropagation();
@@ -67,7 +74,7 @@
       isOpen ? close() : open();
     });
     dropdown.addEventListener('mouseenter', open);
-    dropdown.addEventListener('mouseleave', close);
+    dropdown.addEventListener('mouseleave', scheduleClose);
     document.addEventListener('click', function (e) {
       if (!dropdown.contains(e.target)) close();
     });

@@ -478,6 +478,17 @@ p, li, figcaption {
   pointer-events: none;
   transition: opacity 0.2s var(--ease-out), transform 0.2s var(--ease-out), visibility 0.2s;
 }
+/* Invisible hover bridge: fills the vertical gap between the trigger and the
+   panel so the mouse never leaves the dropdown's hoverable area on the way
+   down, which previously caused the menu to close before it could be used. */
+.nav-dropdown-panel::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(-1 * var(--space-3));
+  height: var(--space-3);
+}
 .nav-dropdown[data-open='true'] .nav-dropdown-panel {
   opacity: 1;
   visibility: visible;
