@@ -787,7 +787,7 @@ resources_body = """
       <div class="partner-card">
         <div class="partner-card-logo"><img src="assets/images/partner-irongate.png" alt="Irongate Business Advisors logo" loading="lazy" decoding="async" width="600" height="239" /></div>
         <h3>Irongate Business Advisors</h3>
-        <p>Specialty tax credit and cost-segregation studies, including R&amp;D tax credits and fixed-asset reviews, for qualifying businesses.</p>
+        <p>Wellness and supplemental benefit solutions benefit both employers and employees. Employers see a net FICA tax savings of up to $1,186 per W2 employee per year, while employees gain access to additional pre-tax wellness benefits that supplement their existing health coverage &mdash; all at no out-of-pocket expense to either party.</p>
         <div class="mini-calc" style="margin-top:0;" data-fica-calculator>
           <p class="mini-calc-label">Estimate potential FICA savings</p>
           <div class="field">
