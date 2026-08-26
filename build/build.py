@@ -918,61 +918,16 @@ contact_body = """
 <section class="section">
   <div class="container--wide">
     <div class="grid grid--2" style="gap:var(--space-16);align-items:flex-start;">
-      <div class="reveal" id="consultation-form-wrap">
+      <div class="reveal" id="consultation-form">
         <div class="eyebrow">Get Started</div>
-        <h2 class="section-title" style="margin-top:var(--space-3);margin-bottom:var(--space-8);max-width:26ch;">Tell us about your situation</h2>
+        <h2 class="section-title" style="margin-top:var(--space-3);margin-bottom:var(--space-8);max-width:26ch;">Pick a time that works for you</h2>
+        <p class="body-lg" style="margin-bottom:var(--space-8);max-width:56ch;">Choose an available time below for a complimentary initial conversation. We'll follow up with details before your scheduled time.</p>
 
-        <form id="consultation-form" novalidate>
-          <div class="form-grid form-grid--2">
-            <div class="field">
-              <label for="name">Full Name</label>
-              <input type="text" id="name" name="name" required autocomplete="name" />
-              <small class="error">Please enter your name.</small>
-            </div>
-            <div class="field">
-              <label for="email">Email Address</label>
-              <input type="email" id="email" name="email" required autocomplete="email" />
-              <small class="error">Please enter a valid email address.</small>
-            </div>
-          </div>
-          <div class="form-grid form-grid--2" style="margin-top:var(--space-6);">
-            <div class="field">
-              <label for="phone">Phone Number</label>
-              <input type="tel" id="phone" name="phone" required autocomplete="tel" />
-              <small class="error">Please enter a phone number.</small>
-            </div>
-            <div class="field">
-              <label for="occupation">Business / Occupation</label>
-              <input type="text" id="occupation" name="occupation" required />
-              <small class="error">Please tell us your business or occupation.</small>
-            </div>
-          </div>
-          <div class="field" style="margin-top:var(--space-6);">
-            <label for="interest">Primary Area of Interest</label>
-            <select id="interest" name="interest" required>
-              <option value="">Select an area of interest</option>
-              <option>Business Consulting</option>
-              <option>Advanced Financial Planning</option>
-              <option>Business Owner Strategies</option>
-              <option>Wealth &amp; Legacy Planning</option>
-              <option>Not Sure Yet</option>
-            </select>
-            <small class="error">Please select an area of interest.</small>
-          </div>
-          <div class="field" style="margin-top:var(--space-6);">
-            <label for="message">What would you like help with?</label>
-            <textarea id="message" name="message" required placeholder="Briefly describe your goals or what prompted you to reach out."></textarea>
-            <small class="error">Please share a brief description.</small>
-          </div>
-          <p class="form-note">By submitting this form, you agree to be contacted by Opulence Venture Group regarding your inquiry. We do not sell your information.</p>
-          <button type="submit" class="btn btn-primary btn-lg btn-block" style="margin-top:var(--space-6);">Request a Consultation</button>
-        </form>
-
-        <div class="form-success" id="form-success" data-visible="false">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
-          <h3 style="font-family:var(--font-body);font-size:var(--text-lg);font-weight:600;">Thank you &mdash; your request has been received.</h3>
-          <p class="text-muted">A member of our team will follow up shortly to schedule your consultation. If your matter is time-sensitive, feel free to call us directly.</p>
+        <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css" />
+        <div class="calendly-embed">
+          <div class="calendly-inline-widget" data-url="https://calendly.com/apdivision?hide_gdpr_banner=1&amp;background_color=ffffff&amp;text_color=0f1e2e&amp;primary_color=1f5c8c" style="min-width:320px;height:750px;"></div>
         </div>
+        <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
       </div>
 
       <div class="reveal section--dark" style="padding:var(--space-10);border-radius:var(--radius-lg);">
