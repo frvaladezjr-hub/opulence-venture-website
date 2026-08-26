@@ -429,6 +429,7 @@ p, li, figcaption {
   text-decoration: none;
   position: relative;
   padding-block: var(--space-2);
+  white-space: nowrap;
 }
 .nav-primary a:hover,
 .nav-primary a[aria-current='page'] {
