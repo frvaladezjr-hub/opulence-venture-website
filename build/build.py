@@ -486,9 +486,33 @@ def accordion_group(group_id, items):
     return html
 
 
-def build_service_page(filename, eyebrow, h1, intro_paragraphs, audience_chips, focus_items, feature_image, feature_alt, quote, meta_title, meta_description):
+def calendly_embed_block(anchor_id, label, calendly_url):
+    return f"""<div class="reveal">
+          <h3 style="font-family:var(--font-body);font-size:var(--text-lg);font-weight:600;margin-bottom:var(--space-4);">{label}</h3>
+          <div class="calendly-embed" id="{anchor_id}">
+            <div class="calendly-inline-widget" data-url="{calendly_url}?hide_gdpr_banner=1&amp;background_color=ffffff&amp;text_color=0f1e2e&amp;primary_color=1f5c8c" style="min-width:280px;height:700px;"></div>
+          </div>
+        </div>"""
+
+
+def schedule_section(schedule_items):
+    blocks = "".join(calendly_embed_block(anchor_id, label, url) for anchor_id, label, url in schedule_items)
+    grid_class = "grid grid--2" if len(schedule_items) > 1 else ""
+    return f"""<link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css" />
+<section class="section section--surface">
+  <div class="container--wide">
+    <div class="eyebrow reveal">Get Started</div>
+    <h2 class="section-title reveal" style="margin-top:var(--space-3);margin-bottom:var(--space-10);max-width:36ch;">Pick a time that works for you</h2>
+    <div class="{grid_class}" style="gap:var(--space-10);align-items:start;">{blocks}</div>
+  </div>
+</section>
+<script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>"""
+
+
+def build_service_page(filename, eyebrow, h1, intro_paragraphs, audience_chips, focus_items, feature_image, feature_alt, quote, meta_title, meta_description, schedule_items=None):
     intro_html = "".join(f'<p class="body-lg reveal" style="margin-top:var(--space-6);">{p}</p>' for p in intro_paragraphs)
     chips_html = "".join(f'<span class="chip">{c}</span>' for c in audience_chips)
+    schedule_html = schedule_section(schedule_items) if schedule_items else ""
     body = f"""
 <section class="page-header">
   <div class="page-header-media"><img src="{feature_image}" alt="" loading="eager" decoding="async" width="1920" height="1200" /></div>
@@ -531,6 +555,8 @@ def build_service_page(filename, eyebrow, h1, intro_paragraphs, audience_chips, 
   </div>
 </section>
 
+{schedule_html}
+
 <section class="disclaimer">
   <div class="container">
     <p>The information on this page is educational in nature and does not constitute tax, legal, or investment advice. Strategies discussed may not be available or suitable in every situation, and outcomes are not guaranteed. Individual circumstances vary &mdash; please consult a qualified, licensed tax, legal, or financial professional before implementing any strategy.</p>
@@ -541,9 +567,20 @@ def build_service_page(filename, eyebrow, h1, intro_paragraphs, audience_chips, 
 
 __CTA__
 """
+    if schedule_items:
+        cta_kwargs = {
+            "primary_label": schedule_items[0][1],
+            "primary_href": f"#{schedule_items[0][0]}",
+        }
+        if len(schedule_items) > 1:
+            cta_kwargs["secondary_label"] = schedule_items[1][1]
+            cta_kwargs["secondary_href"] = f"#{schedule_items[1][0]}"
+    else:
+        cta_kwargs = {}
     body = body.replace("__CTA__", cta_band(
         "Let's discuss what this could look like for you",
         "Schedule a complimentary consultation to explore strategies suited to your situation.",
+        **cta_kwargs,
     ))
     page(filename, meta_title, meta_description, feature_image, body)
 
@@ -572,6 +609,9 @@ build_service_page(
     quote="A business built without a succession or continuity plan is a plan left to chance.",
     meta_title="Business Consulting | Opulence Venture Group",
     meta_description="Business structure optimization, tax-efficiency planning, succession, key-person, and buy-sell strategies for business owners from Opulence Venture Group.",
+    schedule_items=[
+        ("schedule-business", "Schedule a Business Strategy Session", "https://calendly.com/apdivision/business_plan"),
+    ],
 )
 
 # ---- Advanced Financial Planning -------------------------------------------
@@ -598,6 +638,10 @@ build_service_page(
     quote="Retirement income planning is less about any single account and more about how all of them work together.",
     meta_title="Advanced Financial Planning | Opulence Venture Group",
     meta_description="Retirement planning, asset optimization, tax-efficient wealth strategies, Roth conversion planning, and estate coordination from Opulence Venture Group.",
+    schedule_items=[
+        ("schedule-financial-planning", "Schedule a Financial Planning Consultation", "https://calendly.com/apdivision/financialplanning"),
+        ("schedule-advanced-planning", "Schedule an Advanced Planning Consultation", "https://calendly.com/apdivision/retirement-planning-clone"),
+    ],
 )
 
 # ---- Business Owner Strategies ---------------------------------------------
@@ -647,6 +691,9 @@ build_service_page(
     quote="Legacy planning isn't just about what you leave behind &mdash; it's about how clearly your wishes are carried out.",
     meta_title="Wealth &amp; Legacy Planning | Opulence Venture Group",
     meta_description="Estate planning coordination, wealth transfer, retirement income planning, and legacy strategies for families from Opulence Venture Group.",
+    schedule_items=[
+        ("schedule-wealth-legacy", "Schedule a Wealth &amp; Legacy Session", "https://calendly.com/apdivision/estateplanning"),
+    ],
 )
 
 # ---- Capital Gains Tax Strategies ------------------------------------------
