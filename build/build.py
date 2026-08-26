@@ -667,6 +667,9 @@ build_service_page(
     quote="A strong business deserves a plan for what happens next &mdash; not just for what's happening now.",
     meta_title="Business Owner Strategies | Opulence Venture Group",
     meta_description="Business cash-flow planning, entity structure analysis, executive compensation, employee benefits, succession, and risk management strategies for business owners.",
+    schedule_items=[
+        ("schedule-business-owner", "Schedule a Business Strategy Session", "https://calendly.com/apdivision/business-strategies"),
+    ],
 )
 
 # ---- Wealth & Legacy ---------------------------------------------------------
