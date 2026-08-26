@@ -192,4 +192,62 @@
   document.querySelectorAll('[data-current-year]').forEach(function (el) {
     el.textContent = new Date().getFullYear();
   });
+
+  /* ---------- Roth conversion tax estimator ---------- */
+  var rothCalc = document.querySelector('[data-roth-calculator]');
+  if (rothCalc) {
+    var ROTH_BRACKETS = {
+      single: [[0, 12400, 0.10], [12400, 50400, 0.12], [50400, 105700, 0.22], [105700, 201775, 0.24], [201775, 256225, 0.32], [256225, 640600, 0.35], [640600, Infinity, 0.37]],
+      mfj: [[0, 24800, 0.10], [24800, 100800, 0.12], [100800, 211400, 0.22], [211400, 403550, 0.24], [403550, 512450, 0.32], [512450, 768700, 0.35], [768700, Infinity, 0.37]],
+      hoh: [[0, 17700, 0.10], [17700, 67450, 0.12], [67450, 105700, 0.22], [105700, 201775, 0.24], [201775, 256200, 0.32], [256200, 640600, 0.35], [640600, Infinity, 0.37]]
+    };
+    var rothCurrency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+
+    var rothTaxForIncome = function (income, brackets) {
+      var tax = 0;
+      for (var i = 0; i < brackets.length; i++) {
+        var lo = brackets[i][0], hi = brackets[i][1], rate = brackets[i][2];
+        if (income > lo) {
+          tax += (Math.min(income, hi) - lo) * rate;
+        } else {
+          break;
+        }
+      }
+      return tax;
+    };
+
+    var rothBracketForIncome = function (income, brackets) {
+      for (var i = 0; i < brackets.length; i++) {
+        if (income <= brackets[i][1]) return brackets[i][2];
+      }
+      return brackets[brackets.length - 1][2];
+    };
+
+    var rothBtn = rothCalc.querySelector('[data-roth-calculate]');
+    if (rothBtn) {
+      rothBtn.addEventListener('click', function () {
+        var statusEl = rothCalc.querySelector('#roth-filing-status');
+        var incomeEl = rothCalc.querySelector('#roth-income');
+        var conversionEl = rothCalc.querySelector('#roth-conversion');
+        var resultEl = rothCalc.querySelector('[data-roth-result]');
+        var brackets = ROTH_BRACKETS[statusEl.value] || ROTH_BRACKETS.single;
+
+        var income = Math.max(0, parseFloat(incomeEl.value) || 0);
+        var conversion = Math.max(0, parseFloat(conversionEl.value) || 0);
+
+        var baseTax = rothTaxForIncome(income, brackets);
+        var totalTax = rothTaxForIncome(income + conversion, brackets);
+        var conversionTax = Math.max(0, totalTax - baseTax);
+        var marginalRate = conversion > 0 ? (conversionTax / conversion) * 100 : 0;
+        var bracketBefore = rothBracketForIncome(income, brackets) * 100;
+        var bracketAfter = rothBracketForIncome(income + conversion, brackets) * 100;
+
+        rothCalc.querySelector('[data-roth-out-tax]').textContent = rothCurrency.format(conversionTax);
+        rothCalc.querySelector('[data-roth-out-rate]').textContent = marginalRate.toFixed(1) + '%';
+        rothCalc.querySelector('[data-roth-out-before]').textContent = bracketBefore.toFixed(0) + '%';
+        rothCalc.querySelector('[data-roth-out-after]').textContent = bracketAfter.toFixed(0) + '%';
+        resultEl.hidden = false;
+      });
+    }
+  }
 })();

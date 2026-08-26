@@ -470,14 +470,16 @@ page(
 
 def accordion_group(group_id, items):
     html = f'<div data-accordion-group="{group_id}">'
-    for title, body in items:
+    for item in items:
+        title, body = item[0], item[1]
+        extra = item[2] if len(item) > 2 else ""
         html += f"""<div class="accordion-item" data-open="false">
       <button class="accordion-trigger" aria-expanded="false">
         <span>{title}</span>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
       </button>
       <div class="accordion-panel">
-        <div class="accordion-panel-inner"><p>{body}</p></div>
+        <div class="accordion-panel-inner"><p>{body}</p>{extra}</div>
       </div>
     </div>"""
     html += "</div>"
@@ -808,9 +810,55 @@ resources_body = """
 __CTA__
 """
 
+ROTH_CALCULATOR_HTML = """
+<div class="mini-calc" data-roth-calculator>
+  <p class="mini-calc-label">Estimate the tax cost of a conversion</p>
+  <div class="form-grid form-grid--2">
+    <div class="field">
+      <label for="roth-filing-status">Filing Status</label>
+      <select id="roth-filing-status">
+        <option value="single">Single</option>
+        <option value="mfj">Married Filing Jointly</option>
+        <option value="hoh">Head of Household</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="roth-income">Estimated Taxable Income This Year (before conversion)</label>
+      <input type="number" id="roth-income" min="0" step="1000" placeholder="e.g. 120000" inputmode="numeric" />
+    </div>
+  </div>
+  <div class="field" style="margin-top:var(--space-5);">
+    <label for="roth-conversion">Amount You're Considering Converting to Roth</label>
+    <input type="number" id="roth-conversion" min="0" step="1000" placeholder="e.g. 50000" inputmode="numeric" />
+  </div>
+  <button type="button" class="btn btn-primary" style="margin-top:var(--space-6);" data-roth-calculate>Estimate Tax Impact</button>
+  <div class="mini-calc-result" data-roth-result hidden>
+    <div class="mini-calc-result-grid">
+      <div class="mini-calc-result-tile">
+        <span class="mini-calc-result-figure" data-roth-out-tax>&mdash;</span>
+        <span class="mini-calc-result-caption">Estimated additional federal tax on this conversion</span>
+      </div>
+      <div class="mini-calc-result-tile">
+        <span class="mini-calc-result-figure" data-roth-out-rate>&mdash;</span>
+        <span class="mini-calc-result-caption">Marginal rate applied to the conversion</span>
+      </div>
+      <div class="mini-calc-result-tile">
+        <span class="mini-calc-result-figure" data-roth-out-before>&mdash;</span>
+        <span class="mini-calc-result-caption">Bracket before conversion</span>
+      </div>
+      <div class="mini-calc-result-tile">
+        <span class="mini-calc-result-figure" data-roth-out-after>&mdash;</span>
+        <span class="mini-calc-result-caption">Bracket after conversion</span>
+      </div>
+    </div>
+  </div>
+  <p class="mini-calc-note">Based on 2026 federal marginal tax brackets for ordinary income. Does not account for state taxes, the standard deduction or other deductions, credits, Medicare IRMAA surcharges, or the net investment income tax. This is an educational estimate only, not tax advice &mdash; individual circumstances vary, and we recommend reviewing any conversion with a qualified tax professional before proceeding.</p>
+</div>
+"""
+
 resources_body = resources_body.replace("__BREADCRUMB__", breadcrumb("Resources", "resources.html"))
 resources_body = resources_body.replace("__TOPICS__", accordion_group("topics", [
-    ("Understanding Roth Conversion Timing", "The tax impact of a Roth conversion can vary significantly depending on your current income, future tax expectations, and the timing of the conversion. A coordinated review can help you evaluate whether a conversion strategy may align with your broader retirement and tax goals."),
+    ("Understanding Roth Conversion Timing", "The tax impact of a Roth conversion can vary significantly depending on your current income, future tax expectations, and the timing of the conversion. A coordinated review can help you evaluate whether a conversion strategy may align with your broader retirement and tax goals.", ROTH_CALCULATOR_HTML),
     ("Questions to Consider Before a Business Sale", "A business sale involves more than negotiating a price. Structure, tax treatment, timing, and post-sale planning can all significantly affect the outcome, and are worth evaluating well before a transaction is finalized."),
     ("How Buy-Sell Agreements Support Business Continuity", "A properly designed and funded buy-sell agreement can help provide clarity for owners, partners, and their families if an owner passes away, becomes disabled, or exits the business."),
     ("Coordinating Estate Plans with Business Succession", "For business owners, estate planning and succession planning are closely connected. Reviewing both together can help avoid gaps between what your estate documents say and what actually happens to your business."),

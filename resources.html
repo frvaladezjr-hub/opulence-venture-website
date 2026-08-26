@@ -114,7 +114,51 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
       </button>
       <div class="accordion-panel">
-        <div class="accordion-panel-inner"><p>The tax impact of a Roth conversion can vary significantly depending on your current income, future tax expectations, and the timing of the conversion. A coordinated review can help you evaluate whether a conversion strategy may align with your broader retirement and tax goals.</p></div>
+        <div class="accordion-panel-inner"><p>The tax impact of a Roth conversion can vary significantly depending on your current income, future tax expectations, and the timing of the conversion. A coordinated review can help you evaluate whether a conversion strategy may align with your broader retirement and tax goals.</p>
+<div class="mini-calc" data-roth-calculator>
+  <p class="mini-calc-label">Estimate the tax cost of a conversion</p>
+  <div class="form-grid form-grid--2">
+    <div class="field">
+      <label for="roth-filing-status">Filing Status</label>
+      <select id="roth-filing-status">
+        <option value="single">Single</option>
+        <option value="mfj">Married Filing Jointly</option>
+        <option value="hoh">Head of Household</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="roth-income">Estimated Taxable Income This Year (before conversion)</label>
+      <input type="number" id="roth-income" min="0" step="1000" placeholder="e.g. 120000" inputmode="numeric" />
+    </div>
+  </div>
+  <div class="field" style="margin-top:var(--space-5);">
+    <label for="roth-conversion">Amount You're Considering Converting to Roth</label>
+    <input type="number" id="roth-conversion" min="0" step="1000" placeholder="e.g. 50000" inputmode="numeric" />
+  </div>
+  <button type="button" class="btn btn-primary" style="margin-top:var(--space-6);" data-roth-calculate>Estimate Tax Impact</button>
+  <div class="mini-calc-result" data-roth-result hidden>
+    <div class="mini-calc-result-grid">
+      <div class="mini-calc-result-tile">
+        <span class="mini-calc-result-figure" data-roth-out-tax>&mdash;</span>
+        <span class="mini-calc-result-caption">Estimated additional federal tax on this conversion</span>
+      </div>
+      <div class="mini-calc-result-tile">
+        <span class="mini-calc-result-figure" data-roth-out-rate>&mdash;</span>
+        <span class="mini-calc-result-caption">Marginal rate applied to the conversion</span>
+      </div>
+      <div class="mini-calc-result-tile">
+        <span class="mini-calc-result-figure" data-roth-out-before>&mdash;</span>
+        <span class="mini-calc-result-caption">Bracket before conversion</span>
+      </div>
+      <div class="mini-calc-result-tile">
+        <span class="mini-calc-result-figure" data-roth-out-after>&mdash;</span>
+        <span class="mini-calc-result-caption">Bracket after conversion</span>
+      </div>
+    </div>
+  </div>
+  <p class="mini-calc-note">Based on 2026 federal marginal tax brackets for ordinary income. Does not account for state taxes, the standard deduction or other deductions, credits, Medicare IRMAA surcharges, or the net investment income tax. This is an educational estimate only, not tax advice &mdash; individual circumstances vary, and we recommend reviewing any conversion with a qualified tax professional before proceeding.</p>
+</div>
+</div>
       </div>
     </div><div class="accordion-item" data-open="false">
       <button class="accordion-trigger" aria-expanded="false">

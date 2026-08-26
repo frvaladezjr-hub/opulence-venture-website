@@ -1190,6 +1190,61 @@ p, li, figcaption {
   margin-top: var(--space-2);
 }
 
+/* ==========================================================================
+   Mini calculator (Roth conversion estimator, Resources page)
+   ========================================================================== */
+
+.mini-calc {
+  margin-top: var(--space-6);
+  padding: var(--space-6);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+.mini-calc-label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0 0 var(--space-5);
+}
+.mini-calc-result {
+  margin-top: var(--space-6);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--color-border);
+}
+.mini-calc-result-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+@media (min-width: 640px) {
+  .mini-calc-result-grid { grid-template-columns: repeat(2, 1fr); }
+}
+.mini-calc-result-tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+.mini-calc-result-figure {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  color: var(--color-primary);
+  line-height: 1.1;
+}
+.mini-calc-result-caption {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+.mini-calc-note {
+  margin-top: var(--space-5);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
 .form-success {
   display: none;
   flex-direction: column;
