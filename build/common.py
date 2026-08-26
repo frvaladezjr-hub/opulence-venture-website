@@ -1,7 +1,7 @@
 # Shared head / header / footer / mobile-menu templates for Opulence Venture Group
 
 SITE_NAME = "Opulence Venture Group"
-BASE_URL = "https://opulenceventuregroup.com"  # placeholder — update once a live domain is assigned
+BASE_URL = "https://opulenceventuregroup.com"
 
 NAV_ITEMS = [
     ("index.html", "Home"),
