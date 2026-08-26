@@ -788,6 +788,21 @@ resources_body = """
         <div class="partner-card-logo"><img src="assets/images/partner-irongate.png" alt="Irongate Business Advisors logo" loading="lazy" decoding="async" width="600" height="239" /></div>
         <h3>Irongate Business Advisors</h3>
         <p>Specialty tax credit and cost-segregation studies, including R&amp;D tax credits and fixed-asset reviews, for qualifying businesses.</p>
+        <div class="mini-calc" style="margin-top:0;" data-fica-calculator>
+          <p class="mini-calc-label">Estimate potential FICA savings</p>
+          <div class="field">
+            <label for="fica-employees">Number of W-2 Employees</label>
+            <input type="number" id="fica-employees" min="0" step="1" placeholder="e.g. 50" inputmode="numeric" />
+          </div>
+          <button type="button" class="btn btn-primary" style="margin-top:var(--space-6);" data-fica-calculate>Estimate Savings</button>
+          <div class="mini-calc-result" data-fica-result hidden>
+            <div class="mini-calc-result-tile">
+              <span class="mini-calc-result-figure" data-fica-out-savings>&mdash;</span>
+              <span class="mini-calc-result-caption">Estimated potential annual savings</span>
+            </div>
+          </div>
+          <p class="mini-calc-note">Estimate based on IronGate Business Advisors&rsquo; published benefit assumptions for a qualifying Section 125 benefits plan. Actual savings depend on the specific plan selected, employee participation, and individual circumstances, which vary. Provided for illustration purposes only and not tax or legal advice &mdash; consult a qualified professional before implementing any plan.</p>
+        </div>
       </div>
     </div>
   </div>

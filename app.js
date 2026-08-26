@@ -250,4 +250,22 @@
       });
     }
   }
+
+  /* ---------- FICA savings estimator (Irongate partner card) ---------- */
+  var ficaCalc = document.querySelector('[data-fica-calculator]');
+  if (ficaCalc) {
+    var ficaCurrency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+    var ficaBtn = ficaCalc.querySelector('[data-fica-calculate]');
+    if (ficaBtn) {
+      ficaBtn.addEventListener('click', function () {
+        var employeesEl = ficaCalc.querySelector('#fica-employees');
+        var resultEl = ficaCalc.querySelector('[data-fica-result]');
+        var employees = Math.max(0, parseInt(employeesEl.value, 10) || 0);
+        var savings = employees * 1186;
+
+        ficaCalc.querySelector('[data-fica-out-savings]').textContent = 'Up to ' + ficaCurrency.format(savings);
+        resultEl.hidden = false;
+      });
+    }
+  }
 })();
