@@ -975,7 +975,7 @@ contact_body = """
 
         <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css" />
         <div class="calendly-embed">
-          <div class="calendly-inline-widget" data-url="https://calendly.com/apdivision?hide_gdpr_banner=1&amp;background_color=ffffff&amp;text_color=0f1e2e&amp;primary_color=1f5c8c" style="min-width:320px;height:750px;"></div>
+          <div class="calendly-inline-widget" data-url="https://calendly.com/apdivision/free-consultation?hide_gdpr_banner=1&amp;background_color=ffffff&amp;text_color=0f1e2e&amp;primary_color=1f5c8c" style="min-width:320px;height:750px;"></div>
         </div>
         <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
       </div>
