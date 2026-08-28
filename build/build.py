@@ -697,6 +697,52 @@ build_service_page(
     ],
 )
 
+ROTH_CALCULATOR_HTML = """
+<div class="mini-calc" data-roth-calculator>
+  <p class="mini-calc-label">Estimate the tax cost of a conversion</p>
+  <div class="form-grid form-grid--2">
+    <div class="field">
+      <label for="roth-filing-status">Filing Status</label>
+      <select id="roth-filing-status">
+        <option value="single">Single</option>
+        <option value="mfj">Married Filing Jointly</option>
+        <option value="hoh">Head of Household</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="roth-income">Estimated Taxable Income This Year (before conversion)</label>
+      <input type="number" id="roth-income" min="0" step="1000" placeholder="e.g. 120000" inputmode="numeric" />
+    </div>
+  </div>
+  <div class="field" style="margin-top:var(--space-5);">
+    <label for="roth-conversion">Amount You're Considering Converting to Roth</label>
+    <input type="number" id="roth-conversion" min="0" step="1000" placeholder="e.g. 50000" inputmode="numeric" />
+  </div>
+  <button type="button" class="btn btn-primary" style="margin-top:var(--space-6);" data-roth-calculate>Estimate Tax Impact</button>
+  <div class="mini-calc-result" data-roth-result hidden>
+    <div class="mini-calc-result-grid">
+      <div class="mini-calc-result-tile">
+        <span class="mini-calc-result-figure" data-roth-out-tax>&mdash;</span>
+        <span class="mini-calc-result-caption">Estimated additional federal tax on this conversion</span>
+      </div>
+      <div class="mini-calc-result-tile">
+        <span class="mini-calc-result-figure" data-roth-out-rate>&mdash;</span>
+        <span class="mini-calc-result-caption">Marginal rate applied to the conversion</span>
+      </div>
+      <div class="mini-calc-result-tile">
+        <span class="mini-calc-result-figure" data-roth-out-before>&mdash;</span>
+        <span class="mini-calc-result-caption">Bracket before conversion</span>
+      </div>
+      <div class="mini-calc-result-tile">
+        <span class="mini-calc-result-figure" data-roth-out-after>&mdash;</span>
+        <span class="mini-calc-result-caption">Bracket after conversion</span>
+      </div>
+    </div>
+  </div>
+  <p class="mini-calc-note">Based on 2026 federal marginal tax brackets for ordinary income. Does not account for state taxes, the standard deduction or other deductions, credits, Medicare IRMAA surcharges, or the net investment income tax. This is an educational estimate only, not tax advice &mdash; individual circumstances vary, and we recommend reviewing any conversion with a qualified tax professional before proceeding.</p>
+</div>
+"""
+
 # ---- Advanced Financial Planning -------------------------------------------
 build_service_page(
     filename="advanced-financial-planning.html",
@@ -713,7 +759,7 @@ build_service_page(
         ("Tax-Efficient Wealth Strategies", "Identifying strategies that may help manage your tax exposure over time, subject to applicable rules."),
         ("Life Insurance Planning", "Evaluating protection and planning strategies suited to your income replacement and legacy goals."),
         ("Annuity Planning", "Reviewing whether annuity strategies may have a role in your retirement income plan, including their costs and terms."),
-        ("Roth Conversion Planning", "Analyzing whether converting pre-tax assets may align with your long-term tax and income goals."),
+        ("Roth Conversion Planning", "Analyzing whether converting pre-tax assets may align with your long-term tax and income goals.", ROTH_CALCULATOR_HTML),
         ("Estate &amp; Legacy Planning", "Coordinating with your attorney to help align your financial plan with your estate planning documents."),
     ],
     feature_image="assets/images/planning-abstract.webp",
@@ -964,52 +1010,6 @@ resources_body = """
 </section>
 
 __CTA__
-"""
-
-ROTH_CALCULATOR_HTML = """
-<div class="mini-calc" data-roth-calculator>
-  <p class="mini-calc-label">Estimate the tax cost of a conversion</p>
-  <div class="form-grid form-grid--2">
-    <div class="field">
-      <label for="roth-filing-status">Filing Status</label>
-      <select id="roth-filing-status">
-        <option value="single">Single</option>
-        <option value="mfj">Married Filing Jointly</option>
-        <option value="hoh">Head of Household</option>
-      </select>
-    </div>
-    <div class="field">
-      <label for="roth-income">Estimated Taxable Income This Year (before conversion)</label>
-      <input type="number" id="roth-income" min="0" step="1000" placeholder="e.g. 120000" inputmode="numeric" />
-    </div>
-  </div>
-  <div class="field" style="margin-top:var(--space-5);">
-    <label for="roth-conversion">Amount You're Considering Converting to Roth</label>
-    <input type="number" id="roth-conversion" min="0" step="1000" placeholder="e.g. 50000" inputmode="numeric" />
-  </div>
-  <button type="button" class="btn btn-primary" style="margin-top:var(--space-6);" data-roth-calculate>Estimate Tax Impact</button>
-  <div class="mini-calc-result" data-roth-result hidden>
-    <div class="mini-calc-result-grid">
-      <div class="mini-calc-result-tile">
-        <span class="mini-calc-result-figure" data-roth-out-tax>&mdash;</span>
-        <span class="mini-calc-result-caption">Estimated additional federal tax on this conversion</span>
-      </div>
-      <div class="mini-calc-result-tile">
-        <span class="mini-calc-result-figure" data-roth-out-rate>&mdash;</span>
-        <span class="mini-calc-result-caption">Marginal rate applied to the conversion</span>
-      </div>
-      <div class="mini-calc-result-tile">
-        <span class="mini-calc-result-figure" data-roth-out-before>&mdash;</span>
-        <span class="mini-calc-result-caption">Bracket before conversion</span>
-      </div>
-      <div class="mini-calc-result-tile">
-        <span class="mini-calc-result-figure" data-roth-out-after>&mdash;</span>
-        <span class="mini-calc-result-caption">Bracket after conversion</span>
-      </div>
-    </div>
-  </div>
-  <p class="mini-calc-note">Based on 2026 federal marginal tax brackets for ordinary income. Does not account for state taxes, the standard deduction or other deductions, credits, Medicare IRMAA surcharges, or the net investment income tax. This is an educational estimate only, not tax advice &mdash; individual circumstances vary, and we recommend reviewing any conversion with a qualified tax professional before proceeding.</p>
-</div>
 """
 
 resources_body = resources_body.replace("__BREADCRUMB__", breadcrumb("Resources", "resources.html"))
