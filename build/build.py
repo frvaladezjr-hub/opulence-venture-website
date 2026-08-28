@@ -672,6 +672,40 @@ build_service_page(
     ],
 )
 
+RMD_CALCULATOR_HTML = """
+<div class="mini-calc" data-rmd-calculator>
+  <p class="mini-calc-label">Estimate this year's required minimum distribution</p>
+  <div class="form-grid form-grid--2">
+    <div class="field">
+      <label for="rmd-age">Your Age This Year</label>
+      <input type="number" id="rmd-age" min="73" max="120" step="1" placeholder="e.g. 75" inputmode="numeric" />
+    </div>
+    <div class="field">
+      <label for="rmd-balance">Account Balance as of December 31 Last Year</label>
+      <input type="number" id="rmd-balance" min="0" step="1000" placeholder="e.g. 500000" inputmode="numeric" />
+    </div>
+  </div>
+  <button type="button" class="btn btn-primary" style="margin-top:var(--space-6);" data-rmd-calculate>Estimate My RMD</button>
+  <div class="mini-calc-result" data-rmd-result hidden>
+    <div class="mini-calc-result-grid">
+      <div class="mini-calc-result-tile">
+        <span class="mini-calc-result-figure" data-rmd-out-amount>&mdash;</span>
+        <span class="mini-calc-result-caption">Estimated required minimum distribution this year</span>
+      </div>
+      <div class="mini-calc-result-tile">
+        <span class="mini-calc-result-figure" data-rmd-out-divisor>&mdash;</span>
+        <span class="mini-calc-result-caption">IRS life expectancy factor used</span>
+      </div>
+      <div class="mini-calc-result-tile">
+        <span class="mini-calc-result-figure" data-rmd-out-rate>&mdash;</span>
+        <span class="mini-calc-result-caption">Approximate percentage of the balance</span>
+      </div>
+    </div>
+  </div>
+  <p class="mini-calc-note">Based on the IRS Uniform Lifetime Table (Table III), in effect since 2022 and applicable for 2026. This table generally applies to most account owners; a different table may apply if your sole beneficiary is a spouse more than 10 years younger, and different rules apply to inherited accounts. RMD rules generally begin at age 73 for those reaching age 72 after 2022 (rising to 75 in 2033) and do not apply to the original owner of a Roth IRA. This is an educational estimate only, not tax or legal advice &mdash; individual circumstances vary, and we recommend confirming your specific RMD with a qualified tax professional or your account custodian.</p>
+</div>
+"""
+
 # ---- Wealth & Legacy ---------------------------------------------------------
 build_service_page(
     filename="wealth-legacy.html",
@@ -685,7 +719,7 @@ build_service_page(
     focus_items=[
         ("Estate Planning Coordination", "Working alongside your estate planning attorney to help align your financial plan with your estate documents."),
         ("Wealth Transfer", "Reviewing strategies designed to help transfer assets to the next generation in a coordinated way."),
-        ("Retirement Income Planning", "Sequencing income sources with the goal of supporting your lifestyle throughout retirement."),
+        ("Retirement Income Planning", "Sequencing income sources with the goal of supporting your lifestyle throughout retirement.", RMD_CALCULATOR_HTML),
         ("Legacy Planning", "Clarifying your legacy goals and how your financial and estate plans may help support them."),
         ("Life Insurance Strategies", "Evaluating how life insurance strategies may fit into your broader wealth transfer and legacy goals."),
     ],
@@ -749,6 +783,13 @@ consultants_body = f"""
       <div class="consultant-role-group-title reveal">Founder</div>
       <div class="consultant-grid reveal">
         {consultant_card("assets/images/consultant-1.webp", "Portrait of Frank Valadez, Founder of Opulence Venture Group", "Frank Valadez", "Founder", "Oversees each client's overall plan, coordinating business, tax, retirement, and legacy strategy into one integrated approach.")}
+      </div>
+    </div>
+
+    <div class="consultant-role-group">
+      <div class="consultant-role-group-title reveal">Principal | Wealth Advisor</div>
+      <div class="consultant-grid reveal">
+        {consultant_card("assets/images/consultant-miles-amodeo.webp", "Portrait of Miles B. Amodeo, Principal and Wealth Advisor at Opulence Venture Group", "Miles B. Amodeo, CFP&reg;, ChFC&reg;, EA", "Principal | Wealth Advisor", "Works directly with clients to coordinate wealth, tax, and retirement strategy as part of an integrated plan.")}
       </div>
     </div>
 
