@@ -937,6 +937,117 @@ page(
 )
 
 # ==========================================================================
+# CAREERS
+# ==========================================================================
+careers_body = f"""
+<section class="page-header">
+  <div class="page-header-media"><img src="assets/images/team-consultation.webp" alt="" loading="eager" decoding="async" width="1920" height="1200" /></div>
+  <div class="container--wide">
+    {breadcrumb("Careers", "careers.html")}
+    <div class="page-header-content">
+      <div class="eyebrow">Careers</div>
+      <h1>Build Your Career With Opulence Venture Group</h1>
+      <p>We're growing our team of agents, advisors, and strategic partners. Tell us a bit about yourself and how you'd like to get involved.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="eyebrow reveal">Ways to Get Involved</div>
+    <h2 class="section-title reveal" style="margin-top:var(--space-3);margin-bottom:var(--space-10);max-width:34ch;">Three ways to join our team</h2>
+    <div class="path-grid reveal">
+      {path_card(1, "Agent", "Build a practice helping individuals and families with insurance and financial-services solutions, backed by our training and support.", ["Field support and mentorship as you build your book of business", "Access to our marketing and client-service resources", "Coordinated case support for complex client needs"], "#careers-form", "Request Info")}
+      {path_card(2, "Advisor", "Join as a financial or wealth advisor and work alongside our team to deliver coordinated planning across tax, retirement, and legacy strategy.", ["Collaborative planning environment across specialties", "Support pursuing relevant licensing, designations, and continuing education", "A client base that values integrated, long-term planning"], "#careers-form", "Request Info")}
+      {path_card(3, "Strategic Partner", "Explore a referral or strategic partnership if you're a CPA, attorney, or other professional who works with business owners and families.", ["Coordinated planning for shared clients", "Clear communication and defined referral processes", "A team focused on long-term client relationships, not one-off transactions"], "#careers-form", "Request Info")}
+    </div>
+  </div>
+</section>
+
+<section class="section section--surface" id="careers-form">
+  <div class="container--wide">
+    <div class="grid grid--2 reveal" style="gap:var(--space-16);align-items:flex-start;">
+      <div>
+        <div class="eyebrow">Request More Info</div>
+        <h2 class="section-title" style="margin-top:var(--space-3);margin-bottom:var(--space-6);max-width:28ch;">Tell us about your interest</h2>
+        <p class="body-lg" style="margin-bottom:var(--space-8);max-width:56ch;">Share a few details and we'll follow up to talk through next steps. Prefer to talk right away? Schedule a call using the calendar to the right.</p>
+
+        <form data-careers-form novalidate>
+          <div class="form-grid form-grid--2">
+            <div class="field" data-field="name">
+              <label for="careers-name">Full Name</label>
+              <input type="text" id="careers-name" name="name" autocomplete="name" required />
+              <small class="error" data-error-for="name">Please enter your name.</small>
+            </div>
+            <div class="field" data-field="email">
+              <label for="careers-email">Email</label>
+              <input type="email" id="careers-email" name="email" autocomplete="email" required />
+              <small class="error" data-error-for="email">Please enter a valid email address.</small>
+            </div>
+          </div>
+          <div class="form-grid form-grid--2" style="margin-top:var(--space-6);">
+            <div class="field" data-field="phone">
+              <label for="careers-phone">Phone (optional)</label>
+              <input type="tel" id="careers-phone" name="phone" autocomplete="tel" />
+            </div>
+            <div class="field" data-field="interest">
+              <label for="careers-interest">I'm Interested In</label>
+              <select id="careers-interest" name="interest" required>
+                <option value="">Select one</option>
+                <option value="Agent">Becoming an Agent</option>
+                <option value="Advisor">Becoming an Advisor</option>
+                <option value="Strategic Partner">Strategic Partnership</option>
+                <option value="Not sure yet">Not Sure Yet</option>
+              </select>
+              <small class="error" data-error-for="interest">Please select an option.</small>
+            </div>
+          </div>
+          <div class="field" style="margin-top:var(--space-6);">
+            <label for="careers-message">Tell Us a Bit About Yourself (optional)</label>
+            <textarea id="careers-message" name="message" placeholder="Your background, experience, or what you're looking for..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="margin-top:var(--space-7);">Send Inquiry</button>
+          <p class="form-note">Submitting will open your email app with your details pre-filled so you can review before sending &mdash; nothing is sent automatically.</p>
+        </form>
+        <div data-careers-form-success hidden style="margin-top:var(--space-6);padding:var(--space-5);background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);">
+          <p style="margin:0;">Thanks &mdash; your email app should have opened with a pre-filled message. If it didn't, email us directly at <a href="mailto:info@opulenceventuregroup.com">info@opulenceventuregroup.com</a>.</p>
+        </div>
+      </div>
+
+      <div>
+        <link rel="stylesheet" href="https://assets.calendly.com/assets/external/widget.css" />
+        {calendly_embed_block("careers-schedule", "Prefer to talk directly? Schedule a call", "https://calendly.com/apdivision/careers")}
+        <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="disclaimer">
+  <div class="container">
+    <p>Career and partnership opportunities described on this page are general in nature and do not constitute an offer of employment, a guarantee of income, or a promise of any specific business outcome. Actual opportunities, compensation structures, and licensing requirements vary by role and individual circumstances, and some roles may require appropriate state licensing or registration. Submitting an inquiry does not create any contractual or working relationship with Opulence Venture Group.</p>
+  </div>
+</section>
+
+__CTA__
+"""
+
+careers_body = careers_body.replace("__CTA__", cta_band(
+    "Ready to take the next step?",
+    "Reach out today and let's talk about how you can get involved with Opulence Venture Group.",
+    primary_label="Request Info",
+    primary_href="#careers-form",
+))
+
+page(
+    "careers.html",
+    "Careers | Join Opulence Venture Group",
+    "Explore career and partnership opportunities with Opulence Venture Group as an agent, advisor, or strategic partner.",
+    "assets/images/team-consultation.webp",
+    careers_body,
+)
+
+# ==========================================================================
 # RESOURCES
 # ==========================================================================
 resources_body = """

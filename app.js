@@ -611,4 +611,59 @@
       });
     }
   }
+
+  /* ---------- Careers inquiry form ---------- */
+  var careersForm = document.querySelector('[data-careers-form]');
+  if (careersForm) {
+    careersForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var valid = true;
+      var fields = careersForm.querySelectorAll('[required]');
+      fields.forEach(function (input) {
+        var field = input.closest('.field');
+        var invalid = !input.value.trim() || (input.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value));
+        if (field) field.setAttribute('data-invalid', String(invalid));
+        if (invalid) valid = false;
+      });
+      if (!valid) {
+        var firstInvalid = careersForm.querySelector('[data-invalid="true"] input, [data-invalid="true"] select, [data-invalid="true"] textarea');
+        if (firstInvalid) firstInvalid.focus();
+        return;
+      }
+      var name = careersForm.querySelector('#careers-name').value.trim();
+      var email = careersForm.querySelector('#careers-email').value.trim();
+      var phone = careersForm.querySelector('#careers-phone').value.trim();
+      var interest = careersForm.querySelector('#careers-interest').value;
+      var message = careersForm.querySelector('#careers-message').value.trim();
+
+      var bodyLines = [
+        'Name: ' + name,
+        'Email: ' + email,
+        'Phone: ' + (phone || 'Not provided'),
+        "Interested in: " + interest,
+        '',
+        'Message:',
+        message || 'Not provided'
+      ];
+      var subject = 'Careers Inquiry \u2014 ' + interest;
+      var mailto = 'mailto:info@opulenceventuregroup.com'
+        + '?subject=' + encodeURIComponent(subject)
+        + '&body=' + encodeURIComponent(bodyLines.join('\n'));
+      window.location.href = mailto;
+
+      var success = document.querySelector('[data-careers-form-success]');
+      careersForm.style.display = 'none';
+      if (success) {
+        success.hidden = false;
+        success.setAttribute('tabindex', '-1');
+        success.focus();
+      }
+    });
+    careersForm.querySelectorAll('input, textarea, select').forEach(function (input) {
+      input.addEventListener('input', function () {
+        var field = input.closest('.field');
+        if (field) field.setAttribute('data-invalid', 'false');
+      });
+    });
+  }
 })();
