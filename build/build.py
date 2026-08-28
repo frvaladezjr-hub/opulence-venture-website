@@ -585,6 +585,40 @@ __CTA__
     page(filename, meta_title, meta_description, feature_image, body)
 
 
+RMD_CALCULATOR_HTML = """
+<div class="mini-calc" data-rmd-calculator>
+  <p class="mini-calc-label">Estimate this year's required minimum distribution</p>
+  <div class="form-grid form-grid--2">
+    <div class="field">
+      <label for="rmd-age">Your Age This Year</label>
+      <input type="number" id="rmd-age" min="73" max="120" step="1" placeholder="e.g. 75" inputmode="numeric" />
+    </div>
+    <div class="field">
+      <label for="rmd-balance">Account Balance as of December 31 Last Year</label>
+      <input type="number" id="rmd-balance" min="0" step="1000" placeholder="e.g. 500000" inputmode="numeric" />
+    </div>
+  </div>
+  <button type="button" class="btn btn-primary" style="margin-top:var(--space-6);" data-rmd-calculate>Estimate My RMD</button>
+  <div class="mini-calc-result" data-rmd-result hidden>
+    <div class="mini-calc-result-grid">
+      <div class="mini-calc-result-tile">
+        <span class="mini-calc-result-figure" data-rmd-out-amount>&mdash;</span>
+        <span class="mini-calc-result-caption">Estimated required minimum distribution this year</span>
+      </div>
+      <div class="mini-calc-result-tile">
+        <span class="mini-calc-result-figure" data-rmd-out-divisor>&mdash;</span>
+        <span class="mini-calc-result-caption">IRS life expectancy factor used</span>
+      </div>
+      <div class="mini-calc-result-tile">
+        <span class="mini-calc-result-figure" data-rmd-out-rate>&mdash;</span>
+        <span class="mini-calc-result-caption">Approximate percentage of the balance</span>
+      </div>
+    </div>
+  </div>
+  <p class="mini-calc-note">Based on the IRS Uniform Lifetime Table (Table III), in effect since 2022 and applicable for 2026. This table generally applies to most account owners; a different table may apply if your sole beneficiary is a spouse more than 10 years younger, and different rules apply to inherited accounts. RMD rules generally begin at age 73 for those reaching age 72 after 2022 (rising to 75 in 2033) and do not apply to the original owner of a Roth IRA. This is an educational estimate only, not tax or legal advice &mdash; individual circumstances vary, and we recommend confirming your specific RMD with a qualified tax professional or your account custodian.</p>
+</div>
+"""
+
 # ---- Business Consulting --------------------------------------------------
 build_service_page(
     filename="business-consulting.html",
@@ -625,7 +659,7 @@ build_service_page(
     ],
     audience_chips=["High-Income Families", "Professionals", "Pre-Retirees", "Legacy-Focused Families"],
     focus_items=[
-        ("Retirement Planning", "Evaluating how your current savings, income sources, and timeline align with your retirement goals."),
+        ("Retirement Planning", "Evaluating how your current savings, income sources, and timeline align with your retirement goals.", RMD_CALCULATOR_HTML),
         ("Asset Optimization", "Reviewing how assets are positioned across account types with an eye toward tax efficiency and long-term goals."),
         ("Tax-Efficient Wealth Strategies", "Identifying strategies that may help manage your tax exposure over time, subject to applicable rules."),
         ("Life Insurance Planning", "Evaluating protection and planning strategies suited to your income replacement and legacy goals."),
@@ -672,39 +706,6 @@ build_service_page(
     ],
 )
 
-RMD_CALCULATOR_HTML = """
-<div class="mini-calc" data-rmd-calculator>
-  <p class="mini-calc-label">Estimate this year's required minimum distribution</p>
-  <div class="form-grid form-grid--2">
-    <div class="field">
-      <label for="rmd-age">Your Age This Year</label>
-      <input type="number" id="rmd-age" min="73" max="120" step="1" placeholder="e.g. 75" inputmode="numeric" />
-    </div>
-    <div class="field">
-      <label for="rmd-balance">Account Balance as of December 31 Last Year</label>
-      <input type="number" id="rmd-balance" min="0" step="1000" placeholder="e.g. 500000" inputmode="numeric" />
-    </div>
-  </div>
-  <button type="button" class="btn btn-primary" style="margin-top:var(--space-6);" data-rmd-calculate>Estimate My RMD</button>
-  <div class="mini-calc-result" data-rmd-result hidden>
-    <div class="mini-calc-result-grid">
-      <div class="mini-calc-result-tile">
-        <span class="mini-calc-result-figure" data-rmd-out-amount>&mdash;</span>
-        <span class="mini-calc-result-caption">Estimated required minimum distribution this year</span>
-      </div>
-      <div class="mini-calc-result-tile">
-        <span class="mini-calc-result-figure" data-rmd-out-divisor>&mdash;</span>
-        <span class="mini-calc-result-caption">IRS life expectancy factor used</span>
-      </div>
-      <div class="mini-calc-result-tile">
-        <span class="mini-calc-result-figure" data-rmd-out-rate>&mdash;</span>
-        <span class="mini-calc-result-caption">Approximate percentage of the balance</span>
-      </div>
-    </div>
-  </div>
-  <p class="mini-calc-note">Based on the IRS Uniform Lifetime Table (Table III), in effect since 2022 and applicable for 2026. This table generally applies to most account owners; a different table may apply if your sole beneficiary is a spouse more than 10 years younger, and different rules apply to inherited accounts. RMD rules generally begin at age 73 for those reaching age 72 after 2022 (rising to 75 in 2033) and do not apply to the original owner of a Roth IRA. This is an educational estimate only, not tax or legal advice &mdash; individual circumstances vary, and we recommend confirming your specific RMD with a qualified tax professional or your account custodian.</p>
-</div>
-"""
 
 # ---- Wealth & Legacy ---------------------------------------------------------
 build_service_page(
