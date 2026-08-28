@@ -251,54 +251,348 @@
     }
   }
 
-  /* ---------- Required minimum distribution (RMD) estimator ---------- */
-  var rmdCalc = document.querySelector('[data-rmd-calculator]');
-  if (rmdCalc) {
-    var RMD_DIVISORS = {
-      73: 26.5, 74: 25.5, 75: 24.6, 76: 23.7, 77: 22.9, 78: 22.0, 79: 21.1,
-      80: 20.2, 81: 19.4, 82: 18.5, 83: 17.7, 84: 16.8, 85: 16.0, 86: 15.2,
-      87: 14.4, 88: 13.7, 89: 12.9, 90: 12.2, 91: 11.5, 92: 10.8, 93: 10.1,
-      94: 9.5, 95: 8.9, 96: 8.4, 97: 7.8, 98: 7.3, 99: 6.8, 100: 6.4,
-      101: 6.0, 102: 5.6, 103: 5.2, 104: 4.9, 105: 4.6, 106: 4.3, 107: 4.1,
-      108: 3.9, 109: 3.7, 110: 3.5, 111: 3.4, 112: 3.3, 113: 3.1, 114: 3.0,
-      115: 2.9, 116: 2.8, 117: 2.7, 118: 2.5, 119: 2.3
-    };
-    var rmdCurrency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+  /* ---------- Required Minimum Distribution (RMD) Projector ---------- */
+  /*
+   * Configuration block — update here if the IRS changes RMD starting ages
+   * or the Uniform Lifetime Table divisors. Nothing below this config object
+   * should need to change if the underlying IRS rules are revised.
+   */
+  var RMD_CONFIG = {
+    // RMD required-beginning-age cohorts by birth year, per the SECURE Act
+    // and SECURE 2.0 Act (IRC Section 401(a)(9); see IRS Pub. 590-B).
+    startingAgeByBirthYear: [
+      { maxYear: 1950, age: 72 },   // born 1950 or earlier
+      { maxYear: 1959, age: 73 },   // born 1951-1959
+      { maxYear: Infinity, age: 75 } // born 1960 or later
+    ],
+    // IRS Uniform Lifetime Table (Table III), Treasury Reg. Section 1.401(a)(9)-9,
+    // effective for distribution years beginning on/after Jan 1, 2022.
+    // Source: IRS Publication 590-B, Appendix B, Table III.
+    lifeExpectancyDivisors: {
+      72: 27.4, 73: 26.5, 74: 25.5, 75: 24.6, 76: 23.7, 77: 22.9, 78: 22.0,
+      79: 21.1, 80: 20.2, 81: 19.4, 82: 18.5, 83: 17.7, 84: 16.8, 85: 16.0,
+      86: 15.2, 87: 14.4, 88: 13.7, 89: 12.9, 90: 12.2, 91: 11.5, 92: 10.8,
+      93: 10.1, 94: 9.5, 95: 8.9, 96: 8.4, 97: 7.8, 98: 7.3, 99: 6.8,
+      100: 6.4, 101: 6.0, 102: 5.6, 103: 5.2, 104: 4.9, 105: 4.6, 106: 4.3,
+      107: 4.1, 108: 3.9, 109: 3.7, 110: 3.5, 111: 3.4, 112: 3.3, 113: 3.1,
+      114: 3.0, 115: 2.9, 116: 2.8, 117: 2.7, 118: 2.5, 119: 2.3, 120: 2.0
+    },
+    finalProjectionAge: 95,
+    defaultRatePercent: 7,
+    minBirthYear: 1920,
+    maxRatePercent: 20,
+    minRatePercent: -20
+  };
 
-    var rmdDivisorForAge = function (age) {
-      if (age >= 120) return 2.0;
-      if (RMD_DIVISORS[age]) return RMD_DIVISORS[age];
-      // Fall back to the nearest defined age within the table's range.
-      var clamped = Math.max(73, Math.min(119, age));
-      return RMD_DIVISORS[clamped];
-    };
+  function rmdStartingAge(birthYear) {
+    var cohorts = RMD_CONFIG.startingAgeByBirthYear;
+    for (var i = 0; i < cohorts.length; i++) {
+      if (birthYear <= cohorts[i].maxYear) return cohorts[i].age;
+    }
+    return cohorts[cohorts.length - 1].age;
+  }
 
-    var rmdBtn = rmdCalc.querySelector('[data-rmd-calculate]');
-    if (rmdBtn) {
-      rmdBtn.addEventListener('click', function () {
-        var ageEl = rmdCalc.querySelector('#rmd-age');
-        var balanceEl = rmdCalc.querySelector('#rmd-balance');
-        var resultEl = rmdCalc.querySelector('[data-rmd-result]');
+  function rmdDivisorForAge(age) {
+    var table = RMD_CONFIG.lifeExpectancyDivisors;
+    if (table[age] !== undefined) return table[age];
+    var clamped = Math.max(72, Math.min(120, age));
+    return table[clamped] !== undefined ? table[clamped] : 2.0;
+  }
 
-        var age = Math.round(parseFloat(ageEl.value) || 0);
-        var balance = Math.max(0, parseFloat(balanceEl.value) || 0);
+  document.querySelectorAll('[data-rmd-projector]').forEach(function (rmdCalc) {
+    var rmdCurrencyWhole = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+    var rmdChartInstance = null;
 
-        if (age < 73) {
-          age = 73;
-          ageEl.value = 73;
+    var birthYearEl = rmdCalc.querySelector('input[id^="rmd-birth-year"]');
+    var balanceEl = rmdCalc.querySelector('input[id^="rmd-balance-2"]');
+    var rateEl = rmdCalc.querySelector('input[id^="rmd-rate"]');
+    var resultEl = rmdCalc.querySelector('[data-rmd-result]');
+    var calcBtn = rmdCalc.querySelector('[data-rmd-calculate]');
+    var resetBtn = rmdCalc.querySelector('[data-rmd-reset]');
+    var tableBody = rmdCalc.querySelector('[data-rmd-table-body]');
+    var chartCanvas = rmdCalc.querySelector('[data-rmd-chart]');
+
+    function parseCurrencyInput(value) {
+      var cleaned = String(value || '').replace(/[^0-9.\-]/g, '');
+      var num = parseFloat(cleaned);
+      return isNaN(num) ? NaN : num;
+    }
+
+    function formatBalanceField() {
+      var num = parseCurrencyInput(balanceEl.value);
+      if (!isNaN(num) && num >= 0) {
+        balanceEl.value = rmdCurrencyWhole.format(num);
+      }
+    }
+    if (balanceEl) {
+      balanceEl.addEventListener('blur', formatBalanceField);
+    }
+
+    function setFieldError(fieldName, hasError) {
+      var field = rmdCalc.querySelector('[data-rmd-field="' + fieldName + '"]');
+      if (field) field.setAttribute('data-invalid', hasError ? 'true' : 'false');
+    }
+
+    function clearErrors() {
+      ['birthYear', 'balance', 'rate'].forEach(function (f) { setFieldError(f, false); });
+    }
+
+    function themeColors() {
+      var styles = getComputedStyle(document.documentElement);
+      return {
+        primary: styles.getPropertyValue('--color-primary').trim() || '#1f5c8c',
+        warning: styles.getPropertyValue('--color-warning').trim() || '#8a4a1f',
+        border: styles.getPropertyValue('--color-border').trim() || '#c9d6e2',
+        text: styles.getPropertyValue('--color-text-muted').trim() || '#4b5d6f'
+      };
+    }
+
+    function buildProjection(birthYear, balance, ratePercent) {
+      var currentYear = new Date().getFullYear();
+      var currentAge = currentYear - birthYear;
+      var startAge = rmdStartingAge(birthYear);
+      var rate = ratePercent / 100;
+      var finalAge = RMD_CONFIG.finalProjectionAge;
+
+      var rows = [];
+      var firstRmd = null;
+      var beginBalance = balance;
+      var age = currentAge;
+      var year = currentYear;
+
+      while (age <= finalAge) {
+        var isRmdYear = age >= startAge;
+        var growth = beginBalance * rate;
+        var rmdAmount = 0;
+        if (isRmdYear) {
+          var divisor = rmdDivisorForAge(age);
+          rmdAmount = divisor > 0 ? beginBalance / divisor : 0;
+        }
+        var endBalance = beginBalance + growth - rmdAmount;
+        if (endBalance < 0) endBalance = 0;
+
+        rows.push({
+          year: year, age: age, begin: beginBalance, growth: growth,
+          rmd: rmdAmount, end: endBalance, isFirstRmdYear: false
+        });
+
+        if (isRmdYear && !firstRmd) {
+          firstRmd = { year: year, age: age, amount: rmdAmount, balanceAtStart: beginBalance };
         }
 
-        var divisor = rmdDivisorForAge(age);
-        var rmdAmount = divisor > 0 ? balance / divisor : 0;
-        var rate = divisor > 0 ? (100 / divisor) : 0;
+        beginBalance = endBalance;
+        age++; year++;
+      }
 
-        rmdCalc.querySelector('[data-rmd-out-amount]').textContent = rmdCurrency.format(rmdAmount);
-        rmdCalc.querySelector('[data-rmd-out-divisor]').textContent = divisor.toFixed(1);
-        rmdCalc.querySelector('[data-rmd-out-rate]').textContent = rate.toFixed(1) + '%';
-        resultEl.hidden = false;
+      if (firstRmd) {
+        for (var i = 0; i < rows.length; i++) {
+          if (rows[i].year === firstRmd.year) { rows[i].isFirstRmdYear = true; break; }
+        }
+      }
+
+      return { currentAge: currentAge, startAge: startAge, firstRmd: firstRmd, rows: rows };
+    }
+
+    function renderTable(rows) {
+      var html = '';
+      rows.forEach(function (r) {
+        html += '<tr' + (r.isFirstRmdYear ? ' data-rmd-first-year="true"' : '') + '>' +
+          '<td>' + r.year + '</td>' +
+          '<td>' + r.age + '</td>' +
+          '<td>' + rmdCurrencyWhole.format(r.begin) + '</td>' +
+          '<td>' + rmdCurrencyWhole.format(r.growth) + '</td>' +
+          '<td>' + (r.rmd > 0 ? rmdCurrencyWhole.format(r.rmd) : '&mdash;') + '</td>' +
+          '<td>' + rmdCurrencyWhole.format(r.end) + '</td>' +
+          '</tr>';
+      });
+      tableBody.innerHTML = html;
+    }
+
+    function renderChart(rows) {
+      if (!window.Chart || !chartCanvas) return;
+      var colors = themeColors();
+      var labels = rows.map(function (r) { return r.age; });
+      var balances = rows.map(function (r) { return Math.round(r.end); });
+      var rmds = rows.map(function (r) { return Math.round(r.rmd); });
+
+      if (rmdChartInstance) {
+        rmdChartInstance.data.labels = labels;
+        rmdChartInstance.data.datasets[0].data = balances;
+        rmdChartInstance.data.datasets[1].data = rmds;
+        rmdChartInstance.data.datasets[0].borderColor = colors.primary;
+        rmdChartInstance.data.datasets[1].borderColor = colors.warning;
+        rmdChartInstance.options.scales.x.ticks.color = colors.text;
+        rmdChartInstance.options.scales.y.ticks.color = colors.text;
+        rmdChartInstance.options.scales.x.grid.color = colors.border;
+        rmdChartInstance.options.scales.y.grid.color = colors.border;
+        rmdChartInstance.options.plugins.legend.labels.color = colors.text;
+        rmdChartInstance.update();
+        return;
+      }
+
+      rmdChartInstance = new window.Chart(chartCanvas.getContext('2d'), {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Projected Account Balance',
+              data: balances,
+              borderColor: colors.primary,
+              backgroundColor: 'transparent',
+              tension: 0.25,
+              pointRadius: 0,
+              borderWidth: 2,
+              yAxisID: 'y'
+            },
+            {
+              label: 'Estimated Annual RMD',
+              data: rmds,
+              borderColor: colors.warning,
+              backgroundColor: 'transparent',
+              tension: 0.25,
+              pointRadius: 0,
+              borderWidth: 2,
+              yAxisID: 'y'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { position: 'bottom', labels: { color: colors.text, boxWidth: 14 } },
+            tooltip: {
+              callbacks: {
+                title: function (items) { return 'Age ' + items[0].label; },
+                label: function (item) { return item.dataset.label + ': ' + rmdCurrencyWhole.format(item.parsed.y); }
+              }
+            }
+          },
+          scales: {
+            x: {
+              title: { display: true, text: 'Age', color: colors.text },
+              ticks: { color: colors.text },
+              grid: { color: colors.border }
+            },
+            y: {
+              title: { display: true, text: 'Dollars', color: colors.text },
+              ticks: {
+                color: colors.text,
+                callback: function (value) { return rmdCurrencyWhole.format(value); }
+              },
+              grid: { color: colors.border }
+            }
+          }
+        }
       });
     }
-  }
+
+    function showFormError(message) {
+      var errorBanner = rmdCalc.querySelector('[data-rmd-form-error]');
+      if (!errorBanner) {
+        errorBanner = document.createElement('p');
+        errorBanner.setAttribute('data-rmd-form-error', '');
+        errorBanner.style.color = 'var(--color-error)';
+        errorBanner.style.fontSize = 'var(--text-sm)';
+        errorBanner.style.marginTop = 'var(--space-4)';
+        rmdCalc.querySelector('.rmd-projector-actions').insertAdjacentElement('afterend', errorBanner);
+      }
+      errorBanner.textContent = message;
+      errorBanner.hidden = !message;
+    }
+
+    if (calcBtn) {
+      calcBtn.addEventListener('click', function () {
+        clearErrors();
+        showFormError('');
+
+        var currentYear = new Date().getFullYear();
+        var birthYear = Math.round(parseFloat(birthYearEl.value));
+        var balance = parseCurrencyInput(balanceEl.value);
+        var ratePercent = parseFloat(rateEl.value);
+
+        var hasError = false;
+
+        if (isNaN(birthYear) || birthYear < RMD_CONFIG.minBirthYear || birthYear > currentYear) {
+          setFieldError('birthYear', true);
+          hasError = true;
+        } else {
+          var age = currentYear - birthYear;
+          if (age > RMD_CONFIG.finalProjectionAge) {
+            setFieldError('birthYear', true);
+            hasError = true;
+            showFormError('Please enter a birth year that results in a current age of ' + RMD_CONFIG.finalProjectionAge + ' or younger, since this tool projects through age ' + RMD_CONFIG.finalProjectionAge + '.');
+          }
+        }
+
+        if (isNaN(balance) || balance < 0) {
+          setFieldError('balance', true);
+          hasError = true;
+        }
+
+        if (isNaN(ratePercent) || ratePercent < RMD_CONFIG.minRatePercent || ratePercent > RMD_CONFIG.maxRatePercent) {
+          setFieldError('rate', true);
+          hasError = true;
+        }
+
+        if (hasError) {
+          resultEl.hidden = true;
+          return;
+        }
+
+        formatBalanceField();
+
+        var projection = buildProjection(birthYear, balance, ratePercent);
+
+        rmdCalc.querySelector('[data-rmd-out-current-age]').textContent = projection.currentAge;
+        rmdCalc.querySelector('[data-rmd-out-start-age]').textContent = projection.startAge;
+
+        if (projection.firstRmd) {
+          rmdCalc.querySelector('[data-rmd-out-first-year]').textContent = projection.firstRmd.year;
+          rmdCalc.querySelector('[data-rmd-out-balance-at-start]').textContent = rmdCurrencyWhole.format(projection.firstRmd.balanceAtStart);
+          rmdCalc.querySelector('[data-rmd-out-first-amount]').textContent = rmdCurrencyWhole.format(projection.firstRmd.amount);
+        } else {
+          rmdCalc.querySelector('[data-rmd-out-first-year]').textContent = 'Beyond age ' + RMD_CONFIG.finalProjectionAge;
+          rmdCalc.querySelector('[data-rmd-out-balance-at-start]').textContent = String.fromCharCode(8212);
+          rmdCalc.querySelector('[data-rmd-out-first-amount]').textContent = String.fromCharCode(8212);
+        }
+
+        renderTable(projection.rows);
+        renderChart(projection.rows);
+        resultEl.hidden = false;
+        resultEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+    }
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', function () {
+        birthYearEl.value = '';
+        balanceEl.value = '';
+        rateEl.value = RMD_CONFIG.defaultRatePercent;
+        clearErrors();
+        showFormError('');
+        resultEl.hidden = true;
+        if (rmdChartInstance) {
+          rmdChartInstance.destroy();
+          rmdChartInstance = null;
+        }
+      });
+    }
+
+    // Keep chart colors in sync when the user toggles light/dark mode.
+    var lastRows = null;
+    var origRenderChart = renderChart;
+    renderChart = function (rows) {
+      lastRows = rows;
+      origRenderChart(rows);
+    };
+    var themeObserver = new MutationObserver(function () {
+      if (rmdChartInstance && lastRows) renderChart(lastRows);
+    });
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  });
 
   /* ---------- FICA savings estimator (Irongate partner card) ---------- */
   var ficaCalc = document.querySelector('[data-fica-calculator]');

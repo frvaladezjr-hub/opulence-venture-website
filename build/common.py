@@ -57,6 +57,7 @@ def head(title, description, path, og_image="assets/images/hero-skyline.webp", j
 <link rel="stylesheet" href="base.css" />
 <link rel="stylesheet" href="style.css" />
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js" defer></script>
 {jsonld}
 </head>
 """

@@ -586,36 +586,85 @@ __CTA__
 
 
 RMD_CALCULATOR_HTML = """
-<div class="mini-calc" data-rmd-calculator>
-  <p class="mini-calc-label">Estimate this year's required minimum distribution</p>
-  <div class="form-grid form-grid--2">
-    <div class="field">
-      <label for="rmd-age">Your Age This Year</label>
-      <input type="number" id="rmd-age" min="73" max="120" step="1" placeholder="e.g. 75" inputmode="numeric" />
+<div class="rmd-projector" data-rmd-projector>
+  <p class="mini-calc-label">Required Minimum Distribution Calculator</p>
+  <p class="rmd-projector-desc">Estimate your future Required Minimum Distributions and see how your retirement account may grow over time based on an assumed rate of return.</p>
+
+  <div class="form-grid form-grid--3">
+    <div class="field" data-rmd-field="birthYear">
+      <label for="rmd-birth-year">Birth Year</label>
+      <input type="number" id="rmd-birth-year" inputmode="numeric" placeholder="e.g. 1958" min="1920" max="2015" step="1" />
+      <small class="error" data-rmd-error-for="birthYear">Please enter a valid birth year.</small>
     </div>
-    <div class="field">
-      <label for="rmd-balance">Account Balance as of December 31 Last Year</label>
-      <input type="number" id="rmd-balance" min="0" step="1000" placeholder="e.g. 500000" inputmode="numeric" />
+    <div class="field" data-rmd-field="balance">
+      <label for="rmd-balance-2">Current Retirement Account Balance</label>
+      <input type="text" id="rmd-balance-2" inputmode="decimal" placeholder="$500,000" />
+      <small class="error" data-rmd-error-for="balance">Please enter a valid, non-negative account balance.</small>
     </div>
-  </div>
-  <button type="button" class="btn btn-primary" style="margin-top:var(--space-6);" data-rmd-calculate>Estimate My RMD</button>
-  <div class="mini-calc-result" data-rmd-result hidden>
-    <div class="mini-calc-result-grid">
-      <div class="mini-calc-result-tile">
-        <span class="mini-calc-result-figure" data-rmd-out-amount>&mdash;</span>
-        <span class="mini-calc-result-caption">Estimated required minimum distribution this year</span>
+    <div class="field" data-rmd-field="rate">
+      <label for="rmd-rate">Assumed Annual Rate of Return</label>
+      <div class="rmd-rate-field">
+        <input type="number" id="rmd-rate" inputmode="decimal" value="7" min="-20" max="20" step="0.1" />
+        <span class="rmd-rate-suffix">%</span>
       </div>
-      <div class="mini-calc-result-tile">
-        <span class="mini-calc-result-figure" data-rmd-out-divisor>&mdash;</span>
-        <span class="mini-calc-result-caption">IRS life expectancy factor used</span>
-      </div>
-      <div class="mini-calc-result-tile">
-        <span class="mini-calc-result-figure" data-rmd-out-rate>&mdash;</span>
-        <span class="mini-calc-result-caption">Approximate percentage of the balance</span>
-      </div>
+      <small class="error" data-rmd-error-for="rate">Please enter a rate of return between -20% and 20%.</small>
+      <small class="rmd-inline-note">Illustrative only. Investment returns are not guaranteed.</small>
     </div>
   </div>
-  <p class="mini-calc-note">Based on the IRS Uniform Lifetime Table (Table III), in effect since 2022 and applicable for 2026. This table generally applies to most account owners; a different table may apply if your sole beneficiary is a spouse more than 10 years younger, and different rules apply to inherited accounts. RMD rules generally begin at age 73 for those reaching age 72 after 2022 (rising to 75 in 2033) and do not apply to the original owner of a Roth IRA. This is an educational estimate only, not tax or legal advice &mdash; individual circumstances vary, and we recommend confirming your specific RMD with a qualified tax professional or your account custodian.</p>
+
+  <p class="rmd-inline-note" style="margin-top:var(--space-5);">For illustration purposes only &mdash; calculations are estimates and may not reflect your actual RMD.</p>
+
+  <div class="rmd-projector-actions">
+    <button type="button" class="btn btn-primary" data-rmd-calculate>Calculate My RMD Projection</button>
+    <button type="button" class="btn btn-outline" data-rmd-reset>Reset Calculator</button>
+  </div>
+
+  <div class="rmd-projector-result" data-rmd-result hidden>
+    <div class="mini-calc-result-grid rmd-summary-grid">
+      <div class="mini-calc-result-tile">
+        <span class="mini-calc-result-figure" data-rmd-out-current-age>&mdash;</span>
+        <span class="mini-calc-result-caption">Current age</span>
+      </div>
+      <div class="mini-calc-result-tile">
+        <span class="mini-calc-result-figure" data-rmd-out-start-age>&mdash;</span>
+        <span class="mini-calc-result-caption">Estimated RMD starting age</span>
+      </div>
+      <div class="mini-calc-result-tile">
+        <span class="mini-calc-result-figure" data-rmd-out-first-year>&mdash;</span>
+        <span class="mini-calc-result-caption">Estimated first RMD year</span>
+      </div>
+      <div class="mini-calc-result-tile">
+        <span class="mini-calc-result-figure" data-rmd-out-balance-at-start>&mdash;</span>
+        <span class="mini-calc-result-caption">Estimated account value when RMDs begin</span>
+      </div>
+      <div class="mini-calc-result-tile">
+        <span class="mini-calc-result-figure" data-rmd-out-first-amount>&mdash;</span>
+        <span class="mini-calc-result-caption">Estimated first-year RMD</span>
+      </div>
+    </div>
+
+    <div class="rmd-chart-wrap">
+      <canvas data-rmd-chart height="260"></canvas>
+    </div>
+
+    <div class="rmd-table-wrap">
+      <table class="rmd-table" data-rmd-table>
+        <thead>
+          <tr>
+            <th>Year</th>
+            <th>Age</th>
+            <th>Beginning Balance</th>
+            <th>Estimated Growth</th>
+            <th>Estimated RMD</th>
+            <th>Ending Balance</th>
+          </tr>
+        </thead>
+        <tbody data-rmd-table-body></tbody>
+      </table>
+    </div>
+  </div>
+
+  <p class="mini-calc-note">This calculator is for educational and illustrative purposes only and does not constitute tax, legal, investment, or financial advice. Actual Required Minimum Distributions are generally based on the applicable IRS rules, life expectancy factors, and the value of retirement accounts as of December 31 of the prior year. Tax laws and RMD rules may change. Investment returns are not guaranteed, and actual results will vary. Please consult with a qualified tax, legal, financial, or investment professional regarding your individual situation. All calculations are performed in your browser &mdash; no financial information you enter here is stored or transmitted.</p>
 </div>
 """
 

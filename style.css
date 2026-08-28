@@ -1206,6 +1206,114 @@ p, li, figcaption {
   border-radius: var(--radius-md);
 }
 
+@media (min-width: 640px) {
+  .form-grid--3 { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* ==========================================================================
+   RMD Projector (Required Minimum Distribution calculator + chart + table)
+   ========================================================================== */
+
+.rmd-projector {
+  margin-top: var(--space-6);
+  padding: var(--space-6);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+.rmd-projector-desc {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin: var(--space-2) 0 var(--space-6);
+  max-width: 68ch;
+}
+.rmd-rate-field {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.rmd-rate-field input { flex: 1; }
+.rmd-rate-suffix {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+.rmd-inline-note {
+  display: block;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+.rmd-projector-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+.rmd-projector-result { margin-top: var(--space-8); }
+.rmd-summary-grid {
+  grid-template-columns: 1fr;
+}
+@media (min-width: 640px) {
+  .rmd-summary-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 960px) {
+  .rmd-summary-grid { grid-template-columns: repeat(5, 1fr); }
+  .rmd-summary-grid .mini-calc-result-figure { font-size: var(--text-lg); }
+}
+.rmd-chart-wrap {
+  margin-top: var(--space-8);
+  padding: var(--space-5);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  position: relative;
+  height: 300px;
+}
+.rmd-chart-wrap canvas { max-width: 100%; }
+.rmd-table-wrap {
+  margin-top: var(--space-8);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  background: var(--color-surface);
+}
+.rmd-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}
+.rmd-table caption { text-align: left; }
+.rmd-table th,
+.rmd-table td {
+  padding: var(--space-3) var(--space-4);
+  text-align: right;
+  border-bottom: 1px solid var(--color-border);
+}
+.rmd-table th:first-child, .rmd-table td:first-child,
+.rmd-table th:nth-child(2), .rmd-table td:nth-child(2) {
+  text-align: left;
+}
+.rmd-table thead th {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  background: var(--color-surface-2);
+  position: sticky;
+  top: 0;
+}
+.rmd-table tbody tr:last-child td { border-bottom: none; }
+.rmd-table tbody tr[data-rmd-first-year='true'] {
+  background: oklch(from var(--color-primary) l c h / 0.12);
+  font-weight: 600;
+}
+.rmd-table tbody tr[data-rmd-first-year='true'] td:first-child::after {
+  content: ' \2014 First RMD Year';
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
 /* ==========================================================================
    Mini calculator (Roth conversion estimator, Resources page)
    ========================================================================== */
