@@ -955,7 +955,7 @@ careers_body = f"""
 <section class="section">
   <div class="container">
     <div class="eyebrow reveal">Ways to Get Involved</div>
-    <h2 class="section-title reveal" style="margin-top:var(--space-3);margin-bottom:var(--space-10);max-width:34ch;">Three ways to join our team</h2>
+    <h2 class="section-title reveal" style="margin-top:var(--space-3);margin-bottom:var(--space-10);max-width:34ch;">Become part of the vision</h2>
     <div class="path-grid reveal">
       {path_card(1, "Agent", "Build a practice helping individuals and families with insurance and financial-services solutions, backed by our training and support.", ["Field support and mentorship as you build your book of business", "Access to our marketing and client-service resources", "Coordinated case support for complex client needs"], "#careers-form", "Request Info")}
       {path_card(2, "Advisor", "Join as a financial or wealth advisor and work alongside our team to deliver coordinated planning across tax, retirement, and legacy strategy.", ["Collaborative planning environment across specialties", "Support pursuing relevant licensing, designations, and continuing education", "A client base that values integrated, long-term planning"], "#careers-form", "Request Info")}
