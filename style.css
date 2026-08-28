@@ -1254,10 +1254,8 @@ p, li, figcaption {
   grid-template-columns: 1fr;
 }
 @media (min-width: 640px) {
-  .rmd-summary-grid { grid-template-columns: repeat(2, 1fr); }
-}
-@media (min-width: 960px) {
-  .rmd-summary-grid { grid-template-columns: repeat(5, 1fr); }
+  .mini-calc-result-grid.rmd-summary-grid { grid-template-columns: repeat(2, 1fr); }
+  .rmd-summary-grid > *:nth-child(5) { grid-column: 1 / -1; }
   .rmd-summary-grid .mini-calc-result-figure { font-size: var(--text-lg); }
 }
 .rmd-chart-wrap {
