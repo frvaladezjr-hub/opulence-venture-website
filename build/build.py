@@ -725,6 +725,61 @@ ROTH_CALCULATOR_HTML = """
 </div>
 """
 
+FIN_CALCULATOR_HTML = """
+<div class="mini-calc" data-fin-calculator>
+  <p class="mini-calc-label">Estimate your Financial Independence Number</p>
+  <div class="form-grid form-grid--2">
+    <div class="field">
+      <label for="fin-current-age">Current Age</label>
+      <input type="number" id="fin-current-age" min="0" max="100" step="1" placeholder="e.g. 45" inputmode="numeric" />
+    </div>
+    <div class="field" data-fin-field="retirement-age">
+      <label for="fin-retirement-age">Desired Retirement Age</label>
+      <input type="number" id="fin-retirement-age" min="0" max="100" step="1" placeholder="e.g. 65" inputmode="numeric" />
+      <small class="error">Retirement age must be greater than your current age.</small>
+    </div>
+    <div class="field">
+      <label for="fin-income">Desired Annual Income in Retirement</label>
+      <input type="number" id="fin-income" min="0" step="1000" placeholder="e.g. 100000" inputmode="numeric" />
+    </div>
+    <div class="field">
+      <label for="fin-savings">Current Investment &amp; Retirement Savings</label>
+      <input type="number" id="fin-savings" min="0" step="1000" placeholder="e.g. 250000" inputmode="numeric" />
+    </div>
+    <div class="field">
+      <label for="fin-monthly-savings">Amount You're Currently Saving Each Month</label>
+      <input type="number" id="fin-monthly-savings" min="0" step="50" placeholder="e.g. 1500" inputmode="numeric" />
+    </div>
+    <div class="field">
+      <label for="fin-return-rate">Expected Average Annual Rate of Return (%)</label>
+      <input type="number" id="fin-return-rate" min="0" max="20" step="0.1" placeholder="e.g. 6" inputmode="decimal" />
+    </div>
+  </div>
+  <button type="button" class="btn btn-primary" style="margin-top:var(--space-6);" data-fin-calculate>Calculate My Number</button>
+  <div class="mini-calc-result" data-fin-result hidden>
+    <div class="mini-calc-result-grid">
+      <div class="mini-calc-result-tile">
+        <span class="mini-calc-result-figure" data-fin-out-number>&mdash;</span>
+        <span class="mini-calc-result-caption">Your Financial Independence Number (desired income &times; 25)</span>
+      </div>
+      <div class="mini-calc-result-tile">
+        <span class="mini-calc-result-figure" data-fin-out-projected>&mdash;</span>
+        <span class="mini-calc-result-caption">Projected balance at retirement based on your current plan</span>
+      </div>
+      <div class="mini-calc-result-tile">
+        <span class="mini-calc-result-figure" data-fin-out-progress>&mdash;</span>
+        <span class="mini-calc-result-caption">Projected progress toward your number</span>
+      </div>
+      <div class="mini-calc-result-tile">
+        <span class="mini-calc-result-figure" data-fin-out-additional>&mdash;</span>
+        <span class="mini-calc-result-caption">Additional monthly savings that may help close the gap by retirement</span>
+      </div>
+    </div>
+  </div>
+  <p class="mini-calc-note">This estimate uses a common guideline (desired annual income &times; 25, based on an approximate 4% withdrawal rate) and a simplified compounding projection based on the figures you enter. It does not account for taxes, inflation, Social Security, pensions, investment fees, or market volatility, and actual results will vary based on individual circumstances. This is an educational estimate only, not individualized investment, tax, or financial advice &mdash; we recommend reviewing your specific situation with a qualified financial professional.</p>
+</div>
+"""
+
 # ---- Advanced Financial Planning -------------------------------------------
 build_service_page(
     filename="advanced-financial-planning.html",
@@ -1113,6 +1168,7 @@ resources_body = resources_body.replace("__TOPICS__", accordion_group("topics", 
     ("Coordinating Estate Plans with Business Succession", "For business owners, estate planning and succession planning are closely connected. Reviewing both together can help avoid gaps between what your estate documents say and what actually happens to your business."),
     ("Tax Considerations for Real Estate Investors", "Entity structure, depreciation strategy, and cash-flow planning can all affect the tax efficiency of a real estate portfolio, and are worth revisiting as a portfolio grows."),
     ("Retirement Income Planning for Business Owners", "Business owners often lack a traditional pension or employer retirement plan, which makes coordinated planning around business cash flow, personal savings, and eventual business sale proceeds especially important."),
+    ("What is my Financial Independence Number?", "Your Financial Independence Number is an estimate of the investment balance that may be needed to support your desired retirement income, based on a common 4% withdrawal guideline. Use the calculator below to estimate your number and see how your current savings plan is tracking.", FIN_CALCULATOR_HTML),
 ]))
 resources_body = resources_body.replace("__FAQ__", accordion_group("faq", [
     ("What is the difference between business consulting and advanced financial planning?", "Business consulting generally focuses on how your business is structured and run, while advanced financial planning generally focuses on your personal retirement, tax, and estate strategy. Many clients benefit from both, since business and personal finances are often closely connected."),

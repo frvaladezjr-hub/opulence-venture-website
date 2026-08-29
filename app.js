@@ -251,6 +251,64 @@
     }
   }
 
+  /* ---------- Financial Independence Number calculator ---------- */
+  var finCalc = document.querySelector('[data-fin-calculator]');
+  if (finCalc) {
+    var finCurrency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+
+    var finBtn = finCalc.querySelector('[data-fin-calculate]');
+    if (finBtn) {
+      finBtn.addEventListener('click', function () {
+        var currentAge = Math.max(0, parseFloat(finCalc.querySelector('#fin-current-age').value) || 0);
+        var retirementAge = Math.max(0, parseFloat(finCalc.querySelector('#fin-retirement-age').value) || 0);
+        var desiredIncome = Math.max(0, parseFloat(finCalc.querySelector('#fin-income').value) || 0);
+        var currentSavings = Math.max(0, parseFloat(finCalc.querySelector('#fin-savings').value) || 0);
+        var monthlySavings = Math.max(0, parseFloat(finCalc.querySelector('#fin-monthly-savings').value) || 0);
+        var returnRatePct = Math.max(0, parseFloat(finCalc.querySelector('#fin-return-rate').value) || 0);
+
+        var resultEl = finCalc.querySelector('[data-fin-result]');
+        var ageFieldEl = finCalc.querySelector('[data-fin-field="retirement-age"]');
+        var yearsToRetirement = retirementAge - currentAge;
+
+        if (yearsToRetirement <= 0) {
+          if (ageFieldEl) ageFieldEl.setAttribute('data-invalid', 'true');
+          resultEl.hidden = true;
+          return;
+        }
+        if (ageFieldEl) ageFieldEl.removeAttribute('data-invalid');
+
+        var finNumber = desiredIncome * 25;
+        var monthsToRetirement = yearsToRetirement * 12;
+        var monthlyRate = (returnRatePct / 100) / 12;
+
+        var growthFactor = monthlyRate > 0 ? Math.pow(1 + monthlyRate, monthsToRetirement) : 1;
+        var annuityFactor = monthlyRate > 0 ? (growthFactor - 1) / monthlyRate : monthsToRetirement;
+        var projectedBalance = monthlyRate > 0
+          ? (currentSavings * growthFactor) + (monthlySavings * annuityFactor)
+          : currentSavings + (monthlySavings * monthsToRetirement);
+
+        var additionalMonthlyText;
+        if (projectedBalance >= finNumber || finNumber <= 0) {
+          additionalMonthlyText = finCurrency.format(0) + ' / month';
+        } else {
+          var futureValueOfCurrentSavings = monthlyRate > 0 ? currentSavings * growthFactor : currentSavings;
+          var shortfall = Math.max(0, finNumber - futureValueOfCurrentSavings);
+          var totalMonthlyNeeded = annuityFactor > 0 ? shortfall / annuityFactor : 0;
+          var additionalMonthly = Math.max(0, totalMonthlyNeeded - monthlySavings);
+          additionalMonthlyText = finCurrency.format(additionalMonthly) + ' / month';
+        }
+
+        var progressPct = finNumber > 0 ? Math.min(100, Math.max(0, (projectedBalance / finNumber) * 100)) : 0;
+
+        finCalc.querySelector('[data-fin-out-number]').textContent = finCurrency.format(finNumber);
+        finCalc.querySelector('[data-fin-out-projected]').textContent = finCurrency.format(Math.max(0, projectedBalance));
+        finCalc.querySelector('[data-fin-out-progress]').textContent = progressPct.toFixed(0) + '%';
+        finCalc.querySelector('[data-fin-out-additional]').textContent = additionalMonthlyText;
+        resultEl.hidden = false;
+      });
+    }
+  }
+
   /* ---------- Required Minimum Distribution (RMD) Projector ---------- */
   /*
    * Configuration block — update here if the IRS changes RMD starting ages
