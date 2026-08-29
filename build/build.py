@@ -945,7 +945,13 @@ consultants_body = f"""
       <div class="consultant-role-group-title reveal">Retirement Income Specialists</div>
       <div class="consultant-grid reveal">
         {consultant_card(None, "", "Nick Hernandez", "Retirement Income Specialist", "Focuses on sequencing retirement income sources to help support clients' lifestyle goals.")}
-        {consultant_card(None, "", "Josh Stachurski", "Retirement Income Specialist", "Helps clients evaluate retirement income and distribution strategies as part of their overall plan.")}
+      </div>
+    </div>
+
+    <div class="consultant-role-group">
+      <div class="consultant-role-group-title reveal">Life Insurance Specialist</div>
+      <div class="consultant-grid reveal">
+        {consultant_card(None, "", "Josh Stachurski", "Life Insurance Specialist", "Helps clients evaluate life insurance strategies as part of their overall financial plan.")}
       </div>
     </div>
   </div>
