@@ -418,7 +418,7 @@ p, li, figcaption {
   .nav-primary {
     display: flex;
     align-items: center;
-    gap: var(--space-8);
+    gap: var(--space-6);
   }
 }
 .nav-primary a {
@@ -522,7 +522,12 @@ p, li, figcaption {
   gap: var(--space-4);
 }
 
-.nav-cta { display: none; }
+.nav-cta {
+  display: none;
+  padding: var(--space-3) var(--space-5);
+  font-size: var(--text-xs);
+  min-height: 38px;
+}
 @media (min-width: 768px) { .nav-cta { display: inline-flex; } }
 
 .theme-toggle {

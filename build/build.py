@@ -1102,14 +1102,6 @@ resources_body = """
 
 <section class="section">
   <div class="container">
-    <div class="eyebrow reveal">Planning Topics</div>
-    <h2 class="section-title reveal" style="margin-top:var(--space-3);margin-bottom:var(--space-10);max-width:32ch;">Topics worth a closer look</h2>
-    <div class="reveal">__TOPICS__</div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="container">
     <div class="eyebrow reveal">Strategic Partners</div>
     <h2 class="section-title reveal" style="margin-top:var(--space-3);margin-bottom:var(--space-5);max-width:32ch;">Specialists we work alongside</h2>
     <p class="body-lg reveal" style="margin-bottom:var(--space-10);max-width:64ch;">For specific business-formation and specialty tax needs outside our core planning work, we coordinate closely with a small network of strategic partner firms. Opulence Venture Group is affiliated with these firms, and any engagement with them is coordinated as part of your broader relationship with us.</p>
@@ -1145,6 +1137,62 @@ resources_body = """
 
 <section class="section section--surface">
   <div class="container">
+    <div class="eyebrow reveal">Planning Topics &amp; FAQ</div>
+    <h2 class="section-title reveal" style="margin-top:var(--space-3);margin-bottom:var(--space-5);max-width:32ch;">Have a question in mind?</h2>
+    <p class="body-lg reveal" style="margin-bottom:var(--space-8);max-width:56ch;">Visit our FAQ page for answers to common planning questions, plus interactive tools like the Roth conversion and Financial Independence Number calculators.</p>
+    <a class="btn btn-outline btn-lg reveal" href="faq.html">Visit the FAQ Page</a>
+  </div>
+</section>
+
+<section class="disclaimer">
+  <div class="container">
+    <p>The content on this page is provided for general educational purposes only and does not constitute tax, legal, or investment advice. Tax laws and regulations referenced are subject to change and may affect individual circumstances differently. Please consult a qualified, licensed tax, legal, or financial professional regarding your specific situation before making any decisions.</p>
+  </div>
+</section>
+
+__CTA__
+"""
+
+resources_body = resources_body.replace("__BREADCRUMB__", breadcrumb("Resources", "resources.html"))
+resources_body = resources_body.replace("__CTA__", cta_band(
+    "Have a specific question in mind?",
+    "Schedule a consultation and we'll walk through how it may apply to your situation.",
+))
+
+page(
+    "resources.html",
+    "Resources | Business &amp; Wealth Planning Insights | Opulence Venture Group",
+    "Educational resources on business succession, tax-efficient planning, Roth conversions, estate planning, and retirement income from Opulence Venture Group.",
+    "assets/images/resources-desk.webp",
+    resources_body,
+)
+
+# ==========================================================================
+# FAQ
+# ==========================================================================
+faq_body = """
+<section class="page-header">
+  <div class="page-header-media"><img src="assets/images/resources-desk.webp" alt="" loading="eager" decoding="async" width="1920" height="1200" /></div>
+  <div class="container--wide">
+    __BREADCRUMB__
+    <div class="page-header-content">
+      <div class="eyebrow">FAQ</div>
+      <h1>Frequently asked questions &amp; planning topics</h1>
+      <p>Educational perspectives on business strategy, tax-efficient planning, and legacy decisions, plus answers to the questions we hear most often. Every situation is different &mdash; use these as a starting point for a conversation, not a substitute for one.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="eyebrow reveal">Planning Topics</div>
+    <h2 class="section-title reveal" style="margin-top:var(--space-3);margin-bottom:var(--space-10);max-width:32ch;">Topics worth a closer look</h2>
+    <div class="reveal">__TOPICS__</div>
+  </div>
+</section>
+
+<section class="section section--surface">
+  <div class="container">
     <div class="eyebrow reveal">Frequently Asked Questions</div>
     <h2 class="section-title reveal" style="margin-top:var(--space-3);margin-bottom:var(--space-10);max-width:32ch;">Common questions we hear</h2>
     <div class="reveal">__FAQ__</div>
@@ -1160,8 +1208,8 @@ resources_body = """
 __CTA__
 """
 
-resources_body = resources_body.replace("__BREADCRUMB__", breadcrumb("Resources", "resources.html"))
-resources_body = resources_body.replace("__TOPICS__", accordion_group("topics", [
+faq_body = faq_body.replace("__BREADCRUMB__", breadcrumb("FAQ", "faq.html"))
+faq_body = faq_body.replace("__TOPICS__", accordion_group("topics", [
     ("Understanding Roth Conversion Timing", "The tax impact of a Roth conversion can vary significantly depending on your current income, future tax expectations, and the timing of the conversion. A coordinated review can help you evaluate whether a conversion strategy may align with your broader retirement and tax goals.", ROTH_CALCULATOR_HTML),
     ("Questions to Consider Before a Business Sale", "A business sale involves more than negotiating a price. Structure, tax treatment, timing, and post-sale planning can all significantly affect the outcome, and are worth evaluating well before a transaction is finalized. We offer a complimentary business valuation to help you understand where your business currently stands before you begin evaluating a sale."),
     ("How Buy-Sell Agreements Support Business Continuity", "A properly designed and funded buy-sell agreement can help provide clarity for owners, partners, and their families if an owner passes away, becomes disabled, or exits the business."),
@@ -1170,23 +1218,23 @@ resources_body = resources_body.replace("__TOPICS__", accordion_group("topics", 
     ("Retirement Income Planning for Business Owners", "Business owners often lack a traditional pension or employer retirement plan, which makes coordinated planning around business cash flow, personal savings, and eventual business sale proceeds especially important."),
     ("What is my Financial Independence Number?", "Your Financial Independence Number is an estimate of the investment balance that may be needed to support your desired retirement income, based on a common 4% withdrawal guideline. Use the calculator below to estimate your number and see how your current savings plan is tracking.", FIN_CALCULATOR_HTML),
 ]))
-resources_body = resources_body.replace("__FAQ__", accordion_group("faq", [
+faq_body = faq_body.replace("__FAQ__", accordion_group("faq", [
     ("What is the difference between business consulting and advanced financial planning?", "Business consulting generally focuses on how your business is structured and run, while advanced financial planning generally focuses on your personal retirement, tax, and estate strategy. Many clients benefit from both, since business and personal finances are often closely connected."),
     ("Do I need to already have a CPA or attorney to work with you?", "Not necessarily. We can work alongside your existing CPA and attorney, or help you identify professionals to consult as part of your plan. We do not provide tax or legal advice ourselves."),
     ("Is this only for large businesses or high-net-worth individuals?", "No. We work with a range of business owners, professionals, and families, including those earlier in their planning journey. The consultation is designed to help determine whether our approach may be a good fit for your situation."),
     ("How does the consultation process work?", "It typically begins with a complimentary conversation about your goals and current situation, followed by a more detailed review if it makes sense to move forward together."),
 ]))
-resources_body = resources_body.replace("__CTA__", cta_band(
+faq_body = faq_body.replace("__CTA__", cta_band(
     "Have a specific question in mind?",
     "Schedule a consultation and we'll walk through how it may apply to your situation.",
 ))
 
 page(
-    "resources.html",
-    "Resources | Business &amp; Wealth Planning Insights | Opulence Venture Group",
-    "Educational resources on business succession, tax-efficient planning, Roth conversions, estate planning, and retirement income from Opulence Venture Group.",
+    "faq.html",
+    "FAQ | Planning Topics &amp; Common Questions | Opulence Venture Group",
+    "Frequently asked questions and educational planning topics on business succession, tax-efficient planning, Roth conversions, estate planning, and retirement income from Opulence Venture Group.",
     "assets/images/resources-desk.webp",
-    resources_body,
+    faq_body,
 )
 
 # ==========================================================================

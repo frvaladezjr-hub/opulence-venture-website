@@ -19,6 +19,7 @@ SERVICE_ITEMS = [
 NAV_ITEMS_TAIL = [
     ("consultants.html", "Our Team"),
     ("resources.html", "Resources"),
+    ("faq.html", "FAQ"),
     ("careers.html", "Careers"),
     ("contact.html", "Contact"),
 ]
@@ -156,6 +157,7 @@ def footer():
           <li><a href="about.html">About</a></li>
           <li><a href="consultants.html">Our Team</a></li>
           <li><a href="resources.html">Resources</a></li>
+          <li><a href="faq.html">FAQ</a></li>
           <li><a href="careers.html">Careers</a></li>
           <li><a href="contact.html">Contact</a></li>
         </ul>
