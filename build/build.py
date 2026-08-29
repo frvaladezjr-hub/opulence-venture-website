@@ -103,22 +103,10 @@ home_body = """
 
 <section class="section" id="who-we-help">
   <div class="container--wide">
-    <div class="grid" style="grid-template-columns:1fr;gap:var(--space-12);" >
-      <div class="reveal">
-        <div class="eyebrow">Who We Help</div>
-        <h2 class="section-title" style="margin-top:var(--space-3);">Built for the complexity of real financial lives</h2>
-        <p class="section-lede" style="margin-top:var(--space-5);">We work with individuals, families, and business owners whose financial lives involve more than one moving part &mdash; where business decisions, tax exposure, retirement timing, and legacy goals all influence one another.</p>
-      </div>
-      <div class="reveal grid grid--4 audience-grid" style="gap:var(--space-4);">
-        <div class="audience-card"><span class="index">01</span><strong>Business Owners</strong><span class="text-muted">Structuring, protecting, and eventually transitioning what you've built.</span></div>
-        <div class="audience-card"><span class="index">02</span><strong>Entrepreneurs</strong><span class="text-muted">Founders navigating growth, cash flow, and long-term structure decisions.</span></div>
-        <div class="audience-card"><span class="index">03</span><strong>Professionals</strong><span class="text-muted">High-earning professionals seeking coordinated tax and retirement strategy.</span></div>
-        <div class="audience-card"><span class="index">04</span><strong>High-Income Families</strong><span class="text-muted">Households balancing income, taxes, and long-term wealth goals.</span></div>
-        <div class="audience-card"><span class="index">05</span><strong>Real Estate Investors</strong><span class="text-muted">Owners weighing entity structure, cash flow, and tax positioning.</span></div>
-        <div class="audience-card"><span class="index">06</span><strong>Veterans &amp; First Responders</strong><span class="text-muted">Public-service professionals planning around benefits and retirement.</span></div>
-        <div class="audience-card"><span class="index">07</span><strong>Approaching Retirement</strong><span class="text-muted">Individuals evaluating income, risk, and tax sequencing before retiring.</span></div>
-        <div class="audience-card"><span class="index">08</span><strong>Legacy-Focused Families</strong><span class="text-muted">Families coordinating estate plans and multi-generational wealth transfer.</span></div>
-      </div>
+    <div class="reveal" style="max-width:60ch;">
+      <div class="eyebrow">Who We Help</div>
+      <h2 class="section-title" style="margin-top:var(--space-3);">Built for the complexity of real financial lives</h2>
+      <p class="section-lede" style="margin-top:var(--space-5);">We work with individuals, families, and business owners whose financial lives involve more than one moving part &mdash; where business decisions, tax exposure, retirement timing, and legacy goals all influence one another.</p>
     </div>
   </div>
 </section>
