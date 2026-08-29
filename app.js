@@ -193,6 +193,16 @@
     el.textContent = new Date().getFullYear();
   });
 
+  /* ---------- Re-measure an accordion panel after its content changes size ---------- */
+  var syncAccordionPanelHeight = function (el) {
+    var panel = el.closest ? el.closest('.accordion-panel') : null;
+    if (!panel) return;
+    var item = panel.closest('.accordion-item');
+    if (item && item.getAttribute('data-open') === 'true') {
+      panel.style.maxHeight = panel.scrollHeight + 'px';
+    }
+  };
+
   /* ---------- Roth conversion tax estimator ---------- */
   var rothCalc = document.querySelector('[data-roth-calculator]');
   if (rothCalc) {
@@ -247,6 +257,7 @@
         rothCalc.querySelector('[data-roth-out-before]').textContent = bracketBefore.toFixed(0) + '%';
         rothCalc.querySelector('[data-roth-out-after]').textContent = bracketAfter.toFixed(0) + '%';
         resultEl.hidden = false;
+        syncAccordionPanelHeight(rothCalc);
       });
     }
   }
@@ -273,6 +284,7 @@
         if (yearsToRetirement <= 0) {
           if (ageFieldEl) ageFieldEl.setAttribute('data-invalid', 'true');
           resultEl.hidden = true;
+          syncAccordionPanelHeight(finCalc);
           return;
         }
         if (ageFieldEl) ageFieldEl.removeAttribute('data-invalid');
@@ -305,6 +317,7 @@
         finCalc.querySelector('[data-fin-out-progress]').textContent = progressPct.toFixed(0) + '%';
         finCalc.querySelector('[data-fin-out-additional]').textContent = additionalMonthlyText;
         resultEl.hidden = false;
+        syncAccordionPanelHeight(finCalc);
       });
     }
   }
