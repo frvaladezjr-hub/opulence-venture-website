@@ -1053,7 +1053,7 @@ careers_body = f"""
           <p class="form-note">Submitting will open your email app with your details pre-filled so you can review before sending &mdash; nothing is sent automatically.</p>
         </form>
         <div data-careers-form-success hidden style="margin-top:var(--space-6);padding:var(--space-5);background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);">
-          <p style="margin:0;">Thanks &mdash; your email app should have opened with a pre-filled message. If it didn't, email us directly at <a href="mailto:info@opulenceventuregroup.com">info@opulenceventuregroup.com</a>.</p>
+          <p style="margin:0;">Thanks &mdash; your email app should have opened with a pre-filled message. If it didn't, email us directly at <a href="mailto:info@opulenceinvestments.net">info@opulenceinvestments.net</a>.</p>
         </div>
       </div>
 
@@ -1275,7 +1275,7 @@ contact_body = """
         </div>
         <div class="contact-info-item">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z" opacity="0"/><path d="M22 6l-10 7L2 6"/><rect x="2" y="4" width="20" height="16" rx="2"/></svg>
-          <div><strong>Email</strong><a href="mailto:info@opulenceventuregroup.com">info@opulenceventuregroup.com</a></div>
+          <div><strong>Email</strong><a href="mailto:info@opulenceinvestments.net">info@opulenceinvestments.net</a></div>
         </div>
         <div class="contact-info-item">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 1 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>

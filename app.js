@@ -717,7 +717,7 @@
         message || 'Not provided'
       ];
       var subject = 'Careers Inquiry \u2014 ' + interest;
-      var mailto = 'mailto:info@opulenceventuregroup.com'
+      var mailto = 'mailto:info@opulenceinvestments.net'
         + '?subject=' + encodeURIComponent(subject)
         + '&body=' + encodeURIComponent(bodyLines.join('\n'));
       window.location.href = mailto;

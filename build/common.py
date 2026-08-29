@@ -169,7 +169,7 @@ def footer():
       <div class="footer-col">
         <h4>Get in Touch</h4>
         <ul>
-          <li><a href="mailto:info@opulenceventuregroup.com">info@opulenceventuregroup.com</a></li>
+          <li><a href="mailto:info@opulenceinvestments.net">info@opulenceinvestments.net</a></li>
           <li><a href="tel:+18005550134">(800) 555-0134</a></li>
           <li><a href="contact.html#consultation-form">Schedule a Consultation</a></li>
         </ul>
