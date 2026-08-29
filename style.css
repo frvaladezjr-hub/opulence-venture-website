@@ -710,17 +710,20 @@ p, li, figcaption {
 .audience-card {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
-  padding: var(--space-6);
-  border-top: 1px solid var(--color-divider);
-  transition: background var(--transition-interactive);
+  gap: var(--space-2);
+  padding: var(--space-5);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+  transition: background var(--transition-interactive), border-color var(--transition-interactive);
 }
-.audience-card:hover { background: var(--color-surface-2); }
+.audience-card:hover { background: var(--color-surface-2); border-color: var(--color-border); }
 .audience-card .index {
   font-family: var(--font-display);
-  font-size: var(--text-lg);
+  font-size: var(--text-base);
   color: var(--color-text-faint);
 }
+.audience-card strong { font-size: var(--text-base); }
+.audience-card .text-muted { font-size: var(--text-sm); line-height: 1.45; }
 
 .solution-card {
   display: flex;
