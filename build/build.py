@@ -930,7 +930,7 @@ consultants_body = f"""
       <div class="consultant-role-group-title reveal">Business Advisors</div>
       <div class="consultant-grid reveal">
         {consultant_card(None, "", "Anthony Cordova", "Business Advisor", "Works with business owners on structure, cash flow, and growth-stage planning decisions.")}
-        {consultant_card(None, "", "Seth Hallows", "Business Advisor", "Supports business owners in evaluating structure, succession, and operational planning strategies.")}
+        {consultant_card("assets/images/consultant-seth-hallows.webp", "Portrait of Seth Hallows, Business Advisor at Opulence Venture Group", "Seth Hallows", "Business Advisor", "Supports business owners in evaluating structure, succession, and operational planning strategies.")}
       </div>
     </div>
 
