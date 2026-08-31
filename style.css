@@ -1110,7 +1110,7 @@ p, li, figcaption {
 .consultant-role-group .consultant-initials { font-size: var(--text-xl); }
 .consultant-role-group .consultant-photo-note { font-size: 0.65rem; }
 .consultant-role-group .consultant-body { display: flex; flex-direction: column; justify-content: center; flex: 1; }
-.consultant-role-group { margin-bottom: var(--space-14); }
+.consultant-role-group { margin-bottom: var(--space-12); }
 .consultant-role-group:last-child { margin-bottom: 0; }
 .consultant-role-group-title {
   font-family: var(--font-display);
