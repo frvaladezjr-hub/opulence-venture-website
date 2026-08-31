@@ -944,7 +944,7 @@ consultants_body = f"""
     <div class="consultant-role-group">
       <div class="consultant-role-group-title reveal">Retirement Income Specialists</div>
       <div class="consultant-grid reveal">
-        {consultant_card(None, "", "Nick Hernandez", "Retirement Income Specialist", "Focuses on sequencing retirement income sources to help support clients' lifestyle goals.")}
+        {consultant_card("assets/images/consultant-nick-hernandez.webp", "Portrait of Nick Hernandez, Retirement Income Specialist at Opulence Venture Group", "Nick Hernandez", "Retirement Income Specialist", "Focuses on sequencing retirement income sources to help support clients' lifestyle goals.")}
       </div>
     </div>
 
