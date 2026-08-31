@@ -951,7 +951,7 @@ consultants_body = f"""
     <div class="consultant-role-group">
       <div class="consultant-role-group-title reveal">Life Insurance Specialist</div>
       <div class="consultant-grid reveal">
-        {consultant_card(None, "", "Josh Stachurski", "Life Insurance Specialist", "Helps clients evaluate life insurance strategies as part of their overall financial plan.")}
+        {consultant_card("assets/images/consultant-josh-stachurski.webp", "Portrait of Josh Stachurski, Life Insurance Specialist at Opulence Venture Group", "Josh Stachurski", "Life Insurance Specialist", "Helps clients evaluate life insurance strategies as part of their overall financial plan.")}
       </div>
     </div>
   </div>
