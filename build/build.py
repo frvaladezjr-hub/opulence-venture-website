@@ -1115,7 +1115,7 @@ resources_body = """
       <div class="partner-card">
         <div class="partner-card-logo"><img src="assets/images/partner-prime.png" alt="Prime Corporate Services logo" loading="lazy" decoding="async" width="600" height="199" /></div>
         <h3>Prime Corporate Services</h3>
-        <p>Entity formation, business credit development, and specialty tax preparation for entrepreneurs and small business owners.</p>
+        <p>Entity formation, business credit development, and specialty tax preparation for entrepreneurs and small business owners. If you would like to speak directly with Prime about setting up an entity or exploring another Prime service, schedule a call below.</p>
         <a class="btn btn-primary" style="align-self:flex-start;" href="https://www.primecorporateservices.com/entity-formation-3/?utm_source=GFI&amp;utm_medium=LP&amp;utm_campaign=1668&amp;uid=1109&amp;oid=2&amp;affid=1668" target="_blank" rel="noopener noreferrer">Schedule a Call</a>
       </div>
       <div class="partner-card">
