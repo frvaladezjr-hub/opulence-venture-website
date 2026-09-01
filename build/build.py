@@ -937,7 +937,7 @@ consultants_body = f"""
     <div class="consultant-role-group">
       <div class="consultant-role-group-title reveal">Payroll Services</div>
       <div class="consultant-grid reveal">
-        {consultant_card(None, "", "Ajay Fay", "Payroll Services Specialist", "Helps business clients coordinate payroll setup and administration alongside their broader financial plan.")}
+        {consultant_card("assets/images/consultant-ajay-fay.webp", "Portrait of Ajay Fay, Payroll Services Specialist at Opulence Venture Group", "Ajay Fay", "Payroll Services Specialist", "Helps business clients coordinate payroll setup and administration alongside their broader financial plan.")}
       </div>
     </div>
 
