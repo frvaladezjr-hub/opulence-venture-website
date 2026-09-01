@@ -610,6 +610,7 @@
 
         if (hasError) {
           resultEl.hidden = true;
+          syncAccordionPanelHeight(rmdCalc);
           return;
         }
 
@@ -633,6 +634,7 @@
         renderTable(projection.rows);
         renderChart(projection.rows);
         resultEl.hidden = false;
+        syncAccordionPanelHeight(rmdCalc);
         resultEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       });
     }
@@ -645,6 +647,7 @@
         clearErrors();
         showFormError('');
         resultEl.hidden = true;
+        syncAccordionPanelHeight(rmdCalc);
         if (rmdChartInstance) {
           rmdChartInstance.destroy();
           rmdChartInstance = null;
