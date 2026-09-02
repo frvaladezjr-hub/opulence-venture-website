@@ -864,6 +864,7 @@ build_service_page(
     schedule_items=[
         ("schedule-wealth-legacy", "Schedule a Wealth &amp; Legacy Session", "https://calendly.com/apdivision/estateplanning"),
     ],
+    show_get_started_section=False,
 )
 
 # ---- Capital Gains Tax Strategies ------------------------------------------
