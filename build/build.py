@@ -930,6 +930,13 @@ consultants_body = f"""
     </div>
 
     <div class="consultant-role-group">
+      <div class="consultant-role-group-title reveal">Capital Gains Strategist</div>
+      <div class="consultant-grid reveal">
+        {consultant_card("assets/images/consultant-ariocha-salas.webp", "Portrait of Ariocha Salas, Capital Gains Strategist at Opulence Venture Group", "Ariocha Salas", "Capital Gains Strategist", "Helps clients evaluate timing, structuring, and basis strategies around the sale of businesses, real estate, and concentrated positions.")}
+      </div>
+    </div>
+
+    <div class="consultant-role-group">
       <div class="consultant-role-group-title reveal">Business Advisors</div>
       <div class="consultant-grid reveal">
         {consultant_card("assets/images/consultant-anthony-cordova.webp", "Portrait of Anthony Cordova, Business Advisor at Opulence Venture Group", "Anthony Cordova", "Business Advisor", "Works with business owners on structure, cash flow, and growth-stage planning decisions.")}
