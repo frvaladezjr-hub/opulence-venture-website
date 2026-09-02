@@ -805,7 +805,6 @@ build_service_page(
     meta_title="Advanced Financial Planning | Opulence Venture Group",
     meta_description="Retirement planning, asset optimization, tax-efficient wealth strategies, Roth conversion planning, and estate coordination from Opulence Venture Group.",
     schedule_items=[
-        ("schedule-financial-planning", "Schedule a Financial Planning Consultation", "https://calendly.com/apdivision/financialplanning"),
         ("schedule-advanced-planning", "Schedule an Advanced Planning Consultation", "https://calendly.com/apdivision/retirement-planning-clone"),
     ],
 )
