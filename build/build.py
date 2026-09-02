@@ -491,10 +491,10 @@ def schedule_section(schedule_items):
 <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>"""
 
 
-def build_service_page(filename, eyebrow, h1, intro_paragraphs, audience_chips, focus_items, feature_image, feature_alt, quote, meta_title, meta_description, schedule_items=None):
+def build_service_page(filename, eyebrow, h1, intro_paragraphs, audience_chips, focus_items, feature_image, feature_alt, quote, meta_title, meta_description, schedule_items=None, show_get_started_section=True):
     intro_html = "".join(f'<p class="body-lg reveal" style="margin-top:var(--space-6);">{p}</p>' for p in intro_paragraphs)
     chips_html = "".join(f'<span class="chip">{c}</span>' for c in audience_chips)
-    schedule_html = schedule_section(schedule_items) if schedule_items else ""
+    schedule_html = schedule_section(schedule_items) if (schedule_items and show_get_started_section) else ""
     body = f"""
 <section class="page-header">
   <div class="page-header-media"><img src="{feature_image}" alt="" loading="eager" decoding="async" width="1920" height="1200" /></div>
@@ -552,9 +552,9 @@ __CTA__
     if schedule_items:
         cta_kwargs = {
             "primary_label": schedule_items[0][1],
-            "primary_href": f"#{schedule_items[0][0]}",
+            "primary_href": f"#{schedule_items[0][0]}" if show_get_started_section else schedule_items[0][2],
         }
-        if len(schedule_items) > 1:
+        if len(schedule_items) > 1 and show_get_started_section:
             cta_kwargs["secondary_label"] = schedule_items[1][1]
             cta_kwargs["secondary_href"] = f"#{schedule_items[1][0]}"
     else:
@@ -677,6 +677,7 @@ build_service_page(
     schedule_items=[
         ("schedule-business", "Schedule a Business Strategy Session", "https://calendly.com/apdivision/business-strategies"),
     ],
+    show_get_started_section=False,
 )
 
 ROTH_CALCULATOR_HTML = """

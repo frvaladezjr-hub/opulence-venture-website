@@ -204,13 +204,14 @@ def breadcrumb(current_label, current_href):
 
 def cta_band(heading, support, primary_label="Schedule a Consultation", primary_href="contact.html#consultation-form", secondary_label=None, secondary_href=None, image="assets/images/cta-marble.webp"):
     secondary = f'<a class="btn btn-outline btn-lg" href="{secondary_href}">{secondary_label}</a>' if secondary_label else ""
+    primary_target = ' target="_blank" rel="noopener"' if primary_href.startswith("http") else ""
     return f"""<section class="cta-band">
   <div class="cta-band-media"><img src="{image}" alt="" loading="lazy" decoding="async" width="1920" height="1080" /></div>
   <div class="container--wide cta-band-content reveal">
     <h2>{heading}</h2>
     <p>{support}</p>
     <div class="cta-band-actions">
-      <a class="btn btn-primary btn-lg" href="{primary_href}">{primary_label}</a>
+      <a class="btn btn-primary btn-lg" href="{primary_href}"{primary_target}>{primary_label}</a>
       {secondary}
     </div>
   </div>
