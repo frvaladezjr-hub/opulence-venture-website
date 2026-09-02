@@ -837,6 +837,7 @@ build_service_page(
     schedule_items=[
         ("schedule-business-owner", "Schedule a Business Strategy Session", "https://calendly.com/apdivision/business-strategies"),
     ],
+    show_get_started_section=False,
 )
 
 
