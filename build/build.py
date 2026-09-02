@@ -675,7 +675,7 @@ build_service_page(
     meta_title="Business Consulting | Opulence Venture Group",
     meta_description="Business structure optimization, tax-efficiency planning, succession, key-person, and buy-sell strategies for business owners from Opulence Venture Group.",
     schedule_items=[
-        ("schedule-business", "Schedule a Business Strategy Session", "https://calendly.com/apdivision/business_plan"),
+        ("schedule-business", "Schedule a Business Strategy Session", "https://calendly.com/apdivision/business-strategies"),
     ],
 )
 
