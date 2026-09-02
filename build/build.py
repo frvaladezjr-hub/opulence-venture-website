@@ -808,6 +808,7 @@ build_service_page(
     schedule_items=[
         ("schedule-advanced-planning", "Schedule an Advanced Planning Consultation", "https://calendly.com/apdivision/retirement-planning-clone"),
     ],
+    show_get_started_section=False,
 )
 
 # ---- Business Owner Strategies ---------------------------------------------
