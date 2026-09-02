@@ -1061,7 +1061,7 @@ p, li, figcaption {
   overflow: hidden;
 }
 .consultant-photo { aspect-ratio: 4/5; overflow: hidden; }
-.consultant-photo img { width: 100%; height: 100%; object-fit: cover; }
+.consultant-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; }
 .consultant-photo.is-placeholder {
   display: flex;
   flex-direction: column;
@@ -1095,7 +1095,7 @@ p, li, figcaption {
   flex-direction: row;
   align-items: stretch;
 }
-@media (max-width: 479px) {
+@media (max-width: 767px) {
   .consultant-role-group .consultant-card { flex-direction: column; }
 }
 .consultant-role-group .consultant-photo {
@@ -1103,8 +1103,8 @@ p, li, figcaption {
   width: 140px;
   flex-shrink: 0;
 }
-@media (max-width: 479px) {
-  .consultant-role-group .consultant-photo { width: 100%; aspect-ratio: 16/9; }
+@media (max-width: 767px) {
+  .consultant-role-group .consultant-photo { width: 100%; aspect-ratio: 4/3; }
 }
 .consultant-role-group .consultant-photo.is-placeholder { gap: var(--space-1); padding: var(--space-2); text-align: center; }
 .consultant-role-group .consultant-initials { font-size: var(--text-xl); }
