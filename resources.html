@@ -122,19 +122,22 @@
         <h3>Irongate Business Advisors</h3>
         <p>Wellness and supplemental benefit solutions benefit both employers and employees. Employers see a net FICA tax savings of up to $1,186 per W2 employee per year, while employees gain access to additional pre-tax wellness benefits that supplement their existing health coverage &mdash; all at no out-of-pocket expense to either party.</p>
         <div class="mini-calc" style="margin-top:0;" data-fica-calculator>
-          <p class="mini-calc-label">Estimate potential FICA savings</p>
+          <p class="mini-calc-label" style="font-size:var(--text-base);margin-bottom:var(--space-5);">Calculate Your Potential FICA Savings</p>
           <div class="field">
-            <label for="fica-employees">Number of W-2 Employees</label>
-            <input type="number" id="fica-employees" min="0" step="1" placeholder="e.g. 50" inputmode="numeric" />
+            <label for="fica-employees">Number of W2 Employees</label>
+            <input type="number" id="fica-employees" min="0" step="1" placeholder="Enter number of employees" inputmode="numeric" />
+            <p class="mini-calc-note" style="margin-top:0;">Enter the total number of W2 employees for calculation.</p>
           </div>
-          <button type="button" class="btn btn-primary" style="margin-top:var(--space-6);" data-fica-calculate>Estimate Savings</button>
+          <button type="button" class="btn btn-primary" style="margin-top:var(--space-6);width:100%;" data-fica-calculate>Calculate Savings</button>
           <div class="mini-calc-result" data-fica-result hidden>
+            <p class="mini-calc-label" style="margin-bottom:var(--space-3);">Your Estimated Annual Savings</p>
             <div class="mini-calc-result-tile">
               <span class="mini-calc-result-figure" data-fica-out-savings>&mdash;</span>
-              <span class="mini-calc-result-caption">Estimated potential annual savings</span>
+              <span class="mini-calc-result-caption">Based on up to $1,186 in FICA tax savings per W2 employee per year. Actual savings may vary depending on the specific plan selected for your company.</span>
             </div>
+            <a class="btn btn-primary" style="margin-top:var(--space-5);width:100%;" href="https://benefits.igbusinessadvisors.com/consultation?ref=20465" target="_blank" rel="noopener noreferrer">Schedule Free Consultation</a>
           </div>
-          <p class="mini-calc-note">Estimate based on IronGate Business Advisors&rsquo; published benefit assumptions for a qualifying Section 125 benefits plan. Actual savings depend on the specific plan selected, employee participation, and individual circumstances, which vary. Provided for illustration purposes only and not tax or legal advice &mdash; consult a qualified professional before implementing any plan.</p>
+          <p class="mini-calc-note">This calculator provides an estimate based on IronGate Business Advisors&rsquo; published benefit assumptions for a qualifying Section 125 benefits plan. Actual savings depend on the specific plan selected, employee participation, and individual circumstances, which vary. Provided for illustration purposes only and not tax or legal advice &mdash; consult a qualified professional before implementing any plan.</p>
         </div>
       </div>
     </div>
