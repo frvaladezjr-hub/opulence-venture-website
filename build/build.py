@@ -276,6 +276,18 @@ home_body = """
   </div>
 </section>
 
+<section class="section" id="consultants">
+  <div class="container--wide">
+    <div class="eyebrow reveal">Our Team</div>
+    <h2 class="section-title reveal" style="margin-top:var(--space-3);max-width:34ch;">Meet the consultant behind your plan</h2>
+    <p class="section-lede reveal" style="margin-top:var(--space-5);margin-bottom:var(--space-12);">A direct point of contact for every client, working alongside your existing CPA, attorney, and advisors.</p>
+    <div class="consultant-grid reveal">
+      __CONSULTANTS__
+    </div>
+    <a class="link-arrow reveal" href="consultants.html" style="margin-top:var(--space-8);">Meet the full team <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+  </div>
+</section>
+
 __CTA__
 """
 
@@ -304,6 +316,12 @@ home_body = home_body.replace("__PATH_CARDS__", (
         "advanced-financial-planning.html",
         "Explore Advanced Financial Planning",
     )
+))
+home_body = home_body.replace("__CONSULTANTS__", consultant_card(
+    "assets/images/consultant-1.webp",
+    "Portrait of Frank Valadez, Founder of Opulence Venture Group",
+    "Frank Valadez",
+    "Founder",
 ))
 home_body = home_body.replace("__CTA__", cta_band(
     "Let's build a plan around your goals",
