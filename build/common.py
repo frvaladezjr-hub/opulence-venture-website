@@ -172,7 +172,6 @@ def footer():
           <li><a href="mailto:info@opulenceinvestments.net">info@opulenceinvestments.net</a></li>
           <li><a href="tel:+14087103457">(408) 710-3457</a></li>
           <li><a href="contact.html#consultation-form">Schedule a Consultation</a></li>
-          <li><a href="https://dreamteamgfi.com/forms" target="_blank" rel="noopener noreferrer">Forms</a></li>
         </ul>
       </div>
     </div>
