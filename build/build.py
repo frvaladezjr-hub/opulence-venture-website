@@ -784,32 +784,16 @@ DIME_CALCULATOR_HTML = """
       <input type="number" id="dime-education" min="0" step="1000" placeholder="e.g. 60000" inputmode="numeric" />
     </div>
   </div>
-  <div class="field" style="margin-top:var(--space-5);">
-    <label for="dime-existing">Existing Life Insurance Coverage &amp; Available Savings (optional)</label>
-    <input type="number" id="dime-existing" min="0" step="1000" placeholder="e.g. 100000" inputmode="numeric" />
-  </div>
   <button type="button" class="btn btn-primary" style="margin-top:var(--space-6);" data-dime-calculate>Estimate My Coverage Need</button>
   <div class="mini-calc-result" data-dime-result hidden>
     <div class="mini-calc-result-grid">
       <div class="mini-calc-result-tile">
         <span class="mini-calc-result-figure" data-dime-out-total>&mdash;</span>
-        <span class="mini-calc-result-caption">Total estimated need (Debt + Income &times;10 + Mortgage + Education/Expenses)</span>
-      </div>
-      <div class="mini-calc-result-tile">
-        <span class="mini-calc-result-figure" data-dime-out-income-component>&mdash;</span>
-        <span class="mini-calc-result-caption">Income replacement component (annual income &times; 10)</span>
-      </div>
-      <div class="mini-calc-result-tile">
-        <span class="mini-calc-result-figure" data-dime-out-existing>&mdash;</span>
-        <span class="mini-calc-result-caption">Existing coverage &amp; savings entered</span>
-      </div>
-      <div class="mini-calc-result-tile">
-        <span class="mini-calc-result-figure" data-dime-out-additional>&mdash;</span>
-        <span class="mini-calc-result-caption">Additional coverage you may want to consider</span>
+        <span class="mini-calc-result-caption">Total estimated life insurance need (Debt + Income &times;10 + Mortgage + Education/Expenses)</span>
       </div>
     </div>
   </div>
-  <p class="mini-calc-note">DIME is an educational framework that adds together your outstanding <strong>D</strong>ebt, ten times your annual <strong>I</strong>ncome, your remaining <strong>M</strong>ortgage balance, and future <strong>E</strong>ducation or final expenses to arrive at a simplified estimate. It does not account for existing assets beyond what you enter, other income sources, health factors, inflation, or your broader financial plan, and actual needs vary by individual circumstances. This is an educational estimate only, not individualized insurance or financial advice &mdash; we recommend reviewing your specific situation with a qualified, licensed insurance professional.</p>
+  <p class="mini-calc-note">DIME is an educational framework that adds together your outstanding <strong>D</strong>ebt, ten times your annual <strong>I</strong>ncome, your remaining <strong>M</strong>ortgage balance, and future <strong>E</strong>ducation or final expenses to arrive at a simplified estimate. It does not account for life insurance coverage or savings you may already have, other income sources, health factors, inflation, or your broader financial plan, and actual needs vary by individual circumstances. This is an educational estimate only, not individualized insurance or financial advice &mdash; we recommend reviewing your specific situation with a qualified, licensed insurance professional.</p>
 </div>
 """
 
@@ -1253,14 +1237,14 @@ __CTA__
 
 faq_body = faq_body.replace("__BREADCRUMB__", breadcrumb("FAQ", "faq.html"))
 faq_body = faq_body.replace("__TOPICS__", accordion_group("topics", [
+    ("What is my Financial Independence Number?", "Your Financial Independence Number is an estimate of the investment balance that may be needed to support your desired retirement income, based on a common 4% withdrawal guideline. Use the calculator below to estimate your number and see how your current savings plan is tracking.", FIN_CALCULATOR_HTML),
+    ("How Much Life Insurance Do I Really Need?", "DIME stands for Debt, Income (&times;10), Mortgage, and Education or Expenses &mdash; a simple framework some families use to start estimating how much life insurance coverage may help protect against the loss of an income earner. Use the calculator below to get a starting estimate for your situation.", DIME_CALCULATOR_HTML),
     ("Understanding Roth Conversion Timing", "The tax impact of a Roth conversion can vary significantly depending on your current income, future tax expectations, and the timing of the conversion. A coordinated review can help you evaluate whether a conversion strategy may align with your broader retirement and tax goals.", ROTH_CALCULATOR_HTML),
     ("Questions to Consider Before a Business Sale", "A business sale involves more than negotiating a price. Structure, tax treatment, timing, and post-sale planning can all significantly affect the outcome, and are worth evaluating well before a transaction is finalized. We offer a complimentary business valuation to help you understand where your business currently stands before you begin evaluating a sale."),
     ("How Buy-Sell Agreements Support Business Continuity", "A properly designed and funded buy-sell agreement can help provide clarity for owners, partners, and their families if an owner passes away, becomes disabled, or exits the business."),
     ("Coordinating Estate Plans with Business Succession", "For business owners, estate planning and succession planning are closely connected. Reviewing both together can help avoid gaps between what your estate documents say and what actually happens to your business."),
     ("Tax Considerations for Real Estate Investors", "Entity structure, depreciation strategy, and cash-flow planning can all affect the tax efficiency of a real estate portfolio, and are worth revisiting as a portfolio grows."),
     ("Retirement Income Planning for Business Owners", "Business owners often lack a traditional pension or employer retirement plan, which makes coordinated planning around business cash flow, personal savings, and eventual business sale proceeds especially important."),
-    ("What is my Financial Independence Number?", "Your Financial Independence Number is an estimate of the investment balance that may be needed to support your desired retirement income, based on a common 4% withdrawal guideline. Use the calculator below to estimate your number and see how your current savings plan is tracking.", FIN_CALCULATOR_HTML),
-    ("DIME", "DIME stands for Debt, Income (&times;10), Mortgage, and Education or Expenses &mdash; a simple framework some families use to start estimating how much life insurance coverage may help protect against the loss of an income earner. Use the calculator below to get a starting estimate for your situation.", DIME_CALCULATOR_HTML),
 ]))
 faq_body = faq_body.replace("__FAQ__", accordion_group("faq", [
     ("What is the difference between business consulting and advanced financial planning?", "Business consulting generally focuses on how your business is structured and run, while advanced financial planning generally focuses on your personal retirement, tax, and estate strategy. Many clients benefit from both, since business and personal finances are often closely connected."),
