@@ -322,6 +322,35 @@
     }
   }
 
+  /* ---------- DIME Life Insurance Needs calculator ---------- */
+  var dimeCalc = document.querySelector('[data-dime-calculator]');
+  if (dimeCalc) {
+    var dimeCurrency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+
+    var dimeBtn = dimeCalc.querySelector('[data-dime-calculate]');
+    if (dimeBtn) {
+      dimeBtn.addEventListener('click', function () {
+        var debt = Math.max(0, parseFloat(dimeCalc.querySelector('#dime-debt').value) || 0);
+        var income = Math.max(0, parseFloat(dimeCalc.querySelector('#dime-income').value) || 0);
+        var mortgage = Math.max(0, parseFloat(dimeCalc.querySelector('#dime-mortgage').value) || 0);
+        var education = Math.max(0, parseFloat(dimeCalc.querySelector('#dime-education').value) || 0);
+        var existing = Math.max(0, parseFloat(dimeCalc.querySelector('#dime-existing').value) || 0);
+
+        var incomeComponent = income * 10;
+        var totalNeed = debt + incomeComponent + mortgage + education;
+        var additionalNeeded = Math.max(0, totalNeed - existing);
+
+        var resultEl = dimeCalc.querySelector('[data-dime-result]');
+        dimeCalc.querySelector('[data-dime-out-total]').textContent = dimeCurrency.format(totalNeed);
+        dimeCalc.querySelector('[data-dime-out-income-component]').textContent = dimeCurrency.format(incomeComponent);
+        dimeCalc.querySelector('[data-dime-out-existing]').textContent = dimeCurrency.format(existing);
+        dimeCalc.querySelector('[data-dime-out-additional]').textContent = dimeCurrency.format(additionalNeeded);
+        resultEl.hidden = false;
+        syncAccordionPanelHeight(dimeCalc);
+      });
+    }
+  }
+
   /* ---------- Required Minimum Distribution (RMD) Projector ---------- */
   /*
    * Configuration block — update here if the IRS changes RMD starting ages
