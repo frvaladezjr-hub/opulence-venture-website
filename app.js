@@ -764,3 +764,188 @@
     });
   }
 })();
+
+/* ==========================================================================
+   Agent Discovery Form (agent-discovery-form.html)
+   Posts to /api/discovery when available; falls back to a pre-filled email.
+   ========================================================================== */
+(function () {
+  var form = document.querySelector('[data-discovery-form]');
+  if (!form) return;
+
+  var ENDPOINT = '/api/discovery';
+  var FALLBACK_EMAIL = 'info@opulenceinvestments.net';
+  var success = document.querySelector('[data-discovery-success]');
+  var note = document.querySelector('[data-discovery-note]');
+  var submitBtn = form.querySelector('button[type="submit"]');
+
+  form.querySelectorAll('.check-item input').forEach(function (box) {
+    box.addEventListener('change', function () {
+      box.closest('.check-item').setAttribute('data-checked', String(box.checked));
+    });
+  });
+
+  function clearInvalid(el) {
+    var field = el.closest('.field');
+    if (field) field.setAttribute('data-invalid', 'false');
+  }
+  form.querySelectorAll('input, select, textarea').forEach(function (el) {
+    el.addEventListener('input', function () { clearInvalid(el); });
+    el.addEventListener('change', function () { clearInvalid(el); });
+  });
+
+  function values(name) {
+    return Array.prototype.map.call(
+      form.querySelectorAll('input[name="' + name + '"]:checked'),
+      function (el) { return el.value; }
+    );
+  }
+  function value(name) {
+    var el = form.querySelector('[name="' + name + '"]');
+    if (!el) return '';
+    if (el.type === 'radio') { var c = values(name); return c.length ? c[0] : ''; }
+    return el.value.trim();
+  }
+
+  function validate() {
+    var valid = true;
+    var firstInvalid = null;
+
+    form.querySelectorAll('[required]').forEach(function (input) {
+      var field = input.closest('.field');
+      var v = input.value.trim();
+      var invalid = input.type === 'email'
+        ? !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)
+        : !v;
+      if (field) field.setAttribute('data-invalid', String(invalid));
+      if (invalid) { valid = false; if (!firstInvalid) firstInvalid = field || input; }
+    });
+
+    ['clientType', 'stage', 'advisor', 'discussed'].forEach(function (name) {
+      var field = form.querySelector('[data-choice="' + name + '"]');
+      if (!field) return;
+      var invalid = values(name).length === 0;
+      field.setAttribute('data-invalid', String(invalid));
+      if (invalid) { valid = false; if (!firstInvalid) firstInvalid = field; }
+    });
+
+    var needsField = form.querySelector('[data-choice="needs"]');
+    if (needsField) {
+      var invalidNeeds = values('needs').length === 0;
+      needsField.setAttribute('data-invalid', String(invalidNeeds));
+      if (invalidNeeds) { valid = false; if (!firstInvalid) firstInvalid = needsField; }
+    }
+
+    if (!valid && firstInvalid) {
+      firstInvalid.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      var focusable = firstInvalid.querySelector('input, select, textarea');
+      if (focusable) focusable.focus({ preventScroll: true });
+    }
+    return valid;
+  }
+
+  function payload() {
+    return {
+      agentFirst: value('agentFirst'),
+      agentLast: value('agentLast'),
+      agentEmail: value('agentEmail'),
+      agentPhone: value('agentPhone'),
+      agentState: value('agentState'),
+      emdFirst: value('emdFirst'),
+      emdLast: value('emdLast'),
+      clientName: value('clientName'),
+      clientType: value('clientType'),
+      clientState: value('clientState'),
+      netWorth: value('netWorth'),
+      income: value('income'),
+      needs: values('needs'),
+      stage: value('stage'),
+      advisor: value('advisor'),
+      timeframe: value('timeframe'),
+      discussed: value('discussed'),
+      priorBusiness: value('priorBusiness'),
+      outcome: value('outcome'),
+      relationship: value('relationship'),
+      additional: value('additional')
+    };
+  }
+
+  function summaryLines(d) {
+    return [
+      'AGENT',
+      'Name: ' + d.agentFirst + ' ' + d.agentLast,
+      'Email: ' + d.agentEmail,
+      'Phone: ' + d.agentPhone,
+      'State: ' + d.agentState,
+      'EMD: ' + ((d.emdFirst + ' ' + d.emdLast).trim() || 'Not provided'),
+      '',
+      'CLIENT',
+      'Name: ' + d.clientName,
+      'Who is the client: ' + d.clientType,
+      'State of residence: ' + d.clientState,
+      'Approximate net worth: ' + (d.netWorth || 'Not provided'),
+      'Annual income range: ' + (d.income || 'Not provided'),
+      '',
+      'CASE TYPE / AREA OF NEED',
+      d.needs.map(function (n) { return '- ' + n; }).join('\n'),
+      '',
+      'READINESS & ENGAGEMENT',
+      'Stage: ' + d.stage,
+      'Advisor involved: ' + d.advisor,
+      'Timeframe: ' + (d.timeframe || 'Not provided'),
+      '',
+      'EXPECTATIONS',
+      'Concepts already discussed: ' + d.discussed,
+      'Prior GFI business: ' + d.priorBusiness,
+      'Desired outcome: ' + d.outcome,
+      'Relationship with client: ' + d.relationship,
+      'Additional information: ' + (d.additional || 'Not provided')
+    ];
+  }
+
+  function showSuccess(message) {
+    form.style.display = 'none';
+    if (note) note.textContent = message || '';
+    if (success) {
+      success.hidden = false;
+      success.setAttribute('tabindex', '-1');
+      success.focus();
+      success.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    }
+  }
+
+  function mailtoFallback(d) {
+    var subject = 'Advanced Planning Discovery \u2014 ' + d.clientName + ' (' + d.clientType + ')';
+    var mailto = 'mailto:' + FALLBACK_EMAIL
+      + '?subject=' + encodeURIComponent(subject)
+      + '&body=' + encodeURIComponent(summaryLines(d).join('\n'));
+    window.location.href = mailto;
+    showSuccess('Your email app should have opened with the case summary pre-filled. If it did not, email it to ' + FALLBACK_EMAIL + '.');
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!validate()) return;
+
+    var data = payload();
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting\u2026';
+
+    fetch(ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error('Bad response');
+        showSuccess('');
+      })
+      .catch(function () {
+        mailtoFallback(data);
+      })
+      .then(function () {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Discovery Form';
+      });
+  });
+})();
