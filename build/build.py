@@ -1319,6 +1319,11 @@ contact_body = """
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
           <div><strong>Consultations</strong><span>Complimentary initial consultation, in person or virtual.</span></div>
         </div>
+
+        <div class="contact-alt-cta">
+          <p>Licensed agents submitting a case for advanced planning review:</p>
+          <a class="btn btn-outline btn-block" href="agent-discovery-form.html">Agent Discovery Form</a>
+        </div>
       </div>
     </div>
   </div>
@@ -1339,4 +1344,245 @@ page(
     "Schedule a complimentary consultation with Opulence Venture Group to discuss business consulting, financial planning, retirement, and legacy strategies.",
     "assets/images/contact-lobby.webp",
     contact_body,
+)
+
+
+# ==========================================================================
+# AGENT DISCOVERY FORM
+# ==========================================================================
+
+NEED_OPTIONS = [
+    "Business Succession or Exit Planning",
+    "Estate Planning &amp; Wealth Transfer",
+    "Tax Reduction / Tax Deferral Strategies",
+    "Retirement Income Optimization",
+    "Premium Financing / Large Life Insurance Cases",
+    "Executive Benefits or Key Person Planning",
+    "Prime Corporate Services (Entity Creation, Fundability, Tax Services)",
+    "Preventative Care Benefits Program (FICA Tax Reduction)",
+]
+
+
+def _choice(name, value, label=None):
+    return (
+        f'<label class="choice"><input type="radio" name="{name}" value="{value}" />'
+        f'<span>{label or value}</span></label>'
+    )
+
+
+def choice_group(name, values, stack=False):
+    cls = "choice-group choice-group--stack" if stack else "choice-group"
+    return f'<div class="{cls}">' + "".join(_choice(name, v) for v in values) + "</div>"
+
+
+def check_list(name, options):
+    items = "".join(
+        f'<label class="check-item" data-checked="false">'
+        f'<input type="checkbox" name="{name}" value="{o}" /><span>{o}</span></label>'
+        for o in options
+    )
+    return f'<div class="check-list">{items}</div>'
+
+
+discovery_body = """
+<section class="page-header">
+  <div class="page-header-media"><img src="assets/images/contact-lobby.webp" alt="" loading="eager" decoding="async" width="1920" height="1200" /></div>
+  <div class="container--wide">
+    __BREADCRUMB__
+    <div class="page-header-content">
+      <div class="eyebrow">Advance Planning Division</div>
+      <h1>Agent Discovery Form</h1>
+      <p>Submit a case for advanced planning review. Complete the profile below, then book a time with the Advanced Planning team.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container" style="max-width:var(--content-default);">
+    <form data-discovery-form novalidate>
+
+      <div class="form-section">
+        <h2 class="form-section-title">Agent Information</h2>
+        <div class="form-grid form-grid--2">
+          <div class="field" data-field="agentFirst">
+            <label for="d-agent-first">Agent First Name</label>
+            <input type="text" id="d-agent-first" name="agentFirst" autocomplete="given-name" required />
+            <small class="error">Please enter your first name.</small>
+          </div>
+          <div class="field" data-field="agentLast">
+            <label for="d-agent-last">Agent Last Name</label>
+            <input type="text" id="d-agent-last" name="agentLast" autocomplete="family-name" required />
+            <small class="error">Please enter your last name.</small>
+          </div>
+        </div>
+        <div class="form-grid form-grid--2">
+          <div class="field" data-field="agentEmail">
+            <label for="d-agent-email">Agent Email</label>
+            <input type="email" id="d-agent-email" name="agentEmail" autocomplete="email" required />
+            <small class="error">Please enter a valid email address.</small>
+          </div>
+          <div class="field" data-field="agentPhone">
+            <label for="d-agent-phone">Agent's Phone Number</label>
+            <input type="tel" id="d-agent-phone" name="agentPhone" autocomplete="tel" required />
+            <small class="error">Please enter a phone number.</small>
+          </div>
+        </div>
+        <div class="form-grid form-grid--2">
+          <div class="field" data-field="agentState">
+            <label for="d-agent-state">Your State of Residence</label>
+            <input type="text" id="d-agent-state" name="agentState" placeholder="State / Province" required />
+            <small class="error">Please enter your state.</small>
+          </div>
+          <div class="field" data-field="emdFirst">
+            <label for="d-emd-first">Your EMD's First Name</label>
+            <input type="text" id="d-emd-first" name="emdFirst" required />
+            <small class="error">Please enter your EMD's first name.</small>
+          </div>
+        </div>
+        <div class="field" data-field="emdLast">
+          <label for="d-emd-last">Your EMD's Last Name (optional)</label>
+          <input type="text" id="d-emd-last" name="emdLast" />
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2 class="form-section-title">Client Profile</h2>
+        <div class="field" data-field="clientName">
+          <label for="d-client-name">Client Name</label>
+          <input type="text" id="d-client-name" name="clientName" required />
+          <small class="error">Please enter the client's name.</small>
+        </div>
+        <div class="field" data-field="clientType" data-choice="clientType">
+          <span class="field-legend">Who is the client?</span>
+          __CLIENT_TYPE__
+          <small class="error">Please select one.</small>
+        </div>
+        <div class="form-grid form-grid--2">
+          <div class="field" data-field="clientState">
+            <label for="d-client-state">Client's State of Residence</label>
+            <input type="text" id="d-client-state" name="clientState" required />
+            <small class="error">Please enter the client's state.</small>
+          </div>
+          <div class="field" data-field="income">
+            <label for="d-income">Annual Income Range (optional)</label>
+            <select id="d-income" name="income">
+              <option value="">Select one</option>
+              <option value="Under $250k">Under $250k</option>
+              <option value="$250k-$1M">$250k &ndash; $1M</option>
+              <option value="$1M-$5M">$1M &ndash; $5M</option>
+              <option value="$5M +">$5M +</option>
+            </select>
+          </div>
+        </div>
+        <div class="field" data-field="netWorth">
+          <span class="field-legend">Approximate Client Net Worth (optional)</span>
+          __NET_WORTH__
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2 class="form-section-title">Case Type / Area of Need</h2>
+        <div class="field" data-field="needs" data-choice="needs">
+          <span class="field-legend">Check all that apply</span>
+          __NEEDS__
+          <small class="error">Please select at least one area of need.</small>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2 class="form-section-title">Case Readiness &amp; Engagement</h2>
+        <div class="field" data-field="stage" data-choice="stage">
+          <span class="field-legend">What stage is the client at right now?</span>
+          __STAGE__
+          <small class="error">Please select one.</small>
+        </div>
+        <div class="field" data-field="advisor" data-choice="advisor">
+          <span class="field-legend">Is there a CPA, attorney, or other advisor involved?</span>
+          __ADVISOR__
+          <small class="error">Please select one.</small>
+        </div>
+        <div class="field" data-field="timeframe">
+          <label for="d-timeframe">Client's Timeframe for Making Decisions (optional)</label>
+          <select id="d-timeframe" name="timeframe">
+            <option value="">Select one</option>
+            <option value="0-3 Months">0 &ndash; 3 Months</option>
+            <option value="3-6 Months">3 &ndash; 6 Months</option>
+            <option value="6-12 Months">6 &ndash; 12 Months</option>
+            <option value="12+ Months">12+ Months</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2 class="form-section-title">Expectations</h2>
+        <div class="field" data-field="discussed" data-choice="discussed">
+          <span class="field-legend">Have you already discussed advanced planning concepts with the client?</span>
+          __DISCUSSED__
+          <small class="error">Please select one.</small>
+        </div>
+        <div class="field" data-field="priorBusiness">
+          <label for="d-prior">Have you already done life insurance or annuity business with this client through GFI? If so, please explain.</label>
+          <textarea id="d-prior" name="priorBusiness" placeholder="Carriers, products, and approximate dates &mdash; or &ldquo;none.&rdquo;" required></textarea>
+          <small class="error">Please provide an answer.</small>
+        </div>
+        <div class="field" data-field="outcome">
+          <label for="d-outcome">What outcome is the client hoping to achieve?</label>
+          <textarea id="d-outcome" name="outcome" placeholder="The result that matters most to them." required></textarea>
+          <small class="error">Please describe the desired outcome.</small>
+        </div>
+        <div class="field" data-field="relationship">
+          <label for="d-relationship">What is your relationship with the client?</label>
+          <textarea id="d-relationship" name="relationship" placeholder="How you know them, and for how long." required></textarea>
+          <small class="error">Please describe your relationship with the client.</small>
+        </div>
+        <div class="field" data-field="additional">
+          <label for="d-additional">Additional Pertinent Information (optional)</label>
+          <textarea id="d-additional" name="additional" placeholder="Anything else the planning team should know."></textarea>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2 class="form-section-title">Calendar Availability</h2>
+        <div class="book-strip">
+          <p><strong>Book your case review</strong>Submit the form first, then choose a time with the Advanced Planning team.</p>
+          <a class="btn btn-outline" href="https://calendly.com/apdivision/free-consultation" target="_blank" rel="noopener noreferrer">Book a Time</a>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-lg btn-block" style="margin-top:var(--space-10);">Submit Discovery Form</button>
+      <p class="form-note">Submitted directly to the Advance Planning Division. You'll receive a confirmation by email with your case summary and the scheduling link.</p>
+    </form>
+
+    <div data-discovery-success hidden style="padding:var(--space-10);background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-lg);text-align:center;">
+      <div class="eyebrow" style="justify-content:center;">Submitted</div>
+      <h2 class="section-title" style="margin-top:var(--space-3);margin-bottom:var(--space-5);font-size:var(--text-xl);">Discovery form received</h2>
+      <p class="body-lg" style="margin:0 auto var(--space-8);max-width:52ch;">Thank you &mdash; the Advanced Planning team will review this case and follow up. Reserve your case review time below.</p>
+      <a class="btn btn-primary btn-lg" href="https://calendly.com/apdivision/free-consultation" target="_blank" rel="noopener noreferrer">Book Your Case Review</a>
+      <p class="form-note" data-discovery-note style="margin-top:var(--space-6);"></p>
+    </div>
+  </div>
+</section>
+
+<section class="disclaimer">
+  <div class="container">
+    <p>This form is intended for licensed agents submitting a case for advanced planning review. Client information submitted here is used solely to evaluate and coordinate the case and is not sold to third parties. Nothing on this page constitutes tax, legal, or investment advice, and no strategy discussed is guaranteed. Please consult a qualified, licensed professional regarding any specific situation.</p>
+  </div>
+</section>
+"""
+
+discovery_body = discovery_body.replace("__BREADCRUMB__", breadcrumb("Agent Discovery Form", "agent-discovery-form.html"))
+discovery_body = discovery_body.replace("__CLIENT_TYPE__", choice_group("clientType", ["Individual", "Trustee", "Business Owner", "Other"]))
+discovery_body = discovery_body.replace("__NET_WORTH__", choice_group("netWorth", ["Under $1m", "$1m-$5m", "$5m-$10m", "$10M +"]))
+discovery_body = discovery_body.replace("__NEEDS__", check_list("needs", NEED_OPTIONS))
+discovery_body = discovery_body.replace("__STAGE__", choice_group("stage", ["Just exploring options", "Actively reviewing strategies", "Ready to implement a solution soon"], stack=True))
+discovery_body = discovery_body.replace("__ADVISOR__", choice_group("advisor", ["Yes", "No", "Unsure"]))
+discovery_body = discovery_body.replace("__DISCUSSED__", choice_group("discussed", ["Yes", "No"]))
+
+page(
+    "agent-discovery-form.html",
+    "Agent Discovery Form | Advance Planning Division | Opulence Venture Group",
+    "Licensed agents can submit a client case for advanced planning review with the Opulence Venture Group Advance Planning Division.",
+    "assets/images/contact-lobby.webp",
+    discovery_body,
+    active="contact.html",
 )
