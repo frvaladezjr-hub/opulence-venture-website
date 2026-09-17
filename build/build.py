@@ -784,7 +784,10 @@ DIME_CALCULATOR_HTML = """
       <input type="number" id="dime-education" min="0" step="1000" placeholder="e.g. 60000" inputmode="numeric" />
     </div>
   </div>
-  <button type="button" class="btn btn-primary" style="margin-top:var(--space-6);" data-dime-calculate>Estimate My Coverage Need</button>
+  <div style="margin-top:var(--space-6);display:flex;flex-wrap:wrap;gap:var(--space-4);">
+    <button type="button" class="btn btn-primary" data-dime-calculate>Estimate My Coverage Need</button>
+    <a class="btn btn-outline" href="https://agents.ethoslife.com/invite/5a8ff" target="_blank" rel="noopener noreferrer">Get Approved Instantly</a>
+  </div>
   <div class="mini-calc-result" data-dime-result hidden>
     <div class="mini-calc-result-grid">
       <div class="mini-calc-result-tile">
