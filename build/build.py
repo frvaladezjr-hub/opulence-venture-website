@@ -1542,7 +1542,7 @@ discovery_body = """
         <h2 class="form-section-title">Calendar Availability</h2>
         <div class="book-strip">
           <p><strong>Book your case review</strong>Submit the form first, then choose a time with the Advanced Planning team.</p>
-          <a class="btn btn-outline" href="https://calendly.com/apdivision" target="_blank" rel="noopener noreferrer">Book a Time</a>
+          <a class="btn btn-outline" href="https://calendly.com/apdivision/free-consultation" target="_blank" rel="noopener noreferrer">Book a Time</a>
         </div>
       </div>
 
@@ -1554,7 +1554,7 @@ discovery_body = """
       <div class="eyebrow" style="justify-content:center;">Submitted</div>
       <h2 class="section-title" style="margin-top:var(--space-3);margin-bottom:var(--space-5);font-size:var(--text-xl);">Discovery form received</h2>
       <p class="body-lg" style="margin:0 auto var(--space-8);max-width:52ch;">Thank you &mdash; the Advanced Planning team will review this case and follow up. Reserve your case review time below.</p>
-      <a class="btn btn-primary btn-lg" href="https://calendly.com/apdivision" target="_blank" rel="noopener noreferrer">Book Your Case Review</a>
+      <a class="btn btn-primary btn-lg" href="https://calendly.com/apdivision/free-consultation" target="_blank" rel="noopener noreferrer">Book Your Case Review</a>
       <p class="form-note" data-discovery-note style="margin-top:var(--space-6);"></p>
     </div>
   </div>

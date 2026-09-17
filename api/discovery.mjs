@@ -165,7 +165,7 @@ export default async function handler(req, res) {
 
   const from = process.env.MAIL_FROM || 'Opulence Venture Group <onboarding@resend.dev>';
   const notifyTo = process.env.NOTIFY_TO || 'info@opulenceinvestments.net';
-  const bookingUrl = process.env.BOOKING_URL || 'https://calendly.com/apdivision';
+  const bookingUrl = process.env.BOOKING_URL || 'https://calendly.com/apdivision/free-consultation';
 
   let body = req.body;
   if (typeof body === 'string') {
