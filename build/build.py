@@ -942,13 +942,6 @@ consultants_body = f"""
     </div>
 
     <div class="consultant-role-group">
-      <div class="consultant-role-group-title reveal">Principal | Wealth Advisor</div>
-      <div class="consultant-grid reveal">
-        {consultant_card("assets/images/consultant-miles-amodeo.webp", "Portrait of Miles B. Amodeo, Principal and Wealth Advisor at Opulence Venture Group", "Miles B. Amodeo, CFP&reg;, ChFC&reg;, EA", "Principal | Wealth Advisor", "Works directly with clients to coordinate wealth, tax, and retirement strategy as part of an integrated plan.")}
-      </div>
-    </div>
-
-    <div class="consultant-role-group">
       <div class="consultant-role-group-title reveal">Capital Gains Strategist</div>
       <div class="consultant-grid reveal">
         {consultant_card("assets/images/consultant-ariocha-salas.webp", "Portrait of Ariocha Salas, Capital Gains Strategist at Opulence Venture Group", "Ariocha Salas", "Capital Gains Strategist", "Helps clients evaluate timing, structuring, and basis strategies around the sale of businesses, real estate, and concentrated positions.")}
