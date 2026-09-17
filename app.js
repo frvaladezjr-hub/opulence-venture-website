@@ -938,7 +938,7 @@
     })
       .then(function (res) {
         if (!res.ok) throw new Error('Bad response');
-        showSuccess('A confirmation has been sent to ' + data.agentEmail + '.');
+        showSuccess('');
       })
       .catch(function () {
         mailtoFallback(data);

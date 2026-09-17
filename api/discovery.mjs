@@ -1,8 +1,7 @@
 /**
  * POST /api/discovery — Agent Discovery Form handler
  *
- * Emails the submitted case to the Advance Planning Division inbox and sends
- * the submitting agent a branded confirmation with the scheduling link.
+ * Emails the submitted case to the Advance Planning Division inbox.
  *
  * Required environment variable (set in Vercel → Settings → Environment Variables):
  *   RESEND_API_KEY   API key from resend.com
@@ -11,7 +10,6 @@
  *   MAIL_FROM        Sender, e.g. "Opulence Venture Group <no-reply@opulenceventuregroup.com>"
  *                    Defaults to Resend's shared testing sender until the domain is verified.
  *   NOTIFY_TO        Where submissions are delivered. Defaults to info@opulenceinvestments.net.
- *   BOOKING_URL      Scheduling link included in the agent confirmation.
  */
 
 const RESEND_ENDPOINT = 'https://api.resend.com/emails';
@@ -165,8 +163,6 @@ export default async function handler(req, res) {
 
   const from = process.env.MAIL_FROM || 'Opulence Venture Group <onboarding@resend.dev>';
   const notifyTo = process.env.NOTIFY_TO || 'info@opulenceinvestments.net';
-  const bookingUrl = process.env.BOOKING_URL || 'https://calendly.com/apdivision/free-consultation';
-
   let body = req.body;
   if (typeof body === 'string') {
     try { body = JSON.parse(body); } catch { return res.status(400).json({ error: 'Invalid JSON body.' }); }
@@ -221,18 +217,6 @@ export default async function handler(req, res) {
   } catch (error) {
     console.error('Discovery notification failed:', error.message);
     return res.status(502).json({ error: 'Submission could not be delivered.' });
-  }
-
-  try {
-    await sendMail(apiKey, {
-      from,
-      to: [d.agentEmail],
-      subject: 'We received your Advanced Planning discovery form',
-      html: agentHtml(d, bookingUrl),
-    });
-  } catch (error) {
-    // The case reached the office; a failed courtesy copy should not fail the request.
-    console.error('Agent confirmation failed:', error.message);
   }
 
   return res.status(200).json({ ok: true });
