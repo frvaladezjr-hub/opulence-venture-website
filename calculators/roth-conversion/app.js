@@ -13,7 +13,7 @@
   const amountLimits={ira:1e9,income:1e9,fixed:1e9};
   for(let i=0;i<10;i++){
     const field=document.createElement('div');field.className='field';
-    field.innerHTML=`<label for="annual-${i}">Year ${i+1} %</label><input id="annual-${i}" type="number" min="0" max="30" step="0.1" value="6" required>`;
+    field.innerHTML=`<label for="annual-${i}">Year ${i+1} %</label><input id="annual-${i}" type="number" min="0" max="30" step="0.1" value="0" required>`;
     $('annual-grid').append(field);
   }
   function parse(value){return Number(String(value).replace(/[$,\s]/g,''));}
@@ -30,7 +30,7 @@
     numeric.forEach(id=>{if(Number.isFinite(Number(p[id])))$(id).value=p[id];});
     strings.forEach(id=>{if(Array.from($(id).options).some(o=>o.value===String(p[id])))$(id).value=p[id];});
     checks.forEach(id=>$(id).checked=!!p[id]);
-    for(let i=0;i<10;i++)$(`annual-${i}`).value=Number.isFinite(p.annual?.[i])?p.annual[i]:6;
+    for(let i=0;i<10;i++)$(`annual-${i}`).value=Number.isFinite(p.annual?.[i])?p.annual[i]:0;
     document.querySelectorAll('[data-money]').forEach(el=>el.value=decimal.format(parse(el.value)));
   }
   function syncControls(){
@@ -39,7 +39,7 @@
     $('spouse-field').hidden=$('status').value==='single';
     $('annual-fields').hidden=!$('peryear').checked;
     $('comparison-inputs').hidden=!$('compare').checked;
-    $('tax-hint').textContent=mode==='bracket'?'Matches your target bracket. Adjust for state tax.':'Withheld from each gross conversion; not actual tax due.';
+    $('tax-hint').textContent=mode==='bracket'?'Enter a withholding rate; adjust for state tax.':'Withheld from each gross conversion; not actual tax due.';
     const t=M.IRMAA[$('status').value],labels=['Below the first surcharge','Allow one tier','Allow two tiers','Allow three tiers','Allow four tiers'];
     for(let i=0;i<5;i++)$('irmaa').options[i+1].textContent=`${labels[i]} (below ${dollars(t[i])})`;
     $('strategy-label').textContent=modes[mode];
@@ -50,6 +50,8 @@
       el.removeAttribute('aria-invalid');
       if(el.type==='checkbox'||el.closest('[hidden]'))return;
       const raw=el.value.trim(),value=parse(raw);
+      // Zero ages mean "not entered" in an unfunded fresh scenario, not an error.
+      if (parse($('ira').value) === 0 && ['age','spouse'].includes(el.id) && value === 0) return;
       let error='';
       const name=el.labels?.[0]?.childNodes[0]?.textContent.trim()||'Value';
       if(raw===''||!Number.isFinite(value)||(!el.hasAttribute('data-money')&&!el.checkValidity()))error=`${name}: enter a valid number${el.min!==''?` from ${el.min} to ${el.max}`:''}.`;
@@ -163,7 +165,7 @@
     const p=getParams();renderReferences(p);
     if(p.ira===0){
       lastPlan=null;$('result-content').hidden=true;$('empty').hidden=false;
-      $('empty').textContent='Enter a Traditional IRA balance greater than zero to build your projected plan.';
+      $('empty').textContent='Enter your age, Traditional IRA balance, and planning assumptions above to build your projected plan.';
       $('export').disabled=true;return;
     }
     const plan=M.project(p);lastPlan=plan;lastParams=p;
@@ -176,7 +178,7 @@
     observations(p,plan);renderComparison(p,plan);drawAll();
   }
   document.querySelectorAll('[data-mode]').forEach(button=>button.addEventListener('click',()=>{
-    mode=button.dataset.mode;if(mode==='bracket')$('tax').value=$('bracket').value;
+    mode=button.dataset.mode;
     $('share-box').hidden=true;render();
   }));
   $('calculator').addEventListener('submit',e=>e.preventDefault());

@@ -34,26 +34,26 @@
 
     <form id="calculator" novalidate>
       <section id="inputs" class="input-panel">
-        <div class="section-heading"><h2>Your inputs</h2><button type="button" class="text-button" id="reset">Reset example</button></div>
+        <div class="section-heading"><h2>Your inputs</h2><button type="button" class="text-button" id="reset">Reset calculator</button></div>
         <div class="strategy" role="group" aria-label="Conversion strategy">
           <button type="button" data-mode="bracket" aria-pressed="true">Fill the Tax Bracket</button>
           <button type="button" data-mode="fixed" aria-pressed="false">Fixed Dollar Amount</button>
           <button type="button" data-mode="percent" aria-pressed="false">Percent of Account Value</button>
         </div>
         <div class="input-grid">
-          <div class="field"><label for="age">Current age<span class="hint">Age at year-end 2026</span></label><input id="age" type="number" value="66" min="40" max="85" step="1" required></div>
-          <div class="field"><label for="ira">Traditional IRA balance</label><input id="ira" type="text" inputmode="decimal" value="900,000" data-money required></div>
+          <div class="field"><label for="age">Current age<span class="hint">Age at year-end 2026</span></label><input id="age" type="number" value="0" min="40" max="85" step="1" required></div>
+          <div class="field"><label for="ira">Traditional IRA balance</label><input id="ira" type="text" inputmode="decimal" value="0" data-money required></div>
           <div class="field"><label for="status">Filing status</label><select id="status"><option value="mfj">Married Filing Jointly</option><option value="single">Single</option></select></div>
-          <div class="field" id="spouse-field"><label for="spouse">Spouse age<span class="hint">For the age 65 deduction addition</span></label><input id="spouse" type="number" value="65" min="18" max="105" step="1" required></div>
-          <div class="field"><label for="income">Other income (MAGI)<span class="hint">Pensions, taxable Social Security, wages, interest</span></label><input id="income" type="text" inputmode="decimal" value="181,000" data-money required></div>
+          <div class="field" id="spouse-field"><label for="spouse">Spouse age<span class="hint">For the age 65 deduction addition</span></label><input id="spouse" type="number" value="0" min="18" max="105" step="1" required></div>
+          <div class="field"><label for="income">Other income (MAGI)<span class="hint">Pensions, taxable Social Security, wages, interest</span></label><input id="income" type="text" inputmode="decimal" value="0" data-money required></div>
           <div class="field" id="bracket-field"><label for="bracket">Target bracket ceiling</label><select id="bracket"><option value="12">Top of 12% bracket</option><option value="22">Top of 22% bracket</option><option value="24" selected>Top of 24% bracket</option><option value="32">Top of 32% bracket</option></select></div>
-          <div class="field" id="fixed-field" hidden><label for="fixed">Gross conversion $<span class="hint">Same amount each year, before withholding</span></label><input id="fixed" type="text" inputmode="decimal" value="100,000" data-money required></div>
-          <div class="field" id="percent-field" hidden><label for="percent">Gross conversion %<span class="hint">Of account value remaining after any RMD</span></label><input id="percent" type="number" value="10" min="0" max="100" step="0.1" required></div>
-          <div class="field"><label for="tax">Tax withholding rate %<span class="hint" id="tax-hint">Matches your target bracket. Adjust for state tax.</span></label><input id="tax" type="number" value="24" min="0" max="50" step="0.1" required></div>
+          <div class="field" id="fixed-field" hidden><label for="fixed">Gross conversion $<span class="hint">Same amount each year, before withholding</span></label><input id="fixed" type="text" inputmode="decimal" value="0" data-money required></div>
+          <div class="field" id="percent-field" hidden><label for="percent">Gross conversion %<span class="hint">Of account value remaining after any RMD</span></label><input id="percent" type="number" value="0" min="0" max="100" step="0.1" required></div>
+          <div class="field"><label for="tax">Tax withholding rate %<span class="hint" id="tax-hint">Enter a withholding rate; adjust for state tax.</span></label><input id="tax" type="number" value="0" min="0" max="50" step="0.1" required></div>
           <div class="field"><label for="irmaa">IRMAA ceiling<span class="hint">Medicare surcharge threshold to stay below</span></label><select id="irmaa"><option value="none">No IRMAA limit</option><option value="0">Below the first surcharge ($218,000)</option><option value="1" selected>Allow one tier (below $274,000)</option><option value="2">Allow two tiers (below $342,000)</option><option value="3">Allow three tiers (below $410,000)</option><option value="4">Allow four tiers (below $750,000)</option></select></div>
           <div class="field"><label for="bonus">Premium bonus %<span class="hint">Hypothetical amount credited at issue</span></label><input id="bonus" type="number" value="0" min="0" max="40" step="0.1" required></div>
-          <div class="field"><label for="rate">Assumed annual credit %<span class="hint">Hypothetical average index credit</span></label><input id="rate" type="number" value="6" min="0" max="15" step="0.1" required></div>
-          <div class="field"><label for="withdrawal">Free withdrawal %<span class="hint">Contract charge-free allowance each year</span></label><input id="withdrawal" type="number" value="10" min="0" max="20" step="0.1" required></div>
+          <div class="field"><label for="rate">Assumed annual credit %<span class="hint">Hypothetical average index credit</span></label><input id="rate" type="number" value="0" min="0" max="15" step="0.1" required></div>
+          <div class="field"><label for="withdrawal">Free withdrawal %<span class="hint">Contract charge-free allowance each year</span></label><input id="withdrawal" type="number" value="0" min="0" max="20" step="0.1" required></div>
           <div class="field"><label for="basis">Free withdrawal basis<span class="hint">How the carrier calculates it</span></label><select id="basis"><option value="account">Account value at start of year</option><option value="greater">Greater of account value or premium</option></select></div>
         </div>
         <div class="checks">
@@ -66,8 +66,8 @@
         <div class="extra-fields comparison-inputs" id="comparison-inputs" hidden>
           <h3>Do-nothing comparison inputs</h3>
           <div class="input-grid three">
-            <div class="field"><label for="portfolio">Do-nothing growth rate %<span class="hint">Hypothetical growth with no conversions</span></label><input id="portfolio" type="number" value="7" min="0" max="15" step="0.1" required></div>
-            <div class="field"><label for="heir">Heirs’ tax rate %<span class="hint">Simplified tax discount on inherited IRA dollars</span></label><input id="heir" type="number" value="24" min="0" max="50" step="0.1" required></div>
+            <div class="field"><label for="portfolio">Do-nothing growth rate %<span class="hint">Hypothetical growth with no conversions</span></label><input id="portfolio" type="number" value="0" min="0" max="15" step="0.1" required></div>
+            <div class="field"><label for="heir">Heirs’ tax rate %<span class="hint">Simplified tax discount on inherited IRA dollars</span></label><input id="heir" type="number" value="0" min="0" max="50" step="0.1" required></div>
             <div class="field"><label for="horizon">Compare through age<span class="hint">At least the end of the 10-year plan</span></label><select id="horizon"><option>85</option><option selected>90</option><option>95</option></select></div>
           </div>
         </div>
@@ -96,8 +96,8 @@
       <div class="section-heading"><h2 id="results-heading">Your projected plan</h2><div class="actions"><button id="export" class="outline-button" type="button">Export CSV</button><button id="share" class="outline-button" type="button">Copy scenario link</button></div></div>
       <p class="result-caption">10-year illustration <span>·</span> <span id="strategy-label">Fill the Tax Bracket</span> <span>·</span> Updated as you edit</p>
       <div id="share-box" hidden><label for="share-url">Scenario link contains your entered assumptions. Share only with intended recipients.</label><input id="share-url" type="text" readonly><span id="share-status" role="status"></span></div>
-      <p id="empty" class="empty" hidden>Enter a Traditional IRA balance greater than zero to build your projected plan.</p>
-      <div id="result-content">
+      <p id="empty" class="empty">Enter your age, Traditional IRA balance, and planning assumptions above to build your projected plan.</p>
+      <div id="result-content" hidden>
         <div class="metrics" aria-live="polite" aria-atomic="true">
           <article class="metric primary"><h3>Projected Roth balance</h3><p id="roth-total"></p><span id="roth-caption"></span></article>
           <article class="metric"><h3>Total tax withheld</h3><p id="tax-total"></p><span>Withheld from gross conversions</span></article>
