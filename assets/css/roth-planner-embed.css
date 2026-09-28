@@ -4,5 +4,5 @@
 }
 .roth-planner-embed { margin-top: var(--space-6); width: 100%; min-width: 0; }
 .roth-planner-frame { width: 100%; display: block; border: 0; }
-.roth-planner-open { margin-top: var(--space-4); font-size: var(--text-sm); }
+.roth-planner-open { display: flex; justify-content: flex-end; width: 100%; max-width: none; margin: 0 0 var(--space-4); font-size: var(--text-sm); text-align: right; }
 .roth-planner-open a { text-decoration: underline; text-underline-offset: 3px; }
