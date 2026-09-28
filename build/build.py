@@ -60,12 +60,16 @@ def consultant_card(photo, alt, name, role, bio=None):
 
 def page(filename, title, description, og_image, body, jsonld="", active=None):
     html = head(title, description, filename, og_image=og_image, jsonld=jsonld)
+    if filename == "advanced-financial-planning.html":
+        html = html.replace("</head>", '<link rel="stylesheet" href="assets/css/roth-planner-embed.css" />\n</head>')
     html += "<body>\n"
     html += header(active if active else filename)
     html += '<main id="main">\n'
     html += body
     html += "\n</main>\n"
     html += footer()
+    if filename == "advanced-financial-planning.html":
+        html = html.replace("</body>", '<script src="assets/js/roth-planner-embed.js" defer></script>\n</body>')
     with open(os.path.join(OUT, filename), "w") as f:
         f.write(html)
     print("wrote", filename)
@@ -800,6 +804,17 @@ DIME_CALCULATOR_HTML = """
 </div>
 """
 
+ADVANCED_ROTH_PLANNER_HTML = """
+<div class="roth-planner-embed">
+  <iframe class="roth-planner-frame" data-roth-planner-frame
+    src="calculators/roth-conversion/index.html?embed=1"
+    title="Multi-Year Roth Conversion Calculator"
+    loading="lazy" allow="clipboard-write"
+    style="width:100%;height:900px;border:0;display:block;"></iframe>
+  <p class="roth-planner-open"><a href="calculators/roth-conversion/index.html" target="_blank" rel="noopener">Open calculator in a full window</a></p>
+</div>
+"""
+
 # ---- Advanced Financial Planning -------------------------------------------
 build_service_page(
     filename="advanced-financial-planning.html",
@@ -812,11 +827,11 @@ build_service_page(
     audience_chips=["High-Income Families", "Professionals", "Pre-Retirees", "Legacy-Focused Families"],
     focus_items=[
         ("Retirement Planning", "Evaluating how your current savings, income sources, and timeline align with your retirement goals.", RMD_CALCULATOR_HTML),
+        ("Roth Conversion Planning", "Analyzing whether converting pre-tax assets may align with your long-term tax and income goals.", ADVANCED_ROTH_PLANNER_HTML),
         ("Asset Optimization", "Reviewing how assets are positioned across account types with an eye toward tax efficiency and long-term goals."),
         ("Tax-Efficient Wealth Strategies", "Identifying strategies that may help manage your tax exposure over time, subject to applicable rules."),
         ("Life Insurance Planning", "Evaluating protection and planning strategies suited to your income replacement and legacy goals."),
         ("Annuity Planning", "Reviewing whether annuity strategies may have a role in your retirement income plan, including their costs and terms."),
-        ("Roth Conversion Planning", "Analyzing whether converting pre-tax assets may align with your long-term tax and income goals.", ROTH_CALCULATOR_HTML),
         ("Estate &amp; Legacy Planning", "Coordinating with your attorney to help align your financial plan with your estate planning documents."),
     ],
     feature_image="assets/images/planning-abstract.webp",

@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Explore a hypothetical 10-year Roth conversion plan, tax bracket headroom, and Medicare IRMAA thresholds.">
+  <title>Roth Conversion Calculator | Opulence Venture Group</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="model.js" defer></script>
+  <script src="app.js" defer></script>
+  <script src="embed.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#inputs">Skip to calculator</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#top" aria-label="Opulence Venture Group, top of calculator">
+        <svg viewBox="0 0 40 44" role="img" aria-label="Opulence monogram"><path d="M20 2 37 12v20L20 42 3 32V12Z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M20 10 29 16v12l-9 6-9-6V16Z" fill="none" stroke="currentColor" stroke-width="3"/><path d="M20 10v24" stroke="currentColor" stroke-width="1"/></svg>
+        <span>OPULENCE<small>VENTURE GROUP</small></span>
+      </a>
+      <nav aria-label="Calculator sections"><a href="#inputs">Your inputs</a><a href="#tax-reference">Tax reference</a><a href="#results">Projected plan</a></nav>
+      <button class="theme-button" id="theme" aria-label="Switch to dark appearance" title="Change appearance">◐</button>
+    </div>
+  </header>
+  <main id="top">
+    <div class="intro">
+      <div class="eyebrow">RETIREMENT PLANNING <span>/</span> 2026 ILLUSTRATION</div>
+      <h1>Multi-Year Roth Conversion Calculator</h1>
+      <p>Model a year-by-year plan to move a Traditional IRA into a Roth IRA. Explore conversion strategies, tax withholding, and Medicare income thresholds using a hypothetical fixed indexed annuity.</p>
+    </div>
+
+    <form id="calculator" novalidate>
+      <section id="inputs" class="input-panel">
+        <div class="section-heading"><h2>Your inputs</h2><button type="button" class="text-button" id="reset">Reset example</button></div>
+        <div class="strategy" role="group" aria-label="Conversion strategy">
+          <button type="button" data-mode="bracket" aria-pressed="true">Fill the Tax Bracket</button>
+          <button type="button" data-mode="fixed" aria-pressed="false">Fixed Dollar Amount</button>
+          <button type="button" data-mode="percent" aria-pressed="false">Percent of Account Value</button>
+        </div>
+        <div class="input-grid">
+          <div class="field"><label for="age">Current age<span class="hint">Age at year-end 2026</span></label><input id="age" type="number" value="66" min="40" max="85" step="1" required></div>
+          <div class="field"><label for="ira">Traditional IRA balance</label><input id="ira" type="text" inputmode="decimal" value="900,000" data-money required></div>
+          <div class="field"><label for="status">Filing status</label><select id="status"><option value="mfj">Married Filing Jointly</option><option value="single">Single</option></select></div>
+          <div class="field" id="spouse-field"><label for="spouse">Spouse age<span class="hint">For the age 65 deduction addition</span></label><input id="spouse" type="number" value="65" min="18" max="105" step="1" required></div>
+          <div class="field"><label for="income">Other income (MAGI)<span class="hint">Pensions, taxable Social Security, wages, interest</span></label><input id="income" type="text" inputmode="decimal" value="181,000" data-money required></div>
+          <div class="field" id="bracket-field"><label for="bracket">Target bracket ceiling</label><select id="bracket"><option value="12">Top of 12% bracket</option><option value="22">Top of 22% bracket</option><option value="24" selected>Top of 24% bracket</option><option value="32">Top of 32% bracket</option></select></div>
+          <div class="field" id="fixed-field" hidden><label for="fixed">Gross conversion $<span class="hint">Same amount each year, before withholding</span></label><input id="fixed" type="text" inputmode="decimal" value="100,000" data-money required></div>
+          <div class="field" id="percent-field" hidden><label for="percent">Gross conversion %<span class="hint">Of account value remaining after any RMD</span></label><input id="percent" type="number" value="10" min="0" max="100" step="0.1" required></div>
+          <div class="field"><label for="tax">Tax withholding rate %<span class="hint" id="tax-hint">Matches your target bracket. Adjust for state tax.</span></label><input id="tax" type="number" value="24" min="0" max="50" step="0.1" required></div>
+          <div class="field"><label for="irmaa">IRMAA ceiling<span class="hint">Medicare surcharge threshold to stay below</span></label><select id="irmaa"><option value="none">No IRMAA limit</option><option value="0">Below the first surcharge ($218,000)</option><option value="1" selected>Allow one tier (below $274,000)</option><option value="2">Allow two tiers (below $342,000)</option><option value="3">Allow three tiers (below $410,000)</option><option value="4">Allow four tiers (below $750,000)</option></select></div>
+          <div class="field"><label for="bonus">Premium bonus %<span class="hint">Hypothetical amount credited at issue</span></label><input id="bonus" type="number" value="0" min="0" max="40" step="0.1" required></div>
+          <div class="field"><label for="rate">Assumed annual credit %<span class="hint">Hypothetical average index credit</span></label><input id="rate" type="number" value="6" min="0" max="15" step="0.1" required></div>
+          <div class="field"><label for="withdrawal">Free withdrawal %<span class="hint">Contract charge-free allowance each year</span></label><input id="withdrawal" type="number" value="10" min="0" max="20" step="0.1" required></div>
+          <div class="field"><label for="basis">Free withdrawal basis<span class="hint">How the carrier calculates it</span></label><select id="basis"><option value="account">Account value at start of year</option><option value="greater">Greater of account value or premium</option></select></div>
+        </div>
+        <div class="checks">
+          <label><input id="holdback" type="checkbox" checked>No conversion in Year 1</label>
+          <label><input id="rmds" type="checkbox" checked>Model RMDs (age 73 or 75 by birth year)</label>
+          <label><input id="compare" type="checkbox">Compare to doing nothing</label>
+          <label><input id="peryear" type="checkbox">Enter index credits by year</label>
+        </div>
+        <div class="extra-fields" id="annual-fields" hidden><h3>Annual index credits <span>Applies to both the IRA and Roth in each year</span></h3><div class="annual-grid" id="annual-grid"></div></div>
+        <div class="extra-fields comparison-inputs" id="comparison-inputs" hidden>
+          <h3>Do-nothing comparison inputs</h3>
+          <div class="input-grid three">
+            <div class="field"><label for="portfolio">Do-nothing growth rate %<span class="hint">Hypothetical growth with no conversions</span></label><input id="portfolio" type="number" value="7" min="0" max="15" step="0.1" required></div>
+            <div class="field"><label for="heir">Heirs’ tax rate %<span class="hint">Simplified tax discount on inherited IRA dollars</span></label><input id="heir" type="number" value="24" min="0" max="50" step="0.1" required></div>
+            <div class="field"><label for="horizon">Compare through age<span class="hint">At least the end of the 10-year plan</span></label><select id="horizon"><option>85</option><option selected>90</option><option>95</option></select></div>
+          </div>
+        </div>
+        <div id="errors" role="alert" hidden></div>
+        <p class="input-note">Illustration only. Assumes a contract permitting in-contract Roth conversions; only withholding and RMDs use the free withdrawal allowance. Confirm the contract’s actual provisions.</p>
+      </section>
+    </form>
+
+    <section id="tax-reference" class="reference-section" aria-labelledby="reference-heading">
+      <div class="section-heading"><h2 id="reference-heading">2026 tax brackets &amp; IRMAA tiers</h2><span id="reference-status" class="muted"></span></div>
+      <div class="reference-grid">
+        <article class="reference-card">
+          <div class="card-heading"><h3>Federal income tax brackets</h3><p>Applied to taxable income, after the standard deduction</p></div>
+          <table class="reference-table"><caption class="sr-only">2026 federal income tax brackets</caption><thead><tr><th scope="col">Rate</th><th scope="col">Taxable income</th></tr></thead><tbody id="brackets-body"></tbody></table>
+        </article>
+        <article class="reference-card">
+          <div class="card-heading"><h3>IRMAA Medicare tiers</h3><p>MAGI from two years prior; premiums per person, per month</p></div>
+          <table class="reference-table irmaa-table"><caption class="sr-only">2026 Medicare Part B premiums and Part D surcharges</caption><thead><tr><th scope="col">MAGI</th><th scope="col">Part B</th><th scope="col">Part D</th></tr></thead><tbody id="irmaa-body"></tbody></table>
+        </article>
+      </div>
+      <div class="note"><p><strong>How to read these together.</strong> Tax brackets apply after the standard deduction of <span id="deduction"></span>. IRMAA uses MAGI before that deduction. Crossing a tier can increase each enrolled spouse’s Medicare premiums two years later. The bracket strategy stays one dollar below your selected ceiling; fixed and percentage strategies flag crossings without automatically reducing them.</p></div>
+      <p class="source-note">Reference figures: <a href="https://www.irs.gov/newsroom/irs-releases-tax-inflation-adjustments-for-tax-year-2026-including-amendments-from-the-one-big-beautiful-bill" target="_blank" rel="noopener">IRS 2026 brackets</a>, <a href="https://www.irs.gov/pub/irs-prior/f1040es--2026.pdf" target="_blank" rel="noopener">IRS age-based deductions</a>, and <a href="https://www.cms.gov/newsroom/fact-sheets/2026-medicare-parts-b-premiums-deductibles" target="_blank" rel="noopener">CMS 2026 Medicare premiums</a>. Held constant for all projected years.</p>
+    </section>
+
+    <section id="results" aria-labelledby="results-heading">
+      <div class="section-heading"><h2 id="results-heading">Your projected plan</h2><div class="actions"><button id="export" class="outline-button" type="button">Export CSV</button><button id="share" class="outline-button" type="button">Copy scenario link</button></div></div>
+      <p class="result-caption">10-year illustration <span>·</span> <span id="strategy-label">Fill the Tax Bracket</span> <span>·</span> Updated as you edit</p>
+      <div id="share-box" hidden><label for="share-url">Scenario link contains your entered assumptions. Share only with intended recipients.</label><input id="share-url" type="text" readonly><span id="share-status" role="status"></span></div>
+      <p id="empty" class="empty" hidden>Enter a Traditional IRA balance greater than zero to build your projected plan.</p>
+      <div id="result-content">
+        <div class="metrics" aria-live="polite" aria-atomic="true">
+          <article class="metric primary"><h3>Projected Roth balance</h3><p id="roth-total"></p><span id="roth-caption"></span></article>
+          <article class="metric"><h3>Total tax withheld</h3><p id="tax-total"></p><span>Withheld from gross conversions</span></article>
+          <article class="metric"><h3>Remaining Traditional IRA</h3><p id="ira-total"></p><span id="ira-caption"></span></article>
+        </div>
+        <div class="chart-card"><div class="chart-heading"><h3>Your account balances over time</h3><div class="legend"><span><i class="navy-dot"></i>Traditional IRA</span><span><i class="green-dot"></i>Roth IRA</span></div></div><div class="chart-holder"><canvas id="plan-chart" role="img" aria-label="Projected IRA and Roth balances; exact values are in the year-by-year table below"></canvas></div></div>
+        <div class="section-heading table-heading"><h3>Year-by-year conversion schedule</h3><span class="muted">Figures rounded to the nearest dollar</span></div>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="Scrollable year-by-year conversion schedule"><table class="schedule"><caption class="sr-only">Ten-year Roth conversion projection</caption><thead><tr><th>Year</th><th>Age</th><th>Beginning IRA</th><th>Index credit to IRA</th><th>RMD</th><th>Gross conversion</th><th>Tax withheld</th><th>Net to Roth</th><th>Ending IRA</th><th>Index credit to Roth</th><th>Roth balance</th></tr></thead><tbody id="schedule-body"></tbody><tfoot id="schedule-foot"></tfoot></table></div>
+        <div class="note observations"><h3>Plan observations</h3><div id="observations"></div></div>
+        <section id="comparison" hidden aria-labelledby="comparison-heading">
+          <div class="section-heading"><h2 id="comparison-heading">Convert vs. do nothing</h2><div class="small-strategy" role="group" aria-label="Comparison chart view"><button type="button" data-view="wealth" aria-pressed="true">After-tax wealth</button><button type="button" data-view="balance" aria-pressed="false">Account balances</button></div></div>
+          <p id="comparison-caption" class="result-caption"></p>
+          <div class="metrics"><article class="metric primary"><h3>Conversion plan</h3><p id="compare-convert"></p><span class="comparison-age"></span></article><article class="metric"><h3>Do nothing</h3><p id="compare-hold"></p><span class="comparison-age"></span></article><article class="metric"><h3>Conversion difference</h3><p id="compare-difference"></p><span id="difference-caption"></span></article></div>
+          <div class="chart-card"><div class="legend"><span><i class="green-dot"></i>Conversion plan</span><span><i class="navy-dot"></i>Do nothing</span></div><div class="chart-holder"><canvas id="compare-chart" role="img" aria-label="Comparison by age; exact values are available in the comparison table"></canvas></div></div>
+          <div class="note"><p id="comparison-note"></p></div>
+          <details class="comparison-details"><summary>View comparison figures by age</summary><div class="table-scroll" tabindex="0" role="region" aria-label="Comparison values by age"><table class="comparison-table"><thead><tr><th>Age</th><th>Conversion: after tax</th><th>Do nothing: after tax</th><th>Conversion: accounts</th><th>Do nothing: IRA</th></tr></thead><tbody id="comparison-body"></tbody></table></div></details>
+        </section>
+      </div>
+    </section>
+
+    <section class="assumptions">
+      <h2>Assumptions &amp; limitations</h2>
+      <p>This is a hypothetical educational illustration, not tax, legal, investment, or product advice. Results are estimates, not guarantees or a recommendation to convert. Tax withheld is a flat percentage you enter, not a calculation of your actual tax liability. Roth withdrawals are tax-free only when applicable qualification rules are met.</p>
+      <p>The model begins in 2026, assumes a fully pre-tax Traditional IRA, and holds income, tax brackets, and IRMAA thresholds constant. It includes the standard deduction and age-65 additions, but excludes the temporary senior deduction, itemized deductions, state-tax calculations, NIIT, tax credits, and Social Security taxation interactions. Enter MAGI rather than gross income. IRMAA is monitored from age 63 for either spouse on a joint return; disability-based Medicare before age 65 is not modeled. Actual future thresholds may change.</p>
+      <p>Index credits are hypothetical and applied after beginning-of-year distributions and conversions. Bonuses may have vesting restrictions; actual contracts may impose caps, spreads, participation rates, surrender charges, fees, and market value adjustments, none of which are modeled. This recreation assumes in-contract Roth conversions do not consume the free withdrawal allowance, while RMDs and withholding do. This is not a standard feature of every annuity; confirm with the carrier. “Free withdrawal” means free of modeled contract charges, not free of income tax. Additional taxes on early distributions before age 59½ are not modeled.</p>
+      <p>RMDs use the Uniform Lifetime Table and an inferred birth year of 2026 minus your entered age. A different table may apply for a spouse more than 10 years younger who is the sole beneficiary. RMDs cannot be converted. This tool does not support inherited IRAs, after-tax IRA basis, or first-RMD deferral. The comparison reinvests after-tax RMDs for both paths, reduces taxable-account growth by a 15% tax-drag assumption, assumes a basis step-up at death for those accounts, and applies a single heirs’ tax-rate discount to remaining Traditional IRA assets. It does not simulate the timing of inherited IRA distributions. Conversions stop after Year 10; the comparison then continues growth and RMDs. Consult qualified tax and financial professionals before acting.</p>
+      <p class="source-note">RMD factors: <a href="https://www.irs.gov/publications/p590b" target="_blank" rel="noopener">IRS Publication 590-B, Uniform Lifetime Table</a>. Independently built for Opulence Venture Group. No information is submitted to a server by this calculator.</p>
+    </section>
+    <footer><span>OPULENCE VENTURE GROUP</span><span>Educational planning tools · 2026 reference data</span></footer>
+  </main>
+</body>
+</html>

@@ -1,0 +1,8 @@
+/* Loaded only by Advanced Financial Planning. Other calculators are untouched. */
+[data-accordion-group="advanced-financial-planning.html"] .accordion-panel-inner:has([data-roth-planner-frame]) {
+  max-width: none;
+}
+.roth-planner-embed { margin-top: var(--space-6); width: 100%; min-width: 0; }
+.roth-planner-frame { width: 100%; display: block; border: 0; }
+.roth-planner-open { margin-top: var(--space-4); font-size: var(--text-sm); }
+.roth-planner-open a { text-decoration: underline; text-underline-offset: 3px; }
