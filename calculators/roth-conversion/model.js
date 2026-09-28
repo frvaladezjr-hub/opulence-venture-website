@@ -11,7 +11,7 @@
   const PART_B = [202.90,284.10,405.80,527.50,649.20,689.90];
   const PART_D = [0,14.50,37.50,60.40,83.30,91.00];
   const DIVISORS = {72:27.4,73:26.5,74:25.5,75:24.6,76:23.7,77:22.9,78:22,79:21.1,80:20.2,81:19.4,82:18.5,83:17.7,84:16.8,85:16,86:15.2,87:14.4,88:13.7,89:12.9,90:12.2,91:11.5,92:10.8,93:10.1,94:9.5,95:8.9};
-  const defaults = {mode:'bracket',age:0,ira:0,status:'mfj',spouse:0,income:0,bracket:24,fixed:0,percent:0,tax:0,irmaa:'1',bonus:0,rate:0,withdrawal:0,basis:'account',holdback:true,rmds:true,compare:false,peryear:false,portfolio:0,heir:0,horizon:90,annual:Array(10).fill(0)};
+  const defaults = {mode:'bracket',age:0,ira:0,status:'mfj',spouse:0,income:0,bracket:24,fixed:0,percent:0,tax:24,irmaa:'1',bonus:0,rate:0,withdrawal:0,basis:'account',holdback:true,rmds:true,compare:false,peryear:false,portfolio:0,heir:0,horizon:90,annual:Array(10).fill(0)};
   function deduction(p,offset=0) {
     const t=TAX[p.status];
     return t.deduction+t.additional*((p.age+offset>=65?1:0)+(p.status==='mfj'&&p.spouse+offset>=65?1:0));
