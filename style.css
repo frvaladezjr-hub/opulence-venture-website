@@ -428,7 +428,7 @@ p, li, figcaption {
 .nav-primary {
   display: none;
 }
-@media (min-width: 1280px) {
+@media (min-width: 1024px) {
   .nav-primary {
     display: flex;
     flex: 1;
@@ -570,8 +570,25 @@ p, li, figcaption {
   height: 40px;
   color: var(--color-text);
 }
-@media (min-width: 1280px) { .nav-toggle { display: none; } }
+@media (min-width: 1024px) { .nav-toggle { display: none; } }
 .nav-toggle svg { width: 22px; height: 22px; }
+
+/* Keep the complete desktop menu at laptop widths without clipping controls. */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .nav-bar { gap: 12px; }
+  .nav-primary { gap: 8px; }
+  .nav-bar .nav-primary > a,
+  .nav-bar .nav-primary > .nav-dropdown > .nav-dropdown-trigger {
+    font-size: clamp(0.875rem, 1.25vw, 1rem);
+  }
+  .nav-bar .nav-actions { gap: 8px; flex-shrink: 0; }
+  .nav-bar .theme-toggle { width: 32px; }
+  .nav-bar .nav-cta {
+    padding: 10px 12px;
+    font-size: 12px;
+    letter-spacing: 0.01em;
+  }
+}
 
 /* Mobile menu */
 .mobile-menu {
