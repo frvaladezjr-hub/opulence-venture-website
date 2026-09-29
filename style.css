@@ -366,11 +366,8 @@ p, li, figcaption {
   background: oklch(from var(--color-bg) l c h / 0.86);
   backdrop-filter: blur(14px);
   border-bottom: 1px solid oklch(from var(--color-text) l c h / 0.08);
-  transition:
-    transform 0.35s var(--ease-out),
-    box-shadow 0.35s var(--ease-out);
+  transition: box-shadow 0.35s var(--ease-out);
 }
-.site-header--hidden { transform: translateY(-100%); }
 .site-header--scrolled { box-shadow: var(--shadow-sm); }
 
 .nav-bar {

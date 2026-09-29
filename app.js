@@ -29,21 +29,14 @@
     });
   });
 
-  /* ---------- Header scroll behavior ---------- */
+  /* ---------- Persistent header with scroll shadow ---------- */
   var header = document.querySelector('.site-header');
   if (header) {
-    var lastY = window.scrollY;
+    header.classList.toggle('site-header--scrolled', window.scrollY > 8);
     window.addEventListener(
       'scroll',
       function () {
-        var y = window.scrollY;
-        header.classList.toggle('site-header--scrolled', y > 8);
-        if (y > lastY && y > 160) {
-          header.classList.add('site-header--hidden');
-        } else {
-          header.classList.remove('site-header--hidden');
-        }
-        lastY = y;
+        header.classList.toggle('site-header--scrolled', window.scrollY > 8);
       },
       { passive: true }
     );
