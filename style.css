@@ -411,9 +411,6 @@ p, li, figcaption {
 .nav-bar > .brand {
   gap: 8px;
 }
-@media (min-width: 768px) {
-  .nav-bar > .brand { margin-inline-start: 48px; }
-}
 .nav-bar > .brand img {
   height: clamp(28px, 2.5vw, 34px);
 }
