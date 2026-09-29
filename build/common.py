@@ -18,7 +18,7 @@ SERVICE_ITEMS = [
 
 NAV_ITEMS_TAIL = [
     ("consultants.html", "Our Team"),
-    ("resources.html", "Resources"),
+    ("resources.html", "Partners"),
     ("faq.html", "FAQ"),
     ("careers.html", "Careers"),
     ("contact.html", "Contact"),
@@ -121,7 +121,7 @@ def header(current_path):
     </button>
   </div>
   <nav aria-label="Mobile">
-    {"".join(f'<a href="{h}">{l}</a>' for h, l in NAV_ITEMS)}
+    {"".join(link(h, l) for h, l in NAV_ITEMS)}
     <button data-mobile-submenu-trigger aria-expanded="false" style="display:flex;align-items:center;justify-content:space-between;width:100%;font-family:var(--font-display);font-size:var(--text-lg);color:var(--color-text);padding:var(--space-3) 0;border-bottom:1px solid var(--color-divider);background:none;border-left:none;border-right:none;border-top:none;text-align:left;">
       Services
       <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
@@ -129,7 +129,7 @@ def header(current_path):
     <div class="mobile-submenu" style="display:none;">
       {"".join(f'<a href="{h}">{l}</a>' for h, l, d in SERVICE_ITEMS)}
     </div>
-    {"".join(f'<a href="{h}">{l}</a>' for h, l in NAV_ITEMS_TAIL)}
+    {"".join(link(h, l) for h, l in NAV_ITEMS_TAIL)}
   </nav>
   <div class="mobile-menu-cta">
     <a class="btn btn-primary btn-block" href="contact.html#consultation-form">Schedule a Consultation</a>
@@ -156,7 +156,7 @@ def footer():
           <li><a href="index.html">Home</a></li>
           <li><a href="about.html">About</a></li>
           <li><a href="consultants.html">Our Team</a></li>
-          <li><a href="resources.html">Resources</a></li>
+          <li><a href="resources.html">Partners</a></li>
           <li><a href="faq.html">FAQ</a></li>
           <li><a href="careers.html">Careers</a></li>
           <li><a href="contact.html">Contact</a></li>
