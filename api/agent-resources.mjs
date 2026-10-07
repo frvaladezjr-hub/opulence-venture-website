@@ -30,7 +30,10 @@ export function redisStore(env) {
   return {
     async allow(identity){return Number(await cmd(['EVAL',LIMIT_LUA,2,prefix+'attempt:'+identity,prefix+'global-attempts']))===1;},
     async set(key,value,ttl){await cmd(['SET',prefix+'session:'+key,JSON.stringify(value),'EX',ttl]);},
-    async get(key){const value=await cmd(['GET',prefix+'session:'+key]);return value?JSON.parse(value):null;},
+    // GETEX is a write command, so session checks use the primary rather than a
+    // potentially lagging replica. Storage cleanup may slide, but the absolute
+    // expiresAt checked below never extends the two-hour access window.
+    async get(key){const value=await cmd(['GETEX',prefix+'session:'+key,'EX',TTL]);return value?JSON.parse(value):null;},
     async remove(key){await cmd(['DEL',prefix+'session:'+key]);}
   };
 }

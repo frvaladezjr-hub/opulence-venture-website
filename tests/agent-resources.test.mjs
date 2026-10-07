@@ -69,13 +69,17 @@ test('production origin, HTTP methods, malformed JSON, and request size are chec
 test('Redis limiter uses atomic shared counters, TTLs, opaque session keys and auth',async()=>{
   const original=globalThis.fetch;const calls=[];
   try {
-    globalThis.fetch=async(url,options)=>{calls.push({url:String(url),options,cmd:JSON.parse(options.body)});return {ok:true,json:async()=>({result:calls.length===1?1:'OK'})};};
+    globalThis.fetch=async(url,options)=>{const cmd=JSON.parse(options.body);calls.push({url:String(url),options,cmd});return {ok:true,json:async()=>({result:cmd[0]==='EVAL'?1:cmd[0]==='GETEX'?JSON.stringify({version:'version',expiresAt:10000}):'OK'})};};
     const db=redisStore({KV_REST_API_URL:'https://example.com',KV_REST_API_TOKEN:'test-token'});
     assert.equal(await db.allow('hashed-ip'),true);
     assert.equal(calls[0].cmd[0],'EVAL');
     assert.match(calls[0].cmd[1],/EXPIRE/);assert.equal(calls[0].cmd[2],2);
     await db.set('opaque-token-hash',{version:'version',expiresAt:10000},7200);
     assert.deepEqual(calls[1].cmd.slice(-2),['EX',7200]);
+    assert.deepEqual(await db.get('opaque-token-hash'),{version:'version',expiresAt:10000});
+    assert.deepEqual(calls[2].cmd,['GETEX','opulence:agent:v1:session:opaque-token-hash','EX',7200]);
+    await db.remove('opaque-token-hash');
+    assert.deepEqual(calls[3].cmd,['DEL','opulence:agent:v1:session:opaque-token-hash']);
   }finally{globalThis.fetch=original;}
 });
 test('embedded media is catalog-allowlisted and requires a current session',async()=>{
