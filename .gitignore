@@ -1,2 +1,5 @@
 .vercel
 __pycache__/
+.env
+.env.*
+media-key.txt

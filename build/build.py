@@ -1594,3 +1594,13 @@ page(
     discovery_body,
     active="contact.html",
 )
+
+from agent_resources import body as agent_resources_body
+page(
+    "agent-resources.html",
+    "Agent Resources | Opulence Venture Group",
+    "Passcode access to approved Opulence Venture Group agent materials and training videos.",
+    "assets/images/contact-lobby.webp",
+    agent_resources_body(),
+    jsonld='<meta name="robots" content="noindex,nofollow" />',
+)

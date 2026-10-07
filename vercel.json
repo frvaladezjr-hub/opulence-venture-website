@@ -1,0 +1,17 @@
+{
+  "functions": {
+    "api/agent-resources.mjs": {
+      "includeFiles": "agent-vault/**",
+      "maxDuration": 30
+    }
+  },
+  "headers": [
+    {
+      "source": "/api/agent-resources",
+      "headers": [
+        {"key": "Cache-Control", "value": "private, no-store, max-age=0"},
+        {"key": "X-Content-Type-Options", "value": "nosniff"}
+      ]
+    }
+  ]
+}
