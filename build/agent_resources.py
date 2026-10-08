@@ -33,7 +33,7 @@ def body():
         <div class="agent-search"><label for="agent-search">Search the library</label><input id="agent-search" type="search" placeholder="Search titles, topics, or descriptions" autocomplete="off"></div>
         <div class="agent-filters" role="group" aria-label="Resource type">
           <button type="button" data-resource-filter="all" aria-pressed="true">All resources</button>
-          <button type="button" data-resource-filter="material" aria-pressed="false">Materials</button>
+          <button type="button" data-resource-filter="material" aria-pressed="false">PDF Materials</button>
           <button type="button" data-resource-filter="video" aria-pressed="false">Videos</button>
         </div>
       </div>
