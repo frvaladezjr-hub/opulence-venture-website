@@ -13,6 +13,7 @@
 .fia-fields legend { font-family:var(--font-body);font-size:16px;font-weight:600;margin-bottom:16px; }
 .fia-grid { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px; }
 .fia-field { display:flex;flex-direction:column;gap:8px;min-width:0; }
+.fia-follow-up { grid-column:2;max-width:220px; }
 .fia-field label { font-size:14px;font-weight:600; }
 .fia-field input,.fia-field select { width:100%;min-height:48px;padding:12px;border:1px solid var(--color-border);border-radius:4px;background:var(--color-bg);color:var(--color-text);font:16px var(--font-body); }
 .fia-field input:invalid:not(:placeholder-shown):focus { border-color:var(--color-primary); }
@@ -28,6 +29,7 @@
   .fia-open { width:100%; }
   .agent-library-actions .agent-filters { width:100%; }
   .fia-grid { grid-template-columns:1fr; }
+  .fia-follow-up { grid-column:1; }
   .fia-heading { flex-direction:column;gap:12px; }
   .fia-heading h3 { font-size:25px; }
 }

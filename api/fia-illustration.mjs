@@ -15,6 +15,7 @@ export function validateSubmission(body){
   };
   const d={
     agentName:text('agentName',120),agentEmail:text('agentEmail',160),
+    followUpDate:text('followUpDate',10,true),
     clientName:text('clientName',120),age:text('age',3),state:text('state',2),
     gender:text('gender',30),currentAccount:text('currentAccount',160),
     moneyType:text('moneyType',40),amount:text('amount',20),
@@ -23,6 +24,10 @@ export function validateSubmission(body){
     requestId:text('requestId',36)
   };
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.agentEmail))throw new Error('Enter a valid agent email.');
+  if(d.followUpDate){
+    const date=new Date(d.followUpDate+'T00:00:00.000Z');
+    if(!/^[1-9]\d{3}-\d{2}-\d{2}$/.test(d.followUpDate)||!Number.isFinite(date.getTime())||date.toISOString().slice(0,10)!==d.followUpDate)throw new Error('Enter a valid follow up date.');
+  }
   if(!/^\d{1,3}$/.test(d.age)||+d.age<0||+d.age>120)throw new Error('Age must be a whole number from 0 to 120.');
   if(!STATES.some(s=>s[0]===d.state)||!GENDERS.includes(d.gender)||!MONEY_TYPES.includes(d.moneyType)||!GOALS.includes(d.goal))throw new Error('Choose a valid state, gender, account tax status, and goal.');
   if(!/^\d+(\.\d{1,2})?$/.test(d.amount)||+d.amount<=0||+d.amount>1000000000)throw new Error('Enter a dollar amount greater than zero and no more than $1 billion.');
@@ -33,7 +38,9 @@ export function validateSubmission(body){
 export function buildMessages(d,from){
   const reference='FIA-'+d.requestId.slice(0,8).toUpperCase();
   const rows=[
-    ['Agent',d.agentName],['Agent email',d.agentEmail],['Client',d.clientName],['Age',d.age],
+    ['Agent',d.agentName],['Agent email',d.agentEmail],
+    ['Follow up date',d.followUpDate||'Not requested'],
+    ['Client',d.clientName],['Age',d.age],
     ['State',STATES.find(s=>s[0]===d.state)?.[1]||d.state],['Gender',d.gender],
     ['Current account / plan',d.currentAccount],['Account tax status',d.moneyType],
     ['Dollar amount',new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(+d.amount)],

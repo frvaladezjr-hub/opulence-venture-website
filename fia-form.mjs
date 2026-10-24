@@ -12,6 +12,7 @@ export function mountFiaForm({endpoint,getToken,onExpired}){
       <fieldset class="fia-fields"><legend>Agent information</legend><div class="fia-grid">
       ${input('agentName','Agent name','text','maxlength="120" autocomplete="name"')}
       ${input('agentEmail','Agent email','email','maxlength="160" autocomplete="email"')}
+      <div class="fia-field fia-follow-up"><label for="fia-followUpDate">Follow up date (optional)</label><input id="fia-followUpDate" name="followUpDate" type="date" min="1000-01-01" max="9999-12-31"></div>
       </div><p class="fia-help">Used for follow-up and your submission confirmation.</p></fieldset>
       <fieldset class="fia-fields"><legend>Client information</legend><div class="fia-grid">
       ${input('clientName','Client name','text','maxlength="120" autocomplete="off"')}

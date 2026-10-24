@@ -21,6 +21,11 @@ status, amount, optional carrier, and accumulation/income goal. Income start age
 is required for an income illustration. The agent name and email are required
 for reply and confirmation. Do not collect SSNs or account numbers.
 
+An optional Follow up date picker sits beneath Agent email. The chosen date is
+validated as a real calendar date and included in the internal request email;
+it does not create a calendar event or automatic reminder. Gender choices are
+Female and Male.
+
 The UI retains a random request identifier for retries. Provider idempotency keys
 also include the validated payload hash and message type, preventing unchanged
 immediate retries from creating duplicate messages within the provider's

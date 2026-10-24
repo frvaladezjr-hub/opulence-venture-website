@@ -63,6 +63,20 @@ test('email HTML escapes user content',()=>{
   const {internal}=buildMessages({...body,clientName:'<img src=x onerror=alert(1)>'},env.MAIL_FROM);
   assert.ok(internal.html.includes('&lt;img'));assert.ok(!internal.html.includes('<img'));
 });
+test('gender excludes Not specified',()=>{
+  for(const gender of ['Female','Male'])assert.equal(validateSubmission({...body,gender}).gender,gender);
+  assert.throws(()=>validateSubmission({...body,gender:'Not specified'}));
+});
+test('follow up date is optional, calendar-valid, and included in request email',async()=>{
+  assert.equal(validateSubmission(body).followUpDate,'');
+  assert.equal(validateSubmission({...body,followUpDate:''}).followUpDate,'');
+  for(const followUpDate of ['2026-11-06','2028-02-29'])assert.equal(validateSubmission({...body,followUpDate}).followUpDate,followUpDate);
+  for(const followUpDate of ['2026-02-29','2026-02-30','2026-13-01','2026-00-01','0000-01-01','11/06/2026','bad'])assert.throws(()=>validateSubmission({...body,followUpDate}));
+  const sent=[];const result=await call({send:async m=>sent.push(m)},{body:{...body,followUpDate:'2026-11-06'}});
+  assert.equal(result.code,200);
+  assert.ok(sent[0].html.includes('2026-11-06'));
+  assert.ok(sent[0].text.includes('Follow up date: 2026-11-06'));
+});
 test('authorized configuration reports dry-run accurately',async()=>{
   assert.deepEqual((await call({preview:true},{method:'GET'})).body,{preview:true,available:true});
   assert.deepEqual((await call({},{method:'GET'})).body,{preview:false,available:true});

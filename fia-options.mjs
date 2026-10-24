@@ -12,5 +12,5 @@ export const STATES=[
   ['VA','Virginia'],['WA','Washington'],['WV','West Virginia'],['WI','Wisconsin'],['WY','Wyoming']
 ];
 export const MONEY_TYPES=['Qualified (pre-tax)','Roth','Non-qualified (after-tax)'];
-export const GENDERS=['Female','Male','Not specified'];
+export const GENDERS=['Female','Male'];
 export const GOALS=['Accumulation','Income'];
