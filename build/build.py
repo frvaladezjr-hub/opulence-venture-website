@@ -15,10 +15,12 @@ ORG_JSONLD = f"""<script type="application/ld+json">
 }}
 </script>"""
 
-def path_card(index, title, description, topics, href, cta_label):
+def path_card(index, title, description, topics, href, cta_label, expanded=False):
     topics_html = "".join(f"<li>{t}</li>" for t in topics)
-    return f"""<div class="path-card" data-open="false">
-      <button class="path-card-trigger" aria-expanded="false">
+    open_state = "true" if expanded else "false"
+    panel_style = ' style="max-height:none;"' if expanded else ""
+    return f"""<div class="path-card" data-open="{open_state}">
+      <button class="path-card-trigger" aria-expanded="{open_state}">
         <div class="path-card-heading">
           <span class="path-card-index">{index}</span>
           <h3>{title}</h3>
@@ -26,7 +28,7 @@ def path_card(index, title, description, topics, href, cta_label):
         </div>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
       </button>
-      <div class="path-card-panel">
+      <div class="path-card-panel"{panel_style}>
         <div class="path-card-panel-inner">
           <ul class="path-card-topics">{topics_html}</ul>
           <a class="path-card-link" href="{href}">{cta_label} <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
@@ -1037,9 +1039,9 @@ careers_body = f"""
     <div class="eyebrow reveal">Three Business Models</div>
     <h2 class="section-title reveal" style="margin-top:var(--space-3);margin-bottom:var(--space-10);max-width:34ch;">Find Your Fit. Build Your Future.</h2>
     <div class="path-grid reveal">
-      {path_card(1, "Ambassador", "You stay focused on your existing career or business. You recognize when someone could benefit from our services and make the introduction.", ["Make the introduction.", "Great for realtors, loan officers, attorneys, tax professionals, recruiters &amp; more."], "#careers-form", "Request Info")}
-      {path_card(2, "Financial Professional", "You become licensed and work directly with clients. Instead of just making the introduction, you handle the business and get paid per transaction.", ["Handle the transaction."], "#careers-form", "Request Info")}
-      {path_card(3, "Agency Owner", "You're thinking bigger than individual transactions. You're building and scaling an organization. That means recruiting, developing professionals, and working toward ownership/equity opportunities.", ["Build &amp; scale an organization."], "#careers-form", "Request Info")}
+      {path_card(1, "Ambassador", "You stay focused on your existing career or business. You recognize when someone could benefit from our services and make the introduction.", ["Make the introduction.", "Great for realtors, loan officers, attorneys, tax professionals, recruiters &amp; more."], "#careers-form", "Request Info", expanded=True)}
+      {path_card(2, "Financial Professional", "You become licensed and work directly with clients. Instead of just making the introduction, you handle the business and get paid per transaction.", ["Handle the transaction."], "#careers-form", "Request Info", expanded=True)}
+      {path_card(3, "Agency Owner", "You're thinking bigger than individual transactions. You're building and scaling an organization. That means recruiting, developing professionals, and working toward ownership/equity opportunities.", ["Build &amp; scale an organization."], "#careers-form", "Request Info", expanded=True)}
     </div>
   </div>
 </section>
