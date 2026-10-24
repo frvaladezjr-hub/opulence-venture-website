@@ -1027,19 +1027,19 @@ careers_body = f"""
     <div class="page-header-content">
       <div class="eyebrow">Careers</div>
       <h1>Build Your Career With Opulence Venture Group</h1>
-      <p>We're growing our team of agents, advisors, and strategic partners. Tell us a bit about yourself and how you'd like to get involved.</p>
+      <p>Explore three paths: Ambassador, Financial Professional, and Agency Owner. Tell us a bit about yourself and how you'd like to get involved.</p>
     </div>
   </div>
 </section>
 
 <section class="section">
   <div class="container">
-    <div class="eyebrow reveal">Ways to Get Involved</div>
-    <h2 class="section-title reveal" style="margin-top:var(--space-3);margin-bottom:var(--space-10);max-width:34ch;">Become Part of the Vision</h2>
+    <div class="eyebrow reveal">Three Business Models</div>
+    <h2 class="section-title reveal" style="margin-top:var(--space-3);margin-bottom:var(--space-10);max-width:34ch;">Find Your Fit. Build Your Future.</h2>
     <div class="path-grid reveal">
-      {path_card(1, "Agent", "Build a practice helping individuals and families with insurance and financial-services solutions, backed by our training and support.", ["Field support and mentorship as you build your book of business", "Access to our marketing and client-service resources", "Coordinated case support for complex client needs"], "#careers-form", "Request Info")}
-      {path_card(2, "Advisor", "Join as a financial or wealth advisor and work alongside our team to deliver coordinated planning across tax, retirement, and legacy strategy.", ["Collaborative planning environment across specialties", "Support pursuing relevant licensing, designations, and continuing education", "A client base that values integrated, long-term planning"], "#careers-form", "Request Info")}
-      {path_card(3, "Strategic Partner", "Explore a referral or strategic partnership if you're a CPA, attorney, or other professional who works with business owners and families.", ["Coordinated planning for shared clients", "Clear communication and defined referral processes", "A team focused on long-term client relationships, not one-off transactions"], "#careers-form", "Request Info")}
+      {path_card(1, "Ambassador", "You stay focused on your existing career or business. You recognize when someone could benefit from our services and make the introduction.", ["Make the introduction.", "Great for realtors, loan officers, attorneys, tax professionals, recruiters &amp; more."], "#careers-form", "Request Info")}
+      {path_card(2, "Financial Professional", "You become licensed and work directly with clients. Instead of just making the introduction, you handle the business and get paid per transaction.", ["Handle the transaction."], "#careers-form", "Request Info")}
+      {path_card(3, "Agency Owner", "You're thinking bigger than individual transactions. You're building and scaling an organization. That means recruiting, developing professionals, and working toward ownership/equity opportunities.", ["Build &amp; scale an organization."], "#careers-form", "Request Info")}
     </div>
   </div>
 </section>
@@ -1074,9 +1074,9 @@ careers_body = f"""
               <label for="careers-interest">I'm Interested In</label>
               <select id="careers-interest" name="interest" required>
                 <option value="">Select one</option>
-                <option value="Agent">Becoming an Agent</option>
-                <option value="Advisor">Becoming an Advisor</option>
-                <option value="Strategic Partner">Strategic Partnership</option>
+                <option value="Ambassador">Becoming an Ambassador</option>
+                <option value="Financial Professional">Becoming a Financial Professional</option>
+                <option value="Agency Owner">Becoming an Agency Owner</option>
                 <option value="Not sure yet">Not Sure Yet</option>
               </select>
               <small class="error" data-error-for="interest">Please select an option.</small>
@@ -1122,7 +1122,7 @@ careers_body = careers_body.replace("__CTA__", cta_band(
 page(
     "careers.html",
     "Careers | Join Opulence Venture Group",
-    "Explore career and partnership opportunities with Opulence Venture Group as an agent, advisor, or strategic partner.",
+    "Find your fit with Opulence Venture Group as an Ambassador, Financial Professional, or Agency Owner. Explore three business models and build your future.",
     "assets/images/team-consultation.webp",
     careers_body,
 )
