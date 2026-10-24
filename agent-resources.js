@@ -15,6 +15,21 @@
   var busy = false;
   var epoch = 0;
   var mediaCleanup=[];
+  var fiaForm=null;
+  import(new URL('./fia-form.mjs',document.baseURI).href).then(function(module){
+    fiaForm=module.mountFiaForm({
+      endpoint:endpoint.replace('/api/agent-resources','/api/fia-illustration'),
+      getToken:function(){return token;},
+      onExpired:function(){lock('Your session has ended. Please sign in again.');}
+    });
+  }).catch(function(){
+    var button=byId('fia-open');
+    if(button)button.addEventListener('click',function(){
+      var panel=byId('fia-panel');
+      panel.hidden=false;panel.textContent='The illustration form could not be loaded. Please refresh the page.';
+      button.setAttribute('aria-expanded','true');
+    });
+  });
 
   function clearMedia() {
     mediaCleanup.forEach(function(cleanup){cleanup();});
@@ -27,6 +42,7 @@
     resources = [];
     clearTimeout(expiryTimer);
     clearMedia();
+    if(fiaForm)fiaForm.reset();
     byId('agent-resource-grid').replaceChildren();
     byId('agent-resource-count').textContent = '';
     byId('agent-library').hidden = true;

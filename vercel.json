@@ -1,5 +1,8 @@
 {
   "functions": {
+    "api/fia-illustration.mjs": {
+      "maxDuration": 60
+    },
     "api/agent-resources.mjs": {
       "includeFiles": "agent-vault/**",
       "maxDuration": 30

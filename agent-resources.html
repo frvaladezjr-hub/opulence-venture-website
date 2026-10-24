@@ -121,12 +121,16 @@
       </div>
       <div class="agent-library-tools">
         <div class="agent-search"><label for="agent-search">Search the library</label><input id="agent-search" type="search" placeholder="Search titles, topics, or descriptions" autocomplete="off"></div>
+        <div class="agent-library-actions">
+        <button id="fia-open" class="btn btn-outline fia-open" type="button" aria-expanded="false" aria-controls="fia-panel">FIA Illustration Request</button>
         <div class="agent-filters" role="group" aria-label="Resource type">
           <button type="button" data-resource-filter="all" aria-pressed="true">All resources</button>
           <button type="button" data-resource-filter="material" aria-pressed="false">PDF Materials</button>
           <button type="button" data-resource-filter="video" aria-pressed="false">Videos</button>
         </div>
+        </div>
       </div>
+      <section id="fia-panel" class="fia-panel" aria-labelledby="fia-title" hidden></section>
       <p id="agent-resource-count" class="agent-help" role="status" aria-live="polite"></p>
       <div id="agent-resource-grid" class="agent-resource-grid"></div>
       <div id="agent-empty" class="agent-empty" hidden><span class="agent-access-tag">Library updates</span><h3 id="agent-empty-title">Your library is ready to grow.</h3><p id="agent-empty-description">Approved materials and training videos will appear here as they are added. Check back with your agency leader for the first resources.</p></div>

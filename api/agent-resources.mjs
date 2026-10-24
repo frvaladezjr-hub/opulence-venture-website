@@ -29,6 +29,7 @@ export function redisStore(env) {
   }
   return {
     async allow(identity){return Number(await cmd(['EVAL',LIMIT_LUA,2,prefix+'attempt:'+identity,prefix+'global-attempts']))===1;},
+    async allowSubmission(identity){return Number(await cmd(['EVAL',LIMIT_LUA,2,prefix+'fia-attempt:'+identity,prefix+'fia-global-attempts']))===1;},
     async set(key,value,ttl){await cmd(['SET',prefix+'session:'+key,JSON.stringify(value),'EX',ttl]);},
     // GETEX is a write command, so session checks use the primary rather than a
     // potentially lagging replica. Storage cleanup may slide, but the absolute
@@ -36,6 +37,15 @@ export function redisStore(env) {
     async get(key){const value=await cmd(['GETEX',prefix+'session:'+key,'EX',TTL]);return value?JSON.parse(value):null;},
     async remove(key){await cmd(['DEL',prefix+'session:'+key]);}
   };
+}
+// Used by authenticated agent-only forms without exposing passcodes to clients.
+export async function authorizeAgent(req,{env=process.env,store=null,now=Date.now}={}) {
+  if(!/^\d{4}$/.test(env.AGENT_ACCESS_CODE||'')||(env.AGENT_SESSION_SECRET||'').length<32)throw new Error('Access not configured');
+  const match=/^Bearer ([A-Za-z0-9_-]{43})$/.exec(String(req.headers.authorization||''));
+  if(!match)return false;
+  const session=await (store||redisStore(env)).get(sha(match[1]));
+  const version=createHmac('sha256',env.AGENT_SESSION_SECRET).update('version:'+env.AGENT_ACCESS_CODE).digest('hex');
+  return Boolean(session&&session.expiresAt>now()&&session.version===version);
 }
 function readCatalog(raw='[]') {
   const list=JSON.parse(raw);
