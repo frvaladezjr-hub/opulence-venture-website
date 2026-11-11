@@ -974,6 +974,13 @@ consultants_body = f"""
     </div>
 
     <div class="consultant-role-group">
+      <div class="consultant-role-group-title reveal">Payroll Services</div>
+      <div class="consultant-grid reveal">
+        {consultant_card("assets/images/consultant-ajay-fay.webp", "Portrait of Ajay Fay, Payroll Services Specialist at Opulence Venture Group", "Ajay Fay", "Payroll Services Specialist", "Helps business clients coordinate payroll setup and administration alongside their broader financial plan.")}
+      </div>
+    </div>
+
+    <div class="consultant-role-group">
       <div class="consultant-role-group-title reveal">Retirement Income Specialists</div>
       <div class="consultant-grid reveal">
         {consultant_card("assets/images/consultant-josef-del-rosario.webp", "Portrait of Josef Del Rosario, Retirement Income Specialist at Opulence Venture Group", "Josef Del Rosario", "Retirement Income Specialist", "Focuses on sequencing retirement income sources to help support clients' lifestyle goals.")}
