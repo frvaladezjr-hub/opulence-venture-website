@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Financial Needs Analysis | Opulence Venture Group</title>
+  <meta name="description" content="An agent-guided Financial Needs Analysis for Opulence Venture Group clients.">
+  <link rel="icon" type="image/png" href="assets/logo-icon-onwhite.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#form">Skip to form</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#top" aria-label="Opulence Venture Group, top of form">
+        <img src="assets/logo-icon-onwhite.png" alt="" width="31" height="34">
+        <img class="brand-word-img" src="assets/logo-wordmark-onwhite.png" alt="Opulence Venture Group">
+      </a>
+      <div class="header-actions">
+        <span class="save-status" id="saveStatus" aria-live="polite"></span>
+        <button class="btn btn-ghost" type="button" id="openBtn">Open data file</button>
+        <input type="file" id="openFile" accept="application/json,.json" hidden>
+        <button class="btn btn-ghost" type="button" id="clearBtn">Clear form</button>
+        <button class="btn btn-primary" type="button" data-review>Review &amp; Submit</button>
+      </div>
+    </div>
+    <nav class="section-nav" aria-label="Form sections">
+      <div class="section-nav-inner" id="sectionNav"></div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <div class="intro">
+      <div class="eyebrow">ADVANCED PLANNING <span>/</span> AGENT-GUIDED INTAKE</div>
+      <h1>Financial Needs Analysis</h1>
+      <p>Complete this live with the client. Add as many accounts, dependents, properties and debts as needed. Totals, tax-bucket percentages and the planning snapshot update as you type.</p>
+    </div>
+    <form id="form" novalidate autocomplete="off"></form>
+    <div style="position:absolute;left:-9999px" aria-hidden="true"><label>Company <input type="text" id="fna_hp" tabindex="-1" autocomplete="off"></label></div>
+  </main>
+
+  <footer class="site-footer">
+    <span>OPULENCE VENTURE GROUP</span>
+    <span>For information gathering only. Not tax, legal or investment advice.</span>
+  </footer>
+
+  <div class="modal" id="reviewModal" role="dialog" aria-modal="true" aria-labelledby="reviewTitle" hidden>
+    <div class="modal-card">
+      <div class="modal-head">
+        <div>
+          <div class="eyebrow">REVIEW <span>/</span> BEFORE SUBMITTING</div>
+          <h2 id="reviewTitle">Client summary</h2>
+        </div>
+        <button class="icon-btn" type="button" data-close aria-label="Close review">×</button>
+      </div>
+      <div class="modal-body" id="reviewBody"></div>
+      <div class="modal-foot">
+        <button class="btn btn-ghost" type="button" data-close>Keep editing</button>
+        <button class="btn btn-ghost" type="button" id="jsonBtn">Download data file</button>
+        <button class="btn btn-ghost" type="button" id="pdfBtn">Download PDF</button>
+        <button class="btn btn-primary" type="button" id="submitBtn">Submit to Opulence</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle" hidden>
+    <div class="modal-card small">
+      <div class="modal-head"><h2 id="confirmTitle">Clear this form?</h2></div>
+      <div class="modal-body"><p>All answers in this form will be erased. Download a data file first if you want to keep a copy.</p></div>
+      <div class="modal-foot">
+        <button class="btn btn-ghost" type="button" data-close>Cancel</button>
+        <button class="btn btn-danger" type="button" id="confirmClear">Clear form</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

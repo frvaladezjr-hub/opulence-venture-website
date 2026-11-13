@@ -36,3 +36,11 @@ DMARC, or autodiscover records.
 If `RESEND_API_KEY` is missing or the function is unreachable, the form falls
 back to opening the agent's mail client with the full case summary pre-filled,
 matching how the careers form on the site already behaves. Nothing is lost.
+
+## Financial Needs Analysis (`fna.mjs`)
+
+`/financial-needs-analysis/` posts to `/api/fna`, which emails the completed
+analysis to `NOTIFY_TO` (default `info@opulenceinvestments.net`) with the PDF
+summary and the editable `.json` data file attached. It uses the same
+`RESEND_API_KEY` and `MAIL_FROM` variables as the discovery form — no extra
+setup. If the agent enters an email in Section G, replies go to the agent.
