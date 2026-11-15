@@ -36,8 +36,8 @@
     },
     bank: acct(['Checking', 'Savings', 'Money market', 'CD', 'Other'], 'e.g. Chase savings'),
     mutualstocks: acct(['Brokerage', 'Mutual fund', 'Individual stocks', 'ETF', 'Bonds', 'Crypto', 'Other'], 'e.g. Schwab brokerage'),
-    qualified: acct(['401(k)', '403(b)', '457(b)', 'TSP', 'SEP IRA', 'SIMPLE IRA', 'Pension', 'Other'], '401(k), IRA, Qualified plans etc.'),
-    ira: acct(['Traditional IRA', 'Rollover IRA', 'Inherited IRA', 'Non-qualified annuity', 'Other'], 'e.g. Rollover IRA'),
+    qualified: acct(['401(k)', '403(b)', '457(b)', 'TSP', 'Traditional IRA', 'Rollover IRA', 'Inherited IRA', 'SEP IRA', 'SIMPLE IRA', 'Pension', 'Other'], '401(k), IRA, Qualified plans etc.'),
+    ira: acct(['Non-qualified annuity', 'Deferred compensation', 'Other'], 'e.g. Non-qualified annuity'),
     roth: acct(['Roth IRA', 'Roth 401(k)', 'Roth 403(b)', 'Other'], 'e.g. Roth IRA'),
     cvlife: acct(['Whole life', 'Indexed UL', 'Universal life', 'Variable UL', 'Other'], 'e.g. IUL policy'),
     incomeAssets: {
@@ -275,7 +275,7 @@
     <section class="section" id="${s[3].id}">${secHead(s[3])}
       <div class="buckets">
         ${bucket('taxable', 'Taxable', 'Assets are generally positioned for current or short-term needs that can best be served with highly liquid investment instruments.', ['bank', 'Bank Savings/CDs'], ['mutualstocks', 'Mutual Funds / Stocks'])}
-        ${bucket('deferred', 'Tax Deferred', 'Assets are for long-term needs. Invested in less-liquid investments where any growth or interest is ultimately taxable at distribution.', ['qualified', '401(k) or qualified plans'], ['ira', 'IRA or non qualified plans'])}
+        ${bucket('deferred', 'Tax Deferred', 'Assets are for long-term needs. Invested in less-liquid investments where any growth or interest is ultimately taxable at distribution.', ['qualified', '401(k) / Qualified Plans'], ['ira', 'Non Qualified Plans'])}
         ${bucket('exempt', 'Tax Exempt', 'Assets are positioned for the future since they receive preferential tax treatment during accumulation and at distribution.', ['roth', 'Roth IRA'], ['cvlife', 'Cash Value Life Insurance'])}
       </div>
       <div class="stats-wrap">
@@ -566,7 +566,7 @@
     G.groups.push({ kv: kvRows([['Doing today', F('goals.doingToday')], ['Monthly set-aside', F('goals.monthly') ? fmt$(num(F('goals.monthly'))) : '']]) });
     out.push(G);
     const D = { title: 'D — Asset Accumulation (Tax Buckets)', groups: [] };
-    [['bank', 'Taxable — Bank Savings/CDs'], ['mutualstocks', 'Taxable — Mutual Funds / Stocks'], ['qualified', 'Tax Deferred — 401(k) or qualified plans'], ['ira', 'Tax Deferred — IRA or non qualified plans'], ['roth', 'Tax Exempt — Roth IRA'], ['cvlife', 'Tax Exempt — Cash Value Life Insurance']]
+    [['bank', 'Taxable — Bank Savings/CDs'], ['mutualstocks', 'Taxable — Mutual Funds / Stocks'], ['qualified', 'Tax Deferred — 401(k) / Qualified Plans'], ['ira', 'Tax Deferred — Non Qualified Plans'], ['roth', 'Tax Exempt — Roth IRA'], ['cvlife', 'Tax Exempt — Cash Value Life Insurance']]
       .forEach(([k, t]) => { const tb = repTable(k, t); if (tb) D.groups.push({ table: tb }); });
     D.groups.push({ kv: [['Taxable', fmt$(c['taxable.bal']) + ' (' + fmtPct(c['pct.taxable']) + ')'], ['Tax deferred', fmt$(c['deferred.bal']) + ' (' + fmtPct(c['pct.deferred']) + ')'], ['Tax exempt', fmt$(c['exempt.bal']) + ' (' + fmtPct(c['pct.exempt']) + ')'], ['Total balance', fmt$(c['inv.bal'])], ['Total monthly contributions', fmt$(c['inv.mo'])]] });
     const ia = repTable('incomeAssets', 'Income Assets'); if (ia) { D.groups.push({ table: ia }); D.groups.push({ kv: [['Total net monthly income', fmt$(c['inc.netMo'])], ['Total net yearly income', fmt$(c['inc.netYr'])]] }); }
