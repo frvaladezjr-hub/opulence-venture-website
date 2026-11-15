@@ -36,7 +36,7 @@
     },
     bank: acct(['Checking', 'Savings', 'Money market', 'CD', 'Other'], 'e.g. Chase savings'),
     mutualstocks: acct(['Brokerage', 'Mutual fund', 'Individual stocks', 'ETF', 'Bonds', 'Crypto', 'Other'], 'e.g. Schwab brokerage'),
-    qualified: acct(['401(k)', '403(b)', '457(b)', 'TSP', 'SEP IRA', 'SIMPLE IRA', 'Pension', 'Other'], 'e.g. Employer 401(k)'),
+    qualified: acct(['401(k)', '403(b)', '457(b)', 'TSP', 'SEP IRA', 'SIMPLE IRA', 'Pension', 'Other'], '401(k), IRA, Qualified plans etc.'),
     ira: acct(['Traditional IRA', 'Rollover IRA', 'Inherited IRA', 'Non-qualified annuity', 'Other'], 'e.g. Rollover IRA'),
     roth: acct(['Roth IRA', 'Roth 401(k)', 'Roth 403(b)', 'Other'], 'e.g. Roth IRA'),
     cvlife: acct(['Whole life', 'Indexed UL', 'Universal life', 'Variable UL', 'Other'], 'e.g. IUL policy'),
@@ -246,13 +246,13 @@
           </div></div>
         <div class="grid two" style="margin-bottom:18px">
           ${inp('ret.savings', '2. How much money would you need to have saved up to retire on your terms?', { type: 'money', span: 'all' })}
-          ${inp('ret.monthly', '3. What would you need as a monthly income to be able to retire comfortably?', { type: 'money', span: 'all' })}
+          ${inp('ret.annual', '3. How much income would you need annually to retire comfortably?', { type: 'money', span: 'all' })}
         </div>
         ${area('ret.picture', '', { ph: 'Travel, family, hobbies, where they live, how they spend a typical week…' })}
         <div class="final-q">
           <h3>Final Question</h3>
-          <p class="script">If we could put a plan in place that would allow you to retire at age <span class="fill" data-fill="age">______</span> with <span class="fill" data-fill="savings">______</span> saved up, and it paid you <span class="fill" data-fill="yearly">______</span> in income every year in retirement, and it also allowed you to accomplish all the goals we discussed, is there any reason why you wouldn't let our Firm implement that for you for FREE?</p>
-          <p class="hint" style="margin:8px 0 16px">The bracketed values above fill in automatically from your answers to questions 1–3. Leave any blank to see “______”.</p>
+          <p class="script">If we could put a plan in place designed to help you retire at age <span class="fill" data-fill="age">______</span> with <span class="fill" data-fill="yearly">$_____</span> in annual income, is there any reason you wouldn’t want to see how that works?</p>
+          <p class="hint" style="margin:8px 0 16px">The bracketed values above fill in automatically from your answers to questions 1 and 3. Any blank answers show as a blank line.</p>
           ${radios('ret.reason', 'Any reason not to move forward?', YN)}
           <div class="reveal" data-show="ret.reason:Yes" style="margin-top:14px">${area('ret.reasonWhy', 'What would keep you from moving forward?')}</div>
         </div>
@@ -322,7 +322,7 @@
         <div class="snap primary"><div class="k">Estimated net worth</div><div class="v" data-out="snap.net">$0</div><div class="s">All assets minus debts</div></div>
         <div class="snap"><div class="k">Investable assets</div><div class="v" data-out="snap.inv">$0</div><div class="s">All three tax buckets</div></div>
         <div class="snap"><div class="k">Total debts</div><div class="v" data-out="snap.debt">$0</div><div class="s" data-out="snap.debtPay">$0 / month in payments</div></div>
-        <div class="snap"><div class="k">Retirement income gap</div><div class="v" data-out="snap.gap">$0</div><div class="s">Monthly goal minus net income assets</div></div>
+        <div class="snap"><div class="k">Retirement income gap</div><div class="v" data-out="snap.gap">$0</div><div class="s">Monthly need (annual ÷ 12) minus net income assets</div></div>
         <div class="snap"><div class="k">Existing life coverage</div><div class="v" data-out="snap.cov">$0</div><div class="s" data-out="snap.covCount">0 policies</div></div>
         <div class="snap"><div class="k">Education funding gap</div><div class="v" data-out="snap.edu">$0</div><div class="s">Estimated cost minus saved</div></div>
       </div>
@@ -415,7 +415,7 @@
     c['snap.debtPay'] = sum('liabilities', 'payment');
     c['snap.net'] = tb + c['inc.balance'] + physical - c['snap.debt'];
     c['snap.assets'] = tb + c['inc.balance'] + physical;
-    c['snap.gap'] = Math.max(0, num(F('ret.monthly')) - netMo);
+    c['snap.gap'] = Math.max(0, num(F('ret.annual')) / 12 - netMo);
     const life = S.r.coverage.filter(r => !/Disability|Long-term/.test(r.type));
     c['snap.cov'] = life.reduce((a, r) => a + num(r.face), 0);
     c['snap.covCount'] = S.r.coverage.length;
@@ -436,8 +436,8 @@
     });
     ['taxable', 'deferred', 'exempt'].forEach(k => { const el = $(`[data-bar="${k}"]`); if (el) el.style.width = (c['pct.' + k] || 0) + '%'; });
     const yrs = $('[data-outv="ret.years"]'); if (yrs) yrs.value = c['ret.years'] == null ? '—' : c['ret.years'] + ' years';
-    const age = F('ret.retireAge'), sav = num(F('ret.savings')), mo = num(F('ret.monthly'));
-    const fills = { age: age || '______', age4: age || '______', savings: sav ? fmt$(sav) : '______', yearly: mo ? fmt$(mo * 12) : '______' };
+    const age = F('ret.retireAge'), sav = num(F('ret.savings')), yr = num(F('ret.annual'));
+    const fills = { age: age || '______', age4: age || '______', savings: sav ? fmt$(sav) : '______', yearly: yr ? fmt$(yr) : '$_____' };
     $$('[data-fill]').forEach(el => { el.textContent = fills[el.dataset.fill]; });
     // conditional sections
     $$('[data-show]').forEach(el => { const [n, v] = el.dataset.show.split(':'); el.hidden = F(n) !== v; });
@@ -559,8 +559,7 @@
     if (F('hasDependents') === 'Yes') { const t = repTable('dependents', 'Dependents'); if (t) A.groups.push({ table: t }); }
     out.push(A);
     out.push({ title: 'B — Retirement Questions', groups: [{ kv: kvRows([['Current age', F('ret.currentAge')], ['Retire at age', F('ret.retireAge')], ['Years until retirement', c['ret.years'] == null ? '' : String(c['ret.years'])],
-      ['Savings needed to retire', F('ret.savings') ? fmt$(num(F('ret.savings'))) : ''], ['Monthly income needed', F('ret.monthly') ? fmt$(num(F('ret.monthly'))) : ''],
-      ['Yearly income needed', F('ret.monthly') ? fmt$(num(F('ret.monthly')) * 12) : ''], ['Retirement picture', F('ret.picture')],
+      ['Savings needed to retire', F('ret.savings') ? fmt$(num(F('ret.savings'))) : ''], ['Annual income needed', F('ret.annual') ? fmt$(num(F('ret.annual'))) : ''], ['Retirement picture', F('ret.picture')],
       ['Any reason not to move forward?', F('ret.reason')], ['Reason', F('ret.reasonWhy')]]) }] });
     const G = { title: 'C — Financial Goals', groups: [] };
     G.groups.push({ kv: kvRows([['Short-term (1–2 years)', F('goals.notes.short')], ['Mid-term (3–5 years)', F('goals.notes.mid')], ['Long-term (5+ years)', F('goals.notes.long')]]) });
