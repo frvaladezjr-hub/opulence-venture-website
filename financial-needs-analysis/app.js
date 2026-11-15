@@ -56,7 +56,7 @@
     goalsLong: { layout: 'stack', start: 0, add: 'Add goal', empty: '', cols: { desc: text('Other goal', { span: 2 }), amount: money('Amount ($)'), year: text('Target year', { ph: 'e.g. 2040' }) } },
     realestate: {
       layout: 'table', start: 0, add: 'Add property', empty: 'No properties added.',
-      cols: { desc: text('Asset description', { ph: 'e.g. 123 Main St' }), type: sel('Type', ['Primary residence', 'Rental', 'Vacation home', 'Land', 'Commercial', 'Other']), owner: sel('Owner', OWNERS), value: money('Market value ($)'), basis: money('Cost basis ($)') },
+      cols: { desc: text('Asset description', { ph: 'e.g. 123 Main St' }), type: sel('Type', ['Primary residence', 'Rental', 'Vacation home', 'Land', 'Commercial', 'Other']), owner: sel('Owner', OWNERS.concat(['LLC'])), value: money('Market value ($)'), basis: money('Cost basis ($)') },
       totals: ['value', 'basis']
     },
     vehicles: {
@@ -305,7 +305,7 @@
           <div>${radios('est.poa', 'Do you have a power of attorney and healthcare directive?', ['Yes', 'No', 'Not sure'])}</div>
         </div>
       </div>
-      <div class="card"><div class="sub-head">Real Estate Owned Free &amp; Clear</div>${repBlock('realestate')}</div>
+      <div class="card"><div class="sub-head">Real Estate Owned</div>${repBlock('realestate')}</div>
       <div class="card"><div class="sub-head">Vehicles and Boats Owned Free and Clear</div>${repBlock('vehicles')}</div>
       <div class="card"><div class="sub-head">Collectibles, Antiques, Jewelry, etc.</div>${repBlock('collectibles')}</div>
       <div class="card"><div class="sub-head">Debts &amp; Liabilities <small>Mortgages, loans and credit cards</small></div>${repBlock('liabilities')}</div>
@@ -573,7 +573,7 @@
     out.push(D);
     const E = { title: 'E — Preserve Your Estate', groups: [{ kv: kvRows([['Will', F('est.will')], ['Will last updated', F('est.willDate')], ['Trust', F('est.trust')], ['Trust type', F('est.trustType')], ['Trust last updated', F('est.trustYear')],
       ['Expects lump sum / inheritance', F('est.lump')], ['Estimated amount', F('est.lumpAmt') ? fmt$(num(F('est.lumpAmt'))) : ''], ['Source / timing', F('est.lumpNotes')], ['POA & healthcare directive', F('est.poa')]]) }] };
-    [['realestate', 'Real Estate Owned Free & Clear'], ['vehicles', 'Vehicles and Boats Owned Free and Clear'], ['collectibles', 'Collectibles, Antiques, Jewelry, etc.'], ['liabilities', 'Debts & Liabilities'], ['coverage', 'Existing Insurance Coverage']]
+    [['realestate', 'Real Estate Owned'], ['vehicles', 'Vehicles and Boats Owned Free and Clear'], ['collectibles', 'Collectibles, Antiques, Jewelry, etc.'], ['liabilities', 'Debts & Liabilities'], ['coverage', 'Existing Insurance Coverage']]
       .forEach(([k, t]) => { const tb = repTable(k, t); if (tb) E.groups.push({ table: tb }); });
     out.push(E);
     const ed = repTable('education', 'Education goals');
