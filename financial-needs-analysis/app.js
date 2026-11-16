@@ -39,7 +39,7 @@
     qualified: acct(['401(k)', '403(b)', '457(b)', 'TSP', 'Traditional IRA', 'Rollover IRA', 'Inherited IRA', 'SEP IRA', 'SIMPLE IRA', 'Pension', 'Other'], '401(k), IRA, Qualified plans etc.'),
     ira: acct(['Non-qualified annuity', 'Deferred compensation', 'Other'], 'e.g. Non-qualified annuity'),
     roth: acct(['Roth IRA', 'Roth 401(k)', 'Roth 403(b)', 'Other'], 'e.g. Roth IRA'),
-    cvlife: acct(['Whole life', 'Indexed UL', 'Universal life', 'Variable UL', 'Other'], 'e.g. IUL policy'),
+    cvlife: acct(['Whole life', 'Indexed UL', 'Universal life', 'Variable UL', 'Other'], 'Insurance Company Name'),
     incomeAssets: {
       layout: 'table', start: 1, add: 'Add income source', empty: 'No income sources added.',
       cols: {
@@ -47,8 +47,7 @@
         type: sel('Type', ['Social Security', 'Pension', 'Annuity', 'Rental income', 'Dividends / interest', 'Business income', 'Other']),
         owner: sel('Owner', OWNERS.concat(['LLC'])),
         balance: money('Balance ($)'), monthly: money('Monthly income ($)'),
-        yearly: { type: 'computed', label: 'Yearly income ($)', num: true, fn: r => fmt$(num(r.monthly) * 12) },
-        bracket: pct('Tax bracket (%)')
+        yearly: { type: 'computed', label: 'Yearly income ($)', num: true, fn: r => fmt$(num(r.monthly) * 12) }
       }, totals: []
     },
     goalsShort: { layout: 'stack', start: 0, add: 'Add goal', empty: '', cols: { desc: text('Other goal', { span: 2 }), amount: money('Amount ($)'), year: text('Target year', { ph: 'e.g. 2027' }) } },
@@ -290,7 +289,7 @@
       </div>
       <div class="card tint">
         <h3>Income Assets</h3>
-        <p class="card-sub" style="margin-bottom:14px">Add each income-producing asset. Yearly income is calculated automatically as monthly × 12. Net income is calculated after applying the tax bracket (net = income × (1 − bracket%)).</p>
+        <p class="card-sub" style="margin-bottom:14px">Add each income-producing asset. Yearly income is calculated automatically as monthly × 12.</p>
         ${repBlock('incomeAssets')}
       </div>
       <p class="disclaimer">Please note the following: Certain events and distributions may be subject to taxation and individuals would be responsible for the appropriate liability. This piece provides general information regarding the Internal Revenue Code and does not take into consideration specific state laws. Opulence Venture Group does not provide tax advice and strongly recommends that clients consult a tax advisor concerning any tax issues relating to their investments.</p>
@@ -383,7 +382,7 @@
         || (cfg.empty ? `<div class="rep-empty">${cfg.empty}</div>` : '');
     }
     const tot = (cfg.totals || []).map(t => `<span>Total ${esc(cfg.cols[t].tl || cfg.cols[t].label.replace(/ \(\$\)/, ''))}: ${out(`rep.${key}.${t}`)}</span>`).join('');
-    const extra = key === 'incomeAssets' ? `<span>Total Net Monthly Income: ${out('inc.netMo')}</span><span>Total Net Yearly Income: ${out('inc.netYr')}</span>`
+    const extra = key === 'incomeAssets' ? `<span>Total Monthly Income: ${out('inc.netMo')}</span><span>Total Yearly Income: ${out('inc.netYr')}</span>`
       : key === 'education' ? `<span>Total Funding Gap: ${out('edu.gap')}</span>` : '';
     const showTotals = cfg.layout === 'table' || key === 'dependents' ? (tot || extra) : '';
     box.innerHTML = body + `<div class="rep-foot"><button type="button" class="btn-add" data-add="${key}"><span aria-hidden="true">+</span> ${esc(cfg.add)}</button>${showTotals ? `<div class="rep-totals">${tot}${extra}</div>` : ''}</div>`;
@@ -404,7 +403,7 @@
     c['inv.bal'] = tb; c['inv.mo'] = tm;
     for (const k in b) c['pct.' + k] = tb ? c[k + '.bal'] / tb * 100 : 0;
     let netMo = 0;
-    S.r.incomeAssets.forEach(r => { netMo += num(r.monthly) * (1 - Math.min(100, num(r.bracket)) / 100); });
+    S.r.incomeAssets.forEach(r => { netMo += num(r.monthly); });
     c['inc.netMo'] = netMo; c['inc.netYr'] = netMo * 12;
     c['inc.balance'] = sum('incomeAssets', 'balance');
     for (const k in REP) (REP[k].totals || []).forEach(t => { c[`rep.${k}.${t}`] = sum(k, t); });
@@ -569,7 +568,7 @@
     [['bank', 'Taxable — Bank Savings/CDs'], ['mutualstocks', 'Taxable — Mutual Funds / Stocks'], ['qualified', 'Tax Deferred — 401(k) / Qualified Plans'], ['ira', 'Tax Deferred — Non Qualified Plans'], ['roth', 'Tax Exempt — Roth IRA'], ['cvlife', 'Tax Exempt — Cash Value Life Insurance']]
       .forEach(([k, t]) => { const tb = repTable(k, t); if (tb) D.groups.push({ table: tb }); });
     D.groups.push({ kv: [['Taxable', fmt$(c['taxable.bal']) + ' (' + fmtPct(c['pct.taxable']) + ')'], ['Tax deferred', fmt$(c['deferred.bal']) + ' (' + fmtPct(c['pct.deferred']) + ')'], ['Tax exempt', fmt$(c['exempt.bal']) + ' (' + fmtPct(c['pct.exempt']) + ')'], ['Total balance', fmt$(c['inv.bal'])], ['Total monthly contributions', fmt$(c['inv.mo'])]] });
-    const ia = repTable('incomeAssets', 'Income Assets'); if (ia) { D.groups.push({ table: ia }); D.groups.push({ kv: [['Total net monthly income', fmt$(c['inc.netMo'])], ['Total net yearly income', fmt$(c['inc.netYr'])]] }); }
+    const ia = repTable('incomeAssets', 'Income Assets'); if (ia) { D.groups.push({ table: ia }); D.groups.push({ kv: [['Total monthly income', fmt$(c['inc.netMo'])], ['Total yearly income', fmt$(c['inc.netYr'])]] }); }
     out.push(D);
     const E = { title: 'E — Preserve Your Estate', groups: [{ kv: kvRows([['Will', F('est.will')], ['Will last updated', F('est.willDate')], ['Trust', F('est.trust')], ['Trust type', F('est.trustType')], ['Trust last updated', F('est.trustYear')],
       ['Expects lump sum / inheritance', F('est.lump')], ['Estimated amount', F('est.lumpAmt') ? fmt$(num(F('est.lumpAmt'))) : ''], ['Source / timing', F('est.lumpNotes')], ['POA & healthcare directive', F('est.poa')]]) }] };
