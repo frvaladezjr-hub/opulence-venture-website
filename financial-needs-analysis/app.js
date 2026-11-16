@@ -448,21 +448,23 @@
   }
 
   /* ---------- Persistence (auto-saves in this browser; data file for other devices) ---------- */
-  const STORE_KEY = 'opulence-fna-progress-v1';
+  // Browser storage is provided by autosave.js (shipped with the website only).
+  const STORE = window.FNA_STORE || null;
   let dirty = false, saveTimer = null;
   function setStatus(t) { const st = $('#saveStatus'); if (st) st.textContent = t; }
   function timeNow() { return new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }); }
   function storeNow() {
     clearTimeout(saveTimer); saveTimer = null;
     try {
-      localStorage.setItem(STORE_KEY, JSON.stringify({ app: 'Opulence FNA', version: 1, savedAt: new Date().toISOString(), data: S }));
+      if (!STORE) throw new Error('no store');
+      STORE.set(JSON.stringify({ app: 'Opulence FNA', version: 1, savedAt: new Date().toISOString(), data: S }));
       dirty = false; setStatus('Saved on this device ' + timeNow()); return true;
     } catch (e) { dirty = true; setStatus('Unsaved changes'); return false; }
   }
   function save() { dirty = true; setStatus('Saving…'); clearTimeout(saveTimer); saveTimer = setTimeout(storeNow, 600); }
-  function forgetStored() { clearTimeout(saveTimer); saveTimer = null; try { localStorage.removeItem(STORE_KEY); } catch (e) {} }
+  function forgetStored() { clearTimeout(saveTimer); saveTimer = null; try { if (STORE) STORE.remove(); } catch (e) {} }
   function restoreStored() {
-    let raw = null; try { raw = localStorage.getItem(STORE_KEY); } catch (e) { return; }
+    let raw = null; try { raw = STORE ? STORE.get() : null; } catch (e) { return; }
     if (!raw) return;
     try {
       const obj = JSON.parse(raw); importData(obj);
@@ -470,7 +472,7 @@
       setStatus('Progress restored' + (when ? ' from ' + when.toLocaleDateString([], { month: 'short', day: 'numeric' }) + ', ' + when.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : ''));
     } catch (e) { forgetStored(); }
   }
-  function saveProgress() { const ok = storeNow(); downloadJSON(); setStatus(ok ? 'Progress saved ' + timeNow() + ' and file downloaded' : 'Data file downloaded'); }
+  function saveProgress() { const ok = storeNow(); downloadJSON(); setStatus(ok ? 'Progress saved ' + timeNow() + ' and file downloaded' : 'Progress file downloaded'); }
   function importData(obj) {
     const d = obj && obj.data ? obj.data : obj;
     if (!d || !d.f || !d.r) throw new Error('bad');
