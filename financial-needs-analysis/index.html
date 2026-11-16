@@ -21,6 +21,7 @@
       </a>
       <div class="header-actions">
         <span class="save-status" id="saveStatus" aria-live="polite"></span>
+        <button class="btn btn-ghost" type="button" id="saveProgressBtn" title="Saves your answers in this browser and downloads a data file you can open on another device">Save progress</button>
         <button class="btn btn-ghost" type="button" id="openBtn">Open data file</button>
         <input type="file" id="openFile" accept="application/json,.json" hidden>
         <button class="btn btn-ghost" type="button" id="clearBtn">Clear form</button>
@@ -68,7 +69,7 @@
   <div class="modal" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle" hidden>
     <div class="modal-card small">
       <div class="modal-head"><h2 id="confirmTitle">Clear this form?</h2></div>
-      <div class="modal-body"><p>All answers in this form will be erased. Download a data file first if you want to keep a copy.</p></div>
+      <div class="modal-body"><p>All answers in this form will be erased, including progress saved on this device. Download a data file first if you want to keep a copy.</p></div>
       <div class="modal-foot">
         <button class="btn btn-ghost" type="button" data-close>Cancel</button>
         <button class="btn btn-danger" type="button" id="confirmClear">Clear form</button>

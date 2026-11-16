@@ -447,9 +447,30 @@
     ['snap.net', 'snap.gap'].forEach(k => { const el = $(`[data-out="${k}"]`); if (el) el.classList.toggle('neg', k === 'snap.net' && c[k] < 0); });
   }
 
-  /* ---------- Persistence (in-memory; use data file to keep a copy) ---------- */
-  let dirty = false;
-  function save() { dirty = true; const st = $('#saveStatus'); if (st) st.textContent = 'Unsaved changes'; }
+  /* ---------- Persistence (auto-saves in this browser; data file for other devices) ---------- */
+  const STORE_KEY = 'opulence-fna-progress-v1';
+  let dirty = false, saveTimer = null;
+  function setStatus(t) { const st = $('#saveStatus'); if (st) st.textContent = t; }
+  function timeNow() { return new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }); }
+  function storeNow() {
+    clearTimeout(saveTimer); saveTimer = null;
+    try {
+      localStorage.setItem(STORE_KEY, JSON.stringify({ app: 'Opulence FNA', version: 1, savedAt: new Date().toISOString(), data: S }));
+      dirty = false; setStatus('Saved on this device ' + timeNow()); return true;
+    } catch (e) { dirty = true; setStatus('Unsaved changes'); return false; }
+  }
+  function save() { dirty = true; setStatus('Saving…'); clearTimeout(saveTimer); saveTimer = setTimeout(storeNow, 600); }
+  function forgetStored() { clearTimeout(saveTimer); saveTimer = null; try { localStorage.removeItem(STORE_KEY); } catch (e) {} }
+  function restoreStored() {
+    let raw = null; try { raw = localStorage.getItem(STORE_KEY); } catch (e) { return; }
+    if (!raw) return;
+    try {
+      const obj = JSON.parse(raw); importData(obj);
+      const when = obj.savedAt ? new Date(obj.savedAt) : null;
+      setStatus('Progress restored' + (when ? ' from ' + when.toLocaleDateString([], { month: 'short', day: 'numeric' }) + ', ' + when.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) : ''));
+    } catch (e) { forgetStored(); }
+  }
+  function saveProgress() { const ok = storeNow(); downloadJSON(); setStatus(ok ? 'Progress saved ' + timeNow() + ' and file downloaded' : 'Data file downloaded'); }
   function importData(obj) {
     const d = obj && obj.data ? obj.data : obj;
     if (!d || !d.f || !d.r) throw new Error('bad');
@@ -693,7 +714,7 @@
     try {
       const res = await fetch(SUBMIT_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
       if (!res.ok) throw new Error('HTTP ' + res.status);
-      dirty = false; $('#saveStatus').textContent = 'Submitted';
+      forgetStored(); dirty = false; $('#saveStatus').textContent = 'Submitted';
       $('#reviewBody').innerHTML = `<div class="rv-success"><div class="rv-check" aria-hidden="true">✓</div><h3>Financial Needs Analysis received</h3><p>Thank you. Opulence Venture Group has received ${esc([F('client.firstName'), F('client.lastName')].filter(Boolean).join(' ') || 'this client')}’s analysis and will follow up about next steps.</p><p class="hint">You can still download a PDF or data file for your records.</p></div>`;
       btn.hidden = true;
     } catch (e) {
@@ -725,20 +746,23 @@
     $('#jsonBtn').addEventListener('click', downloadJSON);
     $('#clearBtn').addEventListener('click', () => { lastFocus = document.activeElement; $('#confirmModal').hidden = false; $('#confirmClear').focus(); });
     $('#confirmClear').addEventListener('click', () => {
-      S = blank(); closeModals(); buildForm(); hydrateFields(); renderAllReps(); paint(); navObserver(); window.scrollTo(0, 0);
+      forgetStored(); S = blank(); closeModals(); buildForm(); hydrateFields(); renderAllReps(); paint(); navObserver(); window.scrollTo(0, 0);
       $('#saveStatus').textContent = 'Form cleared';
     });
     document.addEventListener('keydown', e => { if (e.key === 'Escape' && $$('.modal').some(m => !m.hidden)) closeModals(); });
     $$('.modal').forEach(m => m.addEventListener('click', e => { if (e.target === m) closeModals(); }));
+    restoreStored();
     navObserver(); loadLogo();
+    $('#saveProgressBtn').addEventListener('click', saveProgress);
     $('#openBtn').addEventListener('click', () => $('#openFile').click());
     $('#openFile').addEventListener('change', e => {
       const file = e.target.files[0]; if (!file) return;
-      file.text().then(t => { importData(JSON.parse(t)); $('#saveStatus').textContent = 'Opened ' + file.name; dirty = false; })
+      file.text().then(t => { importData(JSON.parse(t)); storeNow(); $('#saveStatus').textContent = 'Opened ' + file.name; })
         .catch(() => { $('#saveStatus').textContent = 'That file couldn’t be opened'; });
       e.target.value = '';
     });
-    window.addEventListener('beforeunload', e => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
+    window.addEventListener('pagehide', () => { if (saveTimer) storeNow(); });
+    window.addEventListener('beforeunload', e => { if (saveTimer) storeNow(); if (dirty) { e.preventDefault(); e.returnValue = ''; } });
   }
   document.addEventListener('DOMContentLoaded', init);
 })();
