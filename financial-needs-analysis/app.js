@@ -726,12 +726,25 @@
   }
 
   /* ---------- Section nav highlighting ---------- */
+  let navIO = null, navActive = null;
   function navObserver() {
+    if (navIO) navIO.disconnect();
     const links = {}; $$('[data-nav]').forEach(a => { links[a.dataset.nav] = a; });
-    const io = new IntersectionObserver(ents => {
-      ents.forEach(en => { if (en.isIntersecting) { $$('[data-nav]').forEach(a => a.classList.remove('active')); const a = links[en.target.id]; if (a) { a.classList.add('active'); a.scrollIntoView({ block: 'nearest', inline: 'nearest' }); } } });
+    const bar = $('#sectionNav');
+    navIO = new IntersectionObserver(ents => {
+      ents.forEach(en => {
+        if (!en.isIntersecting) return;
+        const a = links[en.target.id]; if (!a || a === navActive) return;
+        $$('[data-nav]').forEach(x => x.classList.remove('active')); a.classList.add('active'); navActive = a;
+        // Only slide the tab bar sideways; never move the page while the user is scrolling.
+        if (bar && bar.scrollWidth > bar.clientWidth) {
+          const l = a.offsetLeft - bar.offsetLeft, r = l + a.offsetWidth;
+          if (l < bar.scrollLeft) bar.scrollTo({ left: l - 12, behavior: 'smooth' });
+          else if (r > bar.scrollLeft + bar.clientWidth) bar.scrollTo({ left: r - bar.clientWidth + 12, behavior: 'smooth' });
+        }
+      });
     }, { rootMargin: '-35% 0px -60% 0px' });
-    SECTIONS.forEach(s => io.observe(document.getElementById(s.id)));
+    SECTIONS.forEach(s => navIO.observe(document.getElementById(s.id)));
   }
 
   /* ---------- Init ---------- */
