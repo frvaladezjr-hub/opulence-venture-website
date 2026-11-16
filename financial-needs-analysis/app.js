@@ -307,7 +307,7 @@
       </div>
       <div class="card"><div class="sub-head">Real Estate Owned</div>${repBlock('realestate')}</div>
       <div class="card"><div class="sub-head">Debts &amp; Liabilities <small>Mortgages, loans and credit cards</small></div>${repBlock('liabilities')}</div>
-      <div class="card"><div class="sub-head">Vehicles and Boats Owned Free and Clear</div>${repBlock('vehicles')}</div>
+      <div class="card"><div class="sub-head">Vehicles</div>${repBlock('vehicles')}</div>
       <div class="card"><div class="sub-head">Collectibles, Antiques, Jewelry, etc.</div>${repBlock('collectibles')}</div>
       <div class="card"><div class="sub-head">Existing Insurance Coverage <small>Life, disability and long-term care policies already in force</small></div>${repBlock('coverage')}</div>
     </section>
@@ -573,7 +573,7 @@
     out.push(D);
     const E = { title: 'E — Preserve Your Estate', groups: [{ kv: kvRows([['Will', F('est.will')], ['Will last updated', F('est.willDate')], ['Trust', F('est.trust')], ['Trust type', F('est.trustType')], ['Trust last updated', F('est.trustYear')],
       ['Expects lump sum / inheritance', F('est.lump')], ['Estimated amount', F('est.lumpAmt') ? fmt$(num(F('est.lumpAmt'))) : ''], ['Source / timing', F('est.lumpNotes')], ['POA & healthcare directive', F('est.poa')]]) }] };
-    [['realestate', 'Real Estate Owned'], ['liabilities', 'Debts & Liabilities'], ['vehicles', 'Vehicles and Boats Owned Free and Clear'], ['collectibles', 'Collectibles, Antiques, Jewelry, etc.'], ['coverage', 'Existing Insurance Coverage']]
+    [['realestate', 'Real Estate Owned'], ['liabilities', 'Debts & Liabilities'], ['vehicles', 'Vehicles'], ['collectibles', 'Collectibles, Antiques, Jewelry, etc.'], ['coverage', 'Existing Insurance Coverage']]
       .forEach(([k, t]) => { const tb = repTable(k, t); if (tb) E.groups.push({ table: tb }); });
     out.push(E);
     const ed = repTable('education', 'Education goals');
