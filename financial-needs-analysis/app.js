@@ -45,7 +45,7 @@
       cols: {
         name: text('Asset name', { ph: 'e.g. Social Security' }),
         type: sel('Type', ['Social Security', 'Pension', 'Annuity', 'Rental income', 'Dividends / interest', 'Business income', 'Other']),
-        owner: sel('Owner', OWNERS),
+        owner: sel('Owner', OWNERS.concat(['LLC'])),
         balance: money('Balance ($)'), monthly: money('Monthly income ($)'),
         yearly: { type: 'computed', label: 'Yearly income ($)', num: true, fn: r => fmt$(num(r.monthly) * 12) },
         bracket: pct('Tax bracket (%)')
