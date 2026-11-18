@@ -174,7 +174,22 @@
   ];
   const secHead = s => `<div class="section-title"><span class="letter">${s.letter}</span><h2>${esc(s.title)}</h2></div>`;
 
+  function spouseCard() {
+    return `<div class="card" data-show="hasSpouse:Yes" id="card_spouse">
+      <div class="card-head"><h3>Spouse / Partner</h3></div>
+      <p class="card-sub" style="margin:-4px 0 14px">Shares the client’s home address above.</p>
+      <div class="grid">
+        ${inp('spouse.firstName', 'First Name', { req: true })}
+        ${inp('spouse.middleInitial', 'Middle Initial', { ph: 'M.', max: 2 })}
+        ${inp('spouse.lastName', 'Last Name', { req: true })}
+        ${radios('spouse.sex', 'Sex', ['M', 'F'])}
+        ${inp('spouse.dob', 'Date of Birth', { type: 'date' })}
+      </div>
+    </div>`;
+  }
+
   function personCard(p, who) {
+    if (p === 'spouse') return spouseCard();
     const isC = p === 'client';
     const r = isC;
     return `<div class="card" ${isC ? '' : 'data-show="hasSpouse:Yes"'} id="card_${p}">
@@ -507,6 +522,10 @@
       }
       if (n === 'ret.currentAge') S.f._ageAuto = false;
       if (n === 'hasSpouse' && el.value === 'Yes' && !S.f.marital) { S.f.marital = 'Married'; $('[data-f="marital"]').value = 'Married'; }
+      if (n === 'marital' && el.value) {
+        const yn = (el.value === 'Married' || el.value === 'Domestic partner') ? 'Yes' : 'No';
+        S.f.hasSpouse = yn; $$('[data-f="hasSpouse"]').forEach(r => { r.checked = r.value === yn; });
+      }
       if (n === 'hasDependents' && el.value === 'Yes' && !S.r.dependents.length) { S.r.dependents.push(newRow('dependents')); renderRep('dependents'); }
       clearErr(n);
     } else if (el.dataset.r) {
@@ -577,7 +596,7 @@
     const A = { title: 'A — General Information', groups: [] };
     A.groups.push({ sub: 'Household', kv: kvRows([['Spouse / partner', F('hasSpouse')], ['Marital status', F('marital')], ['Dependents', F('hasDependents')]]) });
     A.groups.push({ sub: 'Client', kv: person('client') });
-    if (F('hasSpouse') === 'Yes') A.groups.push({ sub: 'Spouse / Partner', kv: person('spouse') });
+    if (F('hasSpouse') === 'Yes') A.groups.push({ sub: 'Spouse / Partner', kv: kvRows([['Name', [F('spouse.firstName'), F('spouse.middleInitial'), F('spouse.lastName')].filter(Boolean).join(' ')], ['Sex', F('spouse.sex')], ['Date of birth', F('spouse.dob') ? new Date(F('spouse.dob') + 'T00:00:00').toLocaleDateString() + ' (age ' + ageFrom(F('spouse.dob')) + ')' : ''], ['Home address', 'Same as client']]) });
     if (F('hasDependents') === 'Yes') { const t = repTable('dependents', 'Dependents'); if (t) A.groups.push({ table: t }); }
     out.push(A);
     out.push({ title: 'B — Retirement Questions', groups: [{ kv: kvRows([['Current age', F('ret.currentAge')], ['Retire at age', F('ret.retireAge')], ['Years until retirement', c['ret.years'] == null ? '' : String(c['ret.years'])],
