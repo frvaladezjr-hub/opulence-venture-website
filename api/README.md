@@ -44,3 +44,17 @@ analysis to `NOTIFY_TO` (default `info@opulenceinvestments.net`) with the PDF
 summary and the editable `.json` data file attached. It uses the same
 `RESEND_API_KEY` and `MAIL_FROM` variables as the discovery form — no extra
 setup. If the agent enters an email in Section G, replies go to the agent.
+
+### Activity alerts (`fna-activity.mjs`)
+
+The form also posts short heads-up emails to `/api/fna-activity` (same
+variables, same inbox). They contain the client's name, email, cell and agent
+name only — never financial answers.
+
+- **Started** — sent once, a few seconds after the client's first and last name
+  are entered.
+- **Still in progress** — sent when the client leaves or hides the page without
+  submitting, at most once every 3 hours and only if something changed. It lists
+  which sections have answers and the last section viewed.
+
+Submitting or clearing the form resets the alerts for the next client.
