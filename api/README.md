@@ -47,14 +47,22 @@ setup. If the agent enters an email in Section G, replies go to the agent.
 
 ### Activity alerts (`fna-activity.mjs`)
 
-The form also posts short heads-up emails to `/api/fna-activity` (same
-variables, same inbox). They contain the client's name, email, cell and agent
-name only — never financial answers.
+Short heads-up emails to `NOTIFY_TO` with the client's name, email, cell and
+agent name only — never financial answers.
 
-- **Started** — sent once, a few seconds after the client's first and last name
-  are entered.
-- **Still in progress** — sent when the client leaves or hides the page without
-  submitting, at most once every 3 hours and only if something changed. It lists
-  which sections have answers and the last section viewed.
+- **Started** — emailed right away, once, a few seconds after the client's first
+  and last name are entered.
+- **Still in progress (end of day)** — when a client leaves the page without
+  submitting, the site notes it in the existing Upstash storage
+  (`KV_REST_API_URL` / `KV_REST_API_TOKEN`). One summary email goes out at
+  6 PM Pacific listing everyone who worked on the form that day without
+  submitting: sections with answers, last section viewed and last active time.
+  No email is sent on days with nobody in progress.
+- Submitting (`/api/fna`) or clearing the form removes that client from the
+  summary. Entries are deleted after the summary is sent (and expire after
+  3 days regardless).
 
-Submitting or clearing the form resets the alerts for the next client.
+The summary runs from two Vercel Cron schedules in `vercel.json` (01:00 and
+02:00 UTC) so it stays at 6 PM across daylight saving time; only the run that
+lands in the 6 PM Pacific hour sends, once per day. Optionally set
+`CRON_SECRET` in Vercel to lock the summary endpoint to Vercel Cron.

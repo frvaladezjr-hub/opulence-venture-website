@@ -714,14 +714,15 @@
   function alertInline(msg) { const b = $('#reviewBody'); const d = document.createElement('div'); d.className = 'rv-errors'; d.textContent = msg; b.prepend(d); b.scrollTop = 0; }
 
   /* ---------- Activity alerts (started / still in progress) ---------- */
-  // Emails Opulence a short heads-up with no financial answers:
-  //  - "started" once the client's first and last name are entered
-  //  - "progress" when they step away without submitting (at most once every 3 hours)
+  // Short heads-up for Opulence with no financial answers:
+  //  - "started" is emailed once the client's first and last name are entered
+  //  - "progress" is recorded when they step away without submitting; the site
+  //    sends one end-of-day summary of everyone still in progress
   const ACTIVITY_URL = window.FNA_ACTIVITY_URL || '/api/fna-activity';
   const ACT_KEY = 'opulence-fna-alerts-v1';
-  const PROGRESS_GAP_MS = 3 * 60 * 60 * 1000;
   const Activity = (function () {
-    let st = { started: false, changed: false, lastProgress: 0 }, startTimer = null;
+    const newId = () => (Date.now().toString(36) + Math.random().toString(36).slice(2, 10)).slice(0, 20);
+    let st = { id: newId(), started: false, changed: false }, startTimer = null;
     try { const raw = window.localStorage.getItem(ACT_KEY); if (raw) st = Object.assign(st, JSON.parse(raw)); } catch (e) {}
     function persist() { try { window.localStorage.setItem(ACT_KEY, JSON.stringify(st)); } catch (e) {} }
     function hasName() { return F('client.firstName').trim().length > 0 && F('client.lastName').trim().length > 1; }
@@ -739,7 +740,7 @@
     function payload(type) {
       const cur = navActive ? SECTIONS.find(s => s.id === navActive.dataset.nav) : null;
       return {
-        type,
+        type, id: st.id,
         client: { firstName: F('client.firstName'), lastName: F('client.lastName'), email: F('client.email'), cell: F('client.cellPhone') },
         agent: { name: F('next.agent') },
         sections: type === 'progress' ? answered() : [],
@@ -747,8 +748,8 @@
         company: ($('#fna_hp') || {}).value || ''
       };
     }
-    function send(type, leaving) {
-      const body = JSON.stringify(payload(type));
+    function send(type, leaving, data) {
+      const body = JSON.stringify(data || payload(type));
       try {
         if (leaving && navigator.sendBeacon && navigator.sendBeacon(ACTIVITY_URL, new Blob([body], { type: 'text/plain' }))) return;
         fetch(ACTIVITY_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body, keepalive: true }).catch(() => {});
@@ -759,19 +760,22 @@
       if (st.started || !hasName()) return;
       st.started = true; persist(); send('started', leaving);
     }
+    function fresh() { clearTimeout(startTimer); startTimer = null; st = { id: newId(), started: false, changed: false }; try { window.localStorage.removeItem(ACT_KEY); } catch (e) {} }
     return {
+      id: () => st.id,
       touch() {
         st.changed = true; persist();
         // Wait until they pause typing so the alert carries the full name.
         if (!st.started && hasName()) { clearTimeout(startTimer); startTimer = setTimeout(() => sendStarted(false), 4000); }
       },
+      // Updates tonight's summary (no email now). Only sent when something changed.
       leave() {
         if (startTimer) sendStarted(true);
         if (!st.started || !st.changed || !hasName()) return;
-        if (Date.now() - st.lastProgress < PROGRESS_GAP_MS) return;
-        st.lastProgress = Date.now(); st.changed = false; persist(); send('progress', true);
+        st.changed = false; persist(); send('progress', true);
       },
-      reset() { clearTimeout(startTimer); startTimer = null; st = { started: false, changed: false, lastProgress: 0 }; try { window.localStorage.removeItem(ACT_KEY); } catch (e) {} }
+      submitted() { fresh(); },
+      cleared() { if (st.started) send('cleared', false, { type: 'cleared', id: st.id }); fresh(); }
     };
   })();
 
@@ -792,12 +796,13 @@
       fileBase: fileBase(),
       pdf,
       data: { app: 'Opulence FNA', version: 1, savedAt: new Date().toISOString(), data: S },
+      activityId: Activity.id(),
       company: ($('#fna_hp') || {}).value || ''
     };
     try {
       const res = await fetch(SUBMIT_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
       if (!res.ok) throw new Error('HTTP ' + res.status);
-      forgetStored(); Activity.reset(); dirty = false; $('#saveStatus').textContent = 'Submitted';
+      forgetStored(); Activity.submitted(); dirty = false; $('#saveStatus').textContent = 'Submitted';
       $('#reviewBody').innerHTML = `<div class="rv-success"><div class="rv-check" aria-hidden="true">✓</div><h3>Financial Needs Analysis received</h3><p>Thank you. Opulence Venture Group has received ${esc([F('client.firstName'), F('client.lastName')].filter(Boolean).join(' ') || 'this client')}’s analysis and will follow up about next steps.</p><p class="hint">You can still download a PDF or data file for your records.</p></div>`;
       btn.hidden = true;
     } catch (e) {
@@ -842,7 +847,7 @@
     $('#jsonBtn').addEventListener('click', downloadJSON);
     $('#clearBtn').addEventListener('click', () => { lastFocus = document.activeElement; $('#confirmModal').hidden = false; $('#confirmClear').focus(); });
     $('#confirmClear').addEventListener('click', () => {
-      forgetStored(); Activity.reset(); S = blank(); closeModals(); buildForm(); hydrateFields(); renderAllReps(); paint(); navObserver(); window.scrollTo(0, 0);
+      forgetStored(); Activity.cleared(); S = blank(); closeModals(); buildForm(); hydrateFields(); renderAllReps(); paint(); navObserver(); window.scrollTo(0, 0);
       $('#saveStatus').textContent = 'Form cleared';
     });
     document.addEventListener('keydown', e => { if (e.key === 'Escape' && $$('.modal').some(m => !m.hidden)) closeModals(); });
