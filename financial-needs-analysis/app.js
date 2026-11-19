@@ -533,7 +533,7 @@
       row[c] = el.value;
       if (key === 'dependents' && e.type === 'change' && (c === 'firstName' || c === 'lastName')) { renderRep('education'); renderRep('coverage'); }
     } else return;
-    paint(); save();
+    paint(); save(); Activity.touch();
   }
   function onClick(e) {
     const add = e.target.closest('[data-add]'), del = e.target.closest('[data-del]');
@@ -548,7 +548,7 @@
     } else if (e.target.closest('[data-review]')) openReview();
     else if (e.target.closest('[data-close]')) closeModals();
   }
-  function afterRepChange(k) { if (k === 'dependents') { renderRep('education'); renderRep('coverage'); } paint(); save(); }
+  function afterRepChange(k) { if (k === 'dependents') { renderRep('education'); renderRep('coverage'); } paint(); save(); Activity.touch(); }
 
   /* ---------- Validation ---------- */
   const REQUIRED = [
@@ -713,6 +713,72 @@
   }
   function alertInline(msg) { const b = $('#reviewBody'); const d = document.createElement('div'); d.className = 'rv-errors'; d.textContent = msg; b.prepend(d); b.scrollTop = 0; }
 
+  /* ---------- Activity alerts (started / still in progress) ---------- */
+  // Short heads-up for Opulence with no financial answers:
+  //  - "started" is emailed once the client's first and last name are entered
+  //  - "progress" is recorded when they step away without submitting; the site
+  //    sends one end-of-day summary of everyone still in progress
+  const ACTIVITY_URL = window.FNA_ACTIVITY_URL || '/api/fna-activity';
+  const ACT_KEY = 'opulence-fna-alerts-v1';
+  const Activity = (function () {
+    const newId = () => (Date.now().toString(36) + Math.random().toString(36).slice(2, 10)).slice(0, 20);
+    let st = { id: newId(), started: false, changed: false }, startTimer = null;
+    try { const raw = window.localStorage.getItem(ACT_KEY); if (raw) st = Object.assign(st, JSON.parse(raw)); } catch (e) {}
+    function persist() { try { window.localStorage.setItem(ACT_KEY, JSON.stringify(st)); } catch (e) {} }
+    function hasName() { return F('client.firstName').trim().length > 0 && F('client.lastName').trim().length > 1; }
+    function answered() {
+      return SECTIONS.filter(s => {
+        const el = document.getElementById(s.id); if (!el) return false;
+        return $$('input,select,textarea', el).some(f => {
+          if (f.readOnly || f.disabled || f.type === 'hidden' || f.type === 'file' || f.closest('[hidden]')) return false;
+          if (f.dataset.f === 'client.firstName' || f.dataset.f === 'client.lastName') return false;
+          if (f.type === 'checkbox' || f.type === 'radio') return f.checked;
+          return String(f.value || '').trim() !== '';
+        });
+      }).map(s => s.letter + ' · ' + s.nav);
+    }
+    function payload(type) {
+      const cur = navActive ? SECTIONS.find(s => s.id === navActive.dataset.nav) : null;
+      return {
+        type, id: st.id,
+        client: { firstName: F('client.firstName'), lastName: F('client.lastName'), email: F('client.email'), cell: F('client.cellPhone') },
+        agent: { name: F('next.agent') },
+        sections: type === 'progress' ? answered() : [],
+        lastSection: cur ? cur.letter + ' · ' + cur.nav : '',
+        company: ($('#fna_hp') || {}).value || ''
+      };
+    }
+    function send(type, leaving, data) {
+      const body = JSON.stringify(data || payload(type));
+      try {
+        if (leaving && navigator.sendBeacon && navigator.sendBeacon(ACTIVITY_URL, new Blob([body], { type: 'text/plain' }))) return;
+        fetch(ACTIVITY_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body, keepalive: true }).catch(() => {});
+      } catch (e) {}
+    }
+    function sendStarted(leaving) {
+      clearTimeout(startTimer); startTimer = null;
+      if (st.started || !hasName()) return;
+      st.started = true; persist(); send('started', leaving);
+    }
+    function fresh() { clearTimeout(startTimer); startTimer = null; st = { id: newId(), started: false, changed: false }; try { window.localStorage.removeItem(ACT_KEY); } catch (e) {} }
+    return {
+      id: () => st.id,
+      touch() {
+        st.changed = true; persist();
+        // Wait until they pause typing so the alert carries the full name.
+        if (!st.started && hasName()) { clearTimeout(startTimer); startTimer = setTimeout(() => sendStarted(false), 4000); }
+      },
+      // Updates tonight's summary (no email now). Only sent when something changed.
+      leave() {
+        if (startTimer) sendStarted(true);
+        if (!st.started || !st.changed || !hasName()) return;
+        st.changed = false; persist(); send('progress', true);
+      },
+      submitted() { fresh(); },
+      cleared() { if (st.started) send('cleared', false, { type: 'cleared', id: st.id }); fresh(); }
+    };
+  })();
+
   /* ---------- Submit ---------- */
   const SUBMIT_URL = window.FNA_SUBMIT_URL || '/api/fna';
   async function submitFNA() {
@@ -730,12 +796,13 @@
       fileBase: fileBase(),
       pdf,
       data: { app: 'Opulence FNA', version: 1, savedAt: new Date().toISOString(), data: S },
+      activityId: Activity.id(),
       company: ($('#fna_hp') || {}).value || ''
     };
     try {
       const res = await fetch(SUBMIT_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
       if (!res.ok) throw new Error('HTTP ' + res.status);
-      forgetStored(); dirty = false; $('#saveStatus').textContent = 'Submitted';
+      forgetStored(); Activity.submitted(); dirty = false; $('#saveStatus').textContent = 'Submitted';
       $('#reviewBody').innerHTML = `<div class="rv-success"><div class="rv-check" aria-hidden="true">✓</div><h3>Financial Needs Analysis received</h3><p>Thank you. Opulence Venture Group has received ${esc([F('client.firstName'), F('client.lastName')].filter(Boolean).join(' ') || 'this client')}’s analysis and will follow up about next steps.</p><p class="hint">You can still download a PDF or data file for your records.</p></div>`;
       btn.hidden = true;
     } catch (e) {
@@ -780,7 +847,7 @@
     $('#jsonBtn').addEventListener('click', downloadJSON);
     $('#clearBtn').addEventListener('click', () => { lastFocus = document.activeElement; $('#confirmModal').hidden = false; $('#confirmClear').focus(); });
     $('#confirmClear').addEventListener('click', () => {
-      forgetStored(); S = blank(); closeModals(); buildForm(); hydrateFields(); renderAllReps(); paint(); navObserver(); window.scrollTo(0, 0);
+      forgetStored(); Activity.cleared(); S = blank(); closeModals(); buildForm(); hydrateFields(); renderAllReps(); paint(); navObserver(); window.scrollTo(0, 0);
       $('#saveStatus').textContent = 'Form cleared';
     });
     document.addEventListener('keydown', e => { if (e.key === 'Escape' && $$('.modal').some(m => !m.hidden)) closeModals(); });
@@ -795,7 +862,8 @@
         .catch(() => { $('#saveStatus').textContent = 'That file couldn’t be opened'; });
       e.target.value = '';
     });
-    window.addEventListener('pagehide', () => { if (saveTimer) storeNow(); });
+    window.addEventListener('pagehide', () => { if (saveTimer) storeNow(); Activity.leave(); });
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') Activity.leave(); });
     window.addEventListener('beforeunload', e => { if (saveTimer) storeNow(); if (dirty) { e.preventDefault(); e.returnValue = ''; } });
   }
   document.addEventListener('DOMContentLoaded', init);

@@ -10,6 +10,8 @@
  *   NOTIFY_TO        (optional) inbox; defaults to info@opulenceinvestments.net
  */
 
+import { kv, isValidId, PENDING_KEY } from './fna-activity.mjs';
+
 const RESEND_ENDPOINT = 'https://api.resend.com/emails';
 const NAVY = '#00446a';
 const BLUE = '#0084d3';
@@ -149,6 +151,11 @@ export default async function handler(req, res) {
   } catch (error) {
     console.error('FNA notification failed:', error.message);
     return res.status(502).json({ error: 'Submission could not be delivered.' });
+  }
+  // Submitted, so take this client off tonight's "still in progress" summary.
+  if (isValidId(body.activityId)) {
+    try { const store = kv(); if (store) await store(['HDEL', PENDING_KEY, String(body.activityId)]); }
+    catch (error) { console.error('FNA summary cleanup failed:', error.message); }
   }
   return res.status(200).json({ ok: true });
 }

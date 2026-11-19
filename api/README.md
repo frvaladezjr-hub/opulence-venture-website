@@ -44,3 +44,25 @@ analysis to `NOTIFY_TO` (default `info@opulenceinvestments.net`) with the PDF
 summary and the editable `.json` data file attached. It uses the same
 `RESEND_API_KEY` and `MAIL_FROM` variables as the discovery form — no extra
 setup. If the agent enters an email in Section G, replies go to the agent.
+
+### Activity alerts (`fna-activity.mjs`)
+
+Short heads-up emails to `NOTIFY_TO` with the client's name, email, cell and
+agent name only — never financial answers.
+
+- **Started** — emailed right away, once, a few seconds after the client's first
+  and last name are entered.
+- **Still in progress (end of day)** — when a client leaves the page without
+  submitting, the site notes it in the existing Upstash storage
+  (`KV_REST_API_URL` / `KV_REST_API_TOKEN`). One summary email goes out at
+  6 PM Pacific listing everyone who worked on the form that day without
+  submitting: sections with answers, last section viewed and last active time.
+  No email is sent on days with nobody in progress.
+- Submitting (`/api/fna`) or clearing the form removes that client from the
+  summary. Entries are deleted after the summary is sent (and expire after
+  3 days regardless).
+
+The summary runs from two Vercel Cron schedules in `vercel.json` (01:00 and
+02:00 UTC) so it stays at 6 PM across daylight saving time; only the run that
+lands in the 6 PM Pacific hour sends, once per day. Optionally set
+`CRON_SECRET` in Vercel to lock the summary endpoint to Vercel Cron.

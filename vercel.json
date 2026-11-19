@@ -12,9 +12,25 @@
     {
       "source": "/api/agent-resources",
       "headers": [
-        {"key": "Cache-Control", "value": "private, no-store, max-age=0"},
-        {"key": "X-Content-Type-Options", "value": "nosniff"}
+        {
+          "key": "Cache-Control",
+          "value": "private, no-store, max-age=0"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        }
       ]
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/fna-activity",
+      "schedule": "0 1 * * *"
+    },
+    {
+      "path": "/api/fna-activity",
+      "schedule": "0 2 * * *"
     }
   ]
 }
