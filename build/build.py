@@ -966,10 +966,16 @@ consultants_body = f"""
     </div>
 
     <div class="consultant-role-group">
-      <div class="consultant-role-group-title reveal">Business Advisors</div>
+      <div class="consultant-role-group-title reveal">Business Advisor</div>
       <div class="consultant-grid reveal">
-        {consultant_card("assets/images/consultant-anthony-cordova.webp", "Portrait of Anthony Cordova, Business Advisor at Opulence Venture Group", "Anthony Cordova", "Business Advisor", "Works with business owners on structure, cash flow, and growth-stage planning decisions.")}
         {consultant_card("assets/images/consultant-seth-hallows.webp", "Portrait of Seth Hallows, Business Advisor at Opulence Venture Group", "Seth Hallows", "Business Advisor", "Supports business owners in evaluating structure, succession, and operational planning strategies.")}
+      </div>
+    </div>
+
+    <div class="consultant-role-group">
+      <div class="consultant-role-group-title reveal">Business Succession Planning</div>
+      <div class="consultant-grid reveal">
+        {consultant_card("assets/images/consultant-jamie-lankford.webp", "Portrait of Jamie Lankford, Business Succession Planning Specialist at Opulence Venture Group", "Jamie Lankford", "Business Succession Planning Specialist", "Helps business owners plan for ownership transitions, buy-sell arrangements, and long-term business continuity.")}
       </div>
     </div>
 
