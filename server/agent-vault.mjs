@@ -36,3 +36,23 @@ export async function serveMedia(embed,req,res){
   res.setHeader('Content-Length',clear.length);
   res.end(clear);
 }
+// Thumbnails use their own key so they can be refreshed without the media key.
+function thumbKey(){
+  const value=process.env.AGENT_THUMB_KEY||'';
+  if(!/^[a-f0-9]{64}$/i.test(value))return null;
+  return Buffer.from(value,'hex');
+}
+export async function serveThumb(id,res){
+  const key=thumbKey();
+  if(!key)return res.status(404).json({error:'Thumbnail not found.'});
+  let data;
+  try{data=JSON.parse(decryptVault(await readFile(path.join(process.cwd(),'agent-vault','thumbs.bin')),key,'thumbs').toString('utf8'));}
+  catch{return res.status(404).json({error:'Thumbnail not found.'});}
+  const entry=data?.thumbs?.[id];
+  if(!entry||!/^[a-f0-9]{32}\.bin$/.test(entry.file)||!/^image\/(webp|jpeg|png)$/.test(entry.mime))return res.status(404).json({error:'Thumbnail not found.'});
+  const clear=decryptVault(await readFile(path.join(process.cwd(),'agent-vault',entry.file)),key,'thumb:'+id);
+  if(clear.length>512*1024)throw new Error('Thumbnail too large.');
+  res.setHeader('Content-Type',entry.mime);
+  res.setHeader('Content-Length',clear.length);
+  res.end(clear);
+}

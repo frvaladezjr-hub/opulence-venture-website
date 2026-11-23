@@ -1,5 +1,5 @@
 import { createHash, createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
-import {loadCatalog,serveMedia} from '../server/agent-vault.mjs';
+import {loadCatalog,serveMedia,serveThumb} from '../server/agent-vault.mjs';
 
 const TTL=7200;
 const sha=value=>createHash('sha256').update(value).digest('hex');
@@ -74,7 +74,7 @@ function readCatalog(raw='[]') {
 // A four-digit code is only a basic shared gate, never individual agent approval.
 // All production requests fail closed unless the passcode, session secret, and
 // durable Redis-backed rate/session store are configured.
-export function createHandler({env=process.env,store=null,preview=false,now=Date.now,mediaLoader=null,catalogLoader=null}={}) {
+export function createHandler({env=process.env,store=null,preview=false,now=Date.now,mediaLoader=null,catalogLoader=null,thumbLoader=null}={}) {
   return async function handler(req,res) {
     res.setHeader('Cache-Control','no-store, private');
     res.setHeader('X-Content-Type-Options','nosniff');
@@ -118,7 +118,14 @@ export function createHandler({env=process.env,store=null,preview=false,now=Date
       if(!session || session.expiresAt<=now() || session.version!==version)return res.status(401).json({error:'Session expired.'});
       if(req.method==='DELETE'){await db.remove(key);return res.status(200).json({ok:true});}
       const resources=readCatalog(catalogLoader?await catalogLoader():env.AGENT_RESOURCE_CATALOG||'[]');
-      const mediaId=new URL(req.url||'/', 'https://agent.invalid').searchParams.get('media');
+      const params=new URL(req.url||'/', 'https://agent.invalid').searchParams;
+      const thumbId=params.get('thumb');
+      if(thumbId!==null) {
+        const item=resources.find(item=>item.embed?.id===thumbId);
+        if(!item||!thumbLoader)return res.status(404).json({error:'Thumbnail not found.'});
+        return await thumbLoader(item.embed.id,res);
+      }
+      const mediaId=params.get('media');
       if(mediaId!==null) {
         const item=resources.find(item=>item.embed?.id===mediaId);
         if(!item)return res.status(404).json({error:'Resource not found.'});
@@ -132,4 +139,4 @@ export function createHandler({env=process.env,store=null,preview=false,now=Date
     }
   };
 }
-export default createHandler({catalogLoader:loadCatalog,mediaLoader:serveMedia});
+export default createHandler({catalogLoader:loadCatalog,mediaLoader:serveMedia,thumbLoader:serveThumb});
