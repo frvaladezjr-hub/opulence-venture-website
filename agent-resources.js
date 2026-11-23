@@ -43,7 +43,7 @@
     clearTimeout(expiryTimer);
     clearMedia();
     if(fiaForm)fiaForm.reset();
-    byId('agent-resource-grid').replaceChildren();
+    ['video','material'].forEach(function(t){byId('agent-'+t+'-grid').replaceChildren();byId('agent-'+t+'-section').hidden=true;});
     byId('agent-resource-count').textContent = '';
     byId('agent-library').hidden = true;
     byId('agent-gate').hidden = false;
@@ -94,8 +94,10 @@
     var shown=resources.filter(function(item) {
       return (kind==='all'||item.type===kind) && (item.title+' '+item.description+' '+item.category).toLowerCase().includes(query);
     });
-    var grid=byId('agent-resource-grid'); grid.replaceChildren();
+    var grids={video:byId('agent-video-grid'),material:byId('agent-material-grid')};
+    grids.video.replaceChildren();grids.material.replaceChildren();
     shown.forEach(function(item) {
+      var grid=item.type==='video'?grids.video:grids.material;
       var card=element('article',null,'agent-resource-card');
       card.append(element('span',(item.type==='video'?'Video':'Material')+' · '+item.category,'agent-access-tag'));
       card.append(element('h3',item.title));
@@ -108,17 +110,30 @@
         var status=element('p','','agent-media-status');
         status.setAttribute('role','status');
         var controller=null,objectUrl='',active=true,pdfCleanup=null;
-        mediaCleanup.push(function(){
-          active=false;
+        var close=element('button','Close','btn btn-outline agent-media-close');
+        close.type='button';
+        function teardown(){
           if(controller)controller.abort();
-          if(pdfCleanup)pdfCleanup();
+          if(pdfCleanup){pdfCleanup();pdfCleanup=null;}
           var video=mount.querySelector('video');
           if(video){video.pause();video.removeAttribute('src');video.load();}
           mount.replaceChildren();
-          if(objectUrl)URL.revokeObjectURL(objectUrl);
+          if(objectUrl){URL.revokeObjectURL(objectUrl);objectUrl='';}
+        }
+        mediaCleanup.push(function(){active=false;teardown();});
+        function openCard(){
+          card.classList.add('is-open');
+          card.scrollIntoView({block:'nearest',behavior:'smooth'});
+        }
+        close.addEventListener('click',function(){
+          teardown();close.remove();status.textContent='';
+          card.classList.remove('is-open');
+          load.disabled=false;card.insertBefore(load,mount);load.focus({preventScroll:true});
+          card.scrollIntoView({block:'nearest'});
         });
         load.addEventListener('click',async function(){
           load.disabled=true;status.textContent=item.embed.format==='pdf'?'Preparing PDF…':'Loading player…';
+          openCard();
           controller=new AbortController();
           var timeout=setTimeout(function(){controller.abort();},60000);
           try {
@@ -157,9 +172,9 @@
                 if(!active)return;
                 pdfCleanup=await viewerModule.mountPdf({mount:mount,blob:blob,title:item.title,status:status,isActive:function(){return active;}});
                 if(!active){pdfCleanup();return;}
-                load.remove();
+                load.replaceWith(close);
               } catch(pdfError) {
-                if(active){load.remove();status.textContent='The inline reader is unavailable. You can still download the original PDF.';}
+                if(active){load.replaceWith(close);status.textContent='The inline reader is unavailable. You can still download the original PDF.';}
               }
               return;
             }
@@ -173,10 +188,10 @@
               player.setAttribute('sandbox','allow-scripts allow-popups allow-popups-to-escape-sandbox');
               player.setAttribute('allow','fullscreen');player.allowFullscreen=true;
             }
-            player.src=objectUrl;mount.append(player);load.remove();
+            player.src=objectUrl;mount.append(player);load.replaceWith(close);
             status.textContent='Use the player controls to start playback.';
           } catch(error) {
-            if(active){status.textContent=error.name==='AbortError'?'Loading timed out. Please try again.':error.message;load.disabled=false;}
+            if(active){status.textContent=error.name==='AbortError'?'Loading timed out. Please try again.':error.message;load.disabled=false;card.classList.remove('is-open');}
           } finally {clearTimeout(timeout);}
         });
         card.append(load,mount,status);grid.append(card);return;
@@ -187,6 +202,11 @@
       link.href=item.url; link.target='_blank'; link.rel='noopener noreferrer'; link.referrerPolicy='no-referrer';
       link.setAttribute('aria-label',(item.type==='video'?'Watch ':'Open ')+item.title+' (opens in a new tab)');
       card.append(link); grid.append(card);
+    });
+    ['video','material'].forEach(function(t){
+      var n=grids[t].children.length;
+      byId('agent-'+t+'-section').hidden=n===0;
+      byId('agent-'+t+'-count').textContent=n+(n===1?' item':' items');
     });
     byId('agent-resource-count').textContent=shown.length+' of '+resources.length+' resources';
     byId('agent-empty').hidden=shown.length>0;
