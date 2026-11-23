@@ -15,6 +15,20 @@
   var busy = false;
   var epoch = 0;
   var mediaCleanup=[];
+  var thumbs={};
+  function clearThumbs(){Object.keys(thumbs).forEach(function(id){var t=thumbs[id];if(t&&t.url)URL.revokeObjectURL(t.url);if(t&&t.controller)t.controller.abort();});thumbs={};}
+  function loadThumb(id,img,box){
+    var entry=thumbs[id];
+    function apply(e){if(e.url){img.src=e.url;box.classList.add('has-image');}}
+    if(entry){if(entry.url)apply(entry);else if(entry.waiters)entry.waiters.push(function(){apply(thumbs[id]||{});});return;}
+    var controller=new AbortController(),current=token;
+    entry=thumbs[id]={controller:controller,waiters:[function(){apply(thumbs[id]||{});}]};
+    fetch(endpoint+'?thumb='+encodeURIComponent(id),{headers:{Authorization:'Bearer '+current},credentials:'same-origin',cache:'no-store',signal:controller.signal})
+      .then(function(r){if(!r.ok)throw new Error('none');return r.blob();})
+      .then(function(blob){if(thumbs[id]!==entry||!/^image\//.test(blob.type))return;entry.url=URL.createObjectURL(blob);})
+      .catch(function(){})
+      .finally(function(){if(thumbs[id]!==entry)return;var w=entry.waiters||[];entry.waiters=null;w.forEach(function(f){f();});});
+  }
   var fiaForm=null;
   import(new URL('./fia-form.mjs',document.baseURI).href).then(function(module){
     fiaForm=module.mountFiaForm({
@@ -42,6 +56,7 @@
     resources = [];
     clearTimeout(expiryTimer);
     clearMedia();
+    clearThumbs();
     if(fiaForm)fiaForm.reset();
     ['video','material'].forEach(function(t){byId('agent-'+t+'-grid').replaceChildren();byId('agent-'+t+'-section').hidden=true;});
     byId('agent-resource-count').textContent = '';
@@ -99,13 +114,23 @@
     shown.forEach(function(item) {
       var grid=item.type==='video'?grids.video:grids.material;
       var card=element('article',null,'agent-resource-card');
+      if(item.embed && ['video','guide','pdf'].includes(item.embed.format)) {
+        var thumb=element('button',null,'agent-thumb agent-thumb--'+(item.embed.format==='pdf'?'pdf':'video'));
+        thumb.type='button';
+        thumb.setAttribute('aria-label',(item.embed.format==='pdf'?'View ':'Play ')+item.title);
+        var img=element('img');img.alt='';img.decoding='async';
+        thumb.append(img,element('span',item.embed.format==='pdf'?'PDF':'','agent-thumb-badge'));
+        thumb.addEventListener('click',function(){var b=card.querySelector('.agent-load');if(b&&!b.disabled)b.click();});
+        card.append(thumb);
+        loadThumb(item.embed.id,img,thumb);
+      }
       card.append(element('span',(item.type==='video'?'Video':'Material')+' · '+item.category,'agent-access-tag'));
       card.append(element('h3',item.title));
       card.append(element('p',item.description));
       if(item.embed && ['video','guide','pdf'].includes(item.embed.format)) {
         card.classList.add('agent-resource-embedded');
         var mount=element('div',null,'agent-media-mount');
-        var load=element('button',item.embed.format==='pdf'?'View PDF':item.embed.format==='guide'?'Load narrated guide':'Load video','btn btn-outline');
+        var load=element('button',item.embed.format==='pdf'?'View PDF':item.embed.format==='guide'?'Play guide':'Play video','btn btn-outline agent-load');
         load.type='button';
         var status=element('p','','agent-media-status');
         status.setAttribute('role','status');

@@ -25,3 +25,12 @@ The catalog and approved PDF/video files are encrypted using AES-256-GCM before 
 A shared four-digit code is a basic gate, not individual agent identity or per-agent approval. Use this library for non-sensitive training, never client records. The Redis-backed limiter permits five attempts per IP per 15 minutes and 50 globally per 15 minutes; shared office IPs can therefore encounter temporary lockouts. Sessions expire after two hours. Refresh, navigation, sign-out, and expiry clear the page; server-side sign-out revokes its token. Recipients can retain/download content they are authorized to access.
 
 Environment changes require a new Vercel deployment. Updating the media key alone without re-encrypting the vault prevents playback. Do not overwrite the existing discovery-form or Resend settings.
+
+## Library thumbnails
+
+Video and PDF tiles show a thumbnail served by `GET /api/agent-resources?thumb=<embed id>` (same session token as media).
+Thumbnails are 640x360 WebP files encrypted in `agent-vault/` with AES-256-GCM (label `thumb:<embed id>`),
+listed in `agent-vault/thumbs.bin` (label `thumbs`, `{version:1,thumbs:{<embed id>:{mime,size,file}}}`), and
+decrypted with the `AGENT_THUMB_KEY` environment variable (64 hex characters, separate from `AGENT_MEDIA_KEY`).
+Resources without a thumbnail fall back to a branded gradient tile. Vercel stores the key as sensitive, so to add
+thumbnails later, generate a new key, re-encrypt every thumbnail and `thumbs.bin`, and replace `AGENT_THUMB_KEY`.
